@@ -1,5 +1,5 @@
 
-# GitScrum Frontend - Everything you need to manage your Projects Remotely
+# GitScrum CE - Everything you need to manage your Projects Remotely
 
 **Join our work (r)evolution!**
 [GitScrum](https://site.gitscrum.com) is a young and vibrant start-up. We are focused in applying Agile & Scrum principles, gamification and performance management to absolutely any collection of organized individuals.
