@@ -103,11 +103,23 @@ export default {
             <ListUsers v-not-visible="'tablet'" :user="item.user" :link="true"> </ListUsers>
           </template>
           <div class="task-card-content">
-            <div>
+            <div> 
               <h2 v-if="item.code">{{ item.code }} - {{ item.title }}</h2>
               <h2 v-if="!item.code">{{ item.title }}</h2>
               <div class="subtitle1">
-                <span>
+                <span>                  
+                <a @click.stop="redirect(item)" :link="true">
+                   <router-link
+                  :to="{
+                    name: 'projects.board',
+                    params: {
+                      companySlug: item.company.slug,
+                      projectSlug: item.project.slug,
+                    },
+                  }"
+                >
+                  {{ $tc('Project',1) }} : {{ item.project.name }}
+                </router-link>  </a>&nbsp;
                   {{ $t('Created by') }} {{ item.user.name }} {{ $t('at') }}
                   <span v-b-popover.hover.top="item.created_at.timezone"
                     >{{ item.created_at.date_for_humans }}
@@ -117,7 +129,7 @@ export default {
                     {{ $t('Start Date') }}: {{ item.start_date.date_for_humans }}
                 </span>
                 <span v-if="item.start_date.timezone && item.due_date.timezone">
-                  /
+                  
                 </span>
                 <span v-if="item.due_date.timezone" v-b-popover.hover.top="item.due_date.timezone" :style="dueDate(item.due_date.timezone)">
                     {{ $t('Due Date') }}: {{ item.due_date.date_for_humans }}
