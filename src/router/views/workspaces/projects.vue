@@ -211,24 +211,23 @@ export default {
         <b-row>
           <b-col>
             <b-collapse id="collapse-1" @shown="getLabels">
-              <div class="d-flex justify-content-center flex-wrap pt-2 pb-1 p-2">
+              <div class="d-flex justify-content-center flex-wrap pt-2 pb-1 p-2 text-center">
                 <div>
-                <div
-                  v-for="(label, index) in projectsLabels"
-                  :key="index"
-                  class="badge badge-labels mg-b-5 cursor-pointer"
-                  :style=" 
-                    'border:1px solid ' + label.color  + ';color: ' + label.color + ';background:' + label.background
-                  "
-                  @click="handleFilterByLabel(label)"
-                >
-                  <div class="d-flex justify-content-end">
-                    <span v-text="label.title"></span>
-                    <span v-show="label.selected">
-                      <font-awesome-icon :icon="['fa', 'times']" class="ml-5-px" />
-                    </span>
+                  <div
+                    v-for="(label, index) in projectsLabels"
+                    :key="index"
+                    class="badge badge-labels mg-b-5 cursor-pointer"
+                    :style=" 
+                      'border:1px solid ' + label.color  + ';color: ' + label.color + ';background:' + label.background
+                    "
+                    @click="handleFilterByLabel(label)">
+                    <div class="d-flex justify-content-end">
+                      <span v-text="label.title"></span>
+                      <span v-show="label.selected">
+                        <font-awesome-icon :icon="['fa', 'times']" class="ml-5-px" />
+                      </span>
+                    </div>
                   </div>
-                </div>
                 </div>
               </div>
             </b-collapse>
