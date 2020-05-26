@@ -232,14 +232,9 @@ export default {
                 
               </div>
 
-              <ListLabels
-                v-show="project.labels[0]"
-                :labels="project.labels"
-                class="mt-1 labels-size"></ListLabels>
-              
               <b-collapse :id="'collapse' + project.slug">
                 <b-card>
-                  <div class="titles mt-1">
+                  <div class="title mt-1">
                     {{ $t('Project Progress in Last 7 Days') }}
                   </div>
                   
@@ -251,34 +246,11 @@ export default {
                     class="mt-1" />
                 </b-card>
               </b-collapse>
-<!--
-              <div class="collapse-content card-shadow">
-                <div
-                  :id="'collapse' + project.slug"
-                  class="collapse card-body-overlay"
-                >
-                  <div v-show="project.labels.length" class="titles mt-2">
-                    {{ $t('labels') }}
-                  </div>
-                  <ListLabels
-                    :labels="project.labels"
-                    class="mt-2 labels-size"
-                  ></ListLabels>
-                  <div class="titles mt-2">
-                    {{ $t('Project Progress in Last 7 Days') }}
-                  </div>
-                  
-                    <apexchart
-                      v-if="project.closed_tasks"
-                      type="area"
-                      height="50"
-                      :options="chartOptionsTopSpark1"
-                      :series="seriesTopSpark(project)"
-                      class=" mt-2"
-                    />
-                   
-                </div>
-              </div> -->
+
+              <ListLabels
+                v-show="project.labels[0]"
+                :labels="project.labels"
+                class="mt-1 labels-size"></ListLabels>
             </div>
           </div>
         </div>
