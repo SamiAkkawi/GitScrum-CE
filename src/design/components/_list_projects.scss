@@ -59,6 +59,18 @@
             }
         }
     }
+    .dropdown-toggle {
+        padding: 0;
+        margin-right: 4px;
+        .badge {
+            margin: 0;
+        }
+    }
+    button:focus,
+    button:active {
+        border: 1px solid #fff !important;
+        outline: none !important;
+    }
     img {
         width: 100%;
         height: 80px;

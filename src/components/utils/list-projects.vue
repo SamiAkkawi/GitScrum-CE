@@ -26,6 +26,7 @@ export default {
   },
   data() {
     return {
+      currentUser: JSON.parse(localStorage.getItem('CURRENT_USER')),
       currentCompany: JSON.parse(window.localStorage.getItem('CURRENT_COMPANY')),
       projectSelected: {},
       seriesTopSpark1: [
@@ -105,9 +106,6 @@ export default {
 					projects: projects,
 				})
 				.then((response) => {})
-				.catch((e) => {
-					console.error(e)
-				})
     },
 		openLabelsManagementModal(project) {
 			this.projectSelected = project
@@ -132,6 +130,20 @@ export default {
 					projectSlug: project.slug,
 				},
 			})
+    },
+    projectChangeStatus(project, code){
+      Axios()
+        .put('/projects/' + project.slug + 
+          '/?company_slug=' + this.currentCompany.slug, {
+					current_status: code,
+				})
+				.then((response) => {
+          project.status.title = response.data.data.status.title
+          project.status.code = code
+        })
+    },
+    canProjectChangeStatus(project){
+      return project.owner.username === this.currentUser.username
     }
   },
 }
@@ -196,22 +208,34 @@ export default {
               <div class="project-details d-flex justify-content-between">
                 
                 <div class="d-flex justify-content-start ">
-                  <b-badge variant="light">
-                    <ProjectVisibility
-                      :visibility="project.visibility"
-                    ></ProjectVisibility>
-                    <span class="ml-1">
-                      {{ project.visibility.title }}
-                    </span>
-                  </b-badge>
-                  <b-badge variant="light">
+                  
+                  <ProjectVisibility
+                    :visibility="project.visibility"
+                  ></ProjectVisibility>
+                  
+                  <b-dropdown v-if="canProjectChangeStatus(project)" variant="link" class="styled-dropdown">
+                    <template v-slot:button-content>
+                      <b-badge variant="light">
+                        {{ project.status.title }}
+                        &nbsp;<b>{{ parseFloat(project.percent) | percent(0) }}</b>
+                        <font-awesome-icon :icon="['far', 'angle-down']" class="ml-2" />
+                      </b-badge>
+                    </template>
+                    <b-dropdown-item v-if="project.status.code !== 0" @click="projectChangeStatus(project, 0)">In Progress</b-dropdown-item>
+                    <b-dropdown-item v-if="project.status.code !== 1" @click="projectChangeStatus(project, 1)">Completed</b-dropdown-item>
+                    <b-dropdown-item v-if="project.status.code !== 2" @click="projectChangeStatus(project, 2)">Archived</b-dropdown-item>
+                  </b-dropdown>
+
+                  <b-badge v-if="!canProjectChangeStatus(project)" variant="light">
                     {{ project.status.title }}
                     &nbsp;<b>{{ parseFloat(project.percent) | percent(0) }}</b>
                   </b-badge>
+
                   <b-button v-b-toggle="'collapse' + project.slug" size="sm">
                     <font-awesome-icon
                       :icon="['fa', 'chart-area']" />
                   </b-button>
+
                 </div>
 
                 <div class="d-flex">

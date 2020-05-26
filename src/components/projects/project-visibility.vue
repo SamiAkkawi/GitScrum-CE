@@ -12,8 +12,10 @@ export default {
 </script>
 
 <template>
-  <span v-show="visibility.title" v-b-popover.hover.right=" visibility.title + ' ' + $tc('Project', 1)">
+<b-badge v-b-popover.hover.top=" visibility.title + ' ' + $tc('Project', 1)" variant="light">
+  <span v-show="visibility.title">
     <font-awesome-icon v-if="!visibility.is_private" :icon="['fa', 'lock-open-alt']" style="font-size: 12px;" />
     <font-awesome-icon v-if="visibility.is_private" :icon="['fa', 'lock-alt']" style="font-size: 12px;" />
   </span>
+ </b-badge>
 </template>

@@ -119,7 +119,6 @@ export default {
     },
     createStatuses() {
       for (let i = 0; i < this.projects.length; i++) {
-        console.log(this.projects[i].status)
         if (!this.projectsStatuses.some((entry) => entry.value === this.projects[i].status.code)) {
           this.projectsStatuses.push({ value: this.projects[i].status.code, text: this.projects[i].status.title })
         }
