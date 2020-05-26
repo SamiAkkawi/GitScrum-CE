@@ -32,16 +32,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      gridConfig: {
-        style: [
-          'max-width: 45px; padding: 13px 10px 15px 20px;',
-          'max-width:587px; width:587px;',
-          'max-width:105px; width:105px;',
-          'max-width:176px; width:176px;',
-          'max-width:123px; width:123px;',
-        ],
-      },
+      loading: true
     }
   },
   watch: {
@@ -94,72 +85,71 @@ export default {
 </script>
 
 <template>
-  <div class="list-tasks">
+  <div>
+    <div v-for="(item, index) in items" :key="index" class="list-tasks">
+    
+      <div class="d-flex align-items-start">
 
-    <div v-for="(item, index) in items" :key="index" class="box-shadow">
-      <b-card @click="modal('task', item)">
-        <b-media tag="div">
-          <template v-slot:aside>
-            <ListUsers v-not-visible="'tablet'" :user="item.user" :link="true"> </ListUsers>
-          </template>
-          <div class="task-card-content">
-            <div> 
-              <h2 v-if="item.code">{{ item.code }} - {{ item.title }}</h2>
-              <h2 v-if="!item.code">{{ item.title }}</h2>
-              <div class="subtitle1">
-                <span>                  
-                <a :link="true" @click.stop="redirect(item)">
-                   <router-link
+        <div class="mr-2">
+          <ListUsers v-not-visible="'tablet'" :user="item.user" :link="true" size="28"></ListUsers>
+        </div>
+        
+        <div style="width:100%">
+          <div> 
+            <b-link v-if="item.code" href="#" class="txt-primary-title" @click="modal('task', item)">{{ item.code }} - {{ item.title }}</b-link >
+            <b-link v-if="!item.code" href="#" class="txt-primary-title" @click="modal('task', item)">{{ item.title }}</b-link>
+            <div class="subtitle1 mt-1">
+              <div>
+                <router-link
+                  v-b-tooltip.hover :title="item.project.name"
                   :to="{
                     name: 'projects.board',
                     params: {
                       companySlug: item.company.slug,
                       projectSlug: item.project.slug,
                     },
-                  }"
-                >
-                  {{ $tc('Project',1) }} : {{ item.project.name }}
-                </router-link>  </a>&nbsp;
-                  {{ $t('Created by') }} {{ item.user.name }} {{ $t('at') }}
-                  <span v-b-popover.hover.top="item.created_at.timezone"
-                    >{{ item.created_at.date_for_humans }}
-                  </span>
-                </span>
-                <span v-if="item.start_date.timezone" v-b-popover.hover.top="item.start_date.timezone">
-                    {{ $t('Start Date') }}: {{ item.start_date.date_for_humans }}
+                  }" class="mr-1">{{ $t('Go to Project') }}
+                </router-link> 
+
+                <span>- {{ $t('Task created at') }} {{ item.created_at.date_for_humans }}</span>
+                <span v-if="item.start_date.timezone" >
+                    - {{ $t('Start Date') }}: {{ item.start_date.date_for_humans }}
                 </span>
                 <span v-if="item.start_date.timezone && item.due_date.timezone">
-                  
+                  - 
                 </span>
-                <span v-if="item.due_date.timezone" v-b-popover.hover.top="item.due_date.timezone" :style="dueDate(item.due_date.timezone)">
+                <span v-if="item.due_date.timezone" :style="dueDate(item.due_date.timezone)">
                     {{ $t('Due Date') }}: {{ item.due_date.date_for_humans }}
                 </span>
+                 
               </div>
             </div>
-            <ListUsers v-not-visible="'tablet'" :users="item.users" :link="true" :limit="2"></ListUsers>
+            <div class="mt-1">
+              <span
+                v-if="item.workflow"
+                class="badge badge-primary"
+                :style="'color: ' + invertColor(item.workflow.color, true) + ';background:' + item.workflow.color"
+              >
+                {{ item.workflow.title }}
+              </span>
+              <span
+                v-if="item.type"
+                class="badge badge-primary"
+                :style="'color: ' + invertColor(item.type.color, true) + ';background:' + item.type.color"
+              >
+                {{ item.type.title }}
+              </span>
+              <span v-if="item.effort" class="badge  badge-primary badge-light"> {{ item.effort.title }} </span>
+              <Timer v-if="item.timer && authorize('tasks', 'read')" :task="item"></Timer>
+            </div>
           </div>
-          <div class="task-card-badge">
-            <span
-              v-if="item.workflow"
-              class="badge badge-primary"
-              :style="'color: ' + invertColor(item.workflow.color, true) + ';background:' + item.workflow.color"
-            >
-              {{ item.workflow.title }}
-            </span>
-            <span
-              v-if="item.type"
-              class="badge badge-primary"
-              :style="'color: ' + invertColor(item.type.color, true) + ';background:' + item.type.color"
-            >
-              {{ item.type.title }}
-            </span>
-            <span v-if="item.effort" class="badge  badge-primary badge-light"> {{ item.effort.title }} </span>
-
-            <Timer v-if="item.timer && authorize('tasks', 'read')" :task="item"></Timer>
-          </div>
-        </b-media>
+        </div>
         
-      </b-card>
+        <div class="ml-2">
+          <ListUsers v-not-visible="'tablet'" :users="item.users" :link="true" :limit="2" size="28" :wrap="false"></ListUsers>
+        </div>
+      </div>
+
       <div v-show="item.stats.checklist_percentage" class="progress">
         <div
           class="progress-bar"
@@ -168,7 +158,9 @@ export default {
           "
         ></div>
       </div>
-    </div>
 
+      <hr />
+
+    </div>
   </div>
 </template>

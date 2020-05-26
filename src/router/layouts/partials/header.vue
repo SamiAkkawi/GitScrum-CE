@@ -8,9 +8,9 @@ import HeaderUser from '@layouts/partials/header-user'
 import HeaderGift from '@layouts/partials/header-gift'
 import HeaderChangeCompany from '@layouts/partials/header-change-company'
 import GlobalSideBar from '@layouts/partials/global-side-bar'
-import VueGoodshare from "vue-goodshare";
 import VOffline from 'v-offline';
 import { isMobile } from 'mobile-device-detect';
+import MyNextTasks from '@components/utils/my-next-tasks'
 
 export default {
   components: {
@@ -22,7 +22,7 @@ export default {
     HeaderGift,
     HeaderChangeCompany,
     GlobalSideBar,
-    VueGoodshare,
+    MyNextTasks,
     VOffline
   },
   props: {
@@ -51,7 +51,8 @@ export default {
       onlineSlot: 'online',
       offlineSlot: 'offline', 
       currentCompany: JSON.parse(localStorage.getItem('CURRENT_COMPANY')),
-      currentUser: JSON.parse(localStorage.getItem('CURRENT_USER'))
+      currentUser: JSON.parse(localStorage.getItem('CURRENT_USER')),
+      statusMyNextTask: false,
     }
   },
   methods: {
@@ -91,13 +92,17 @@ export default {
 
     getCompleteURL(){
       return window.location;
+    },
+
+    openSidebar(){
+      this.statusMyNextTask = true;
     }
   },
 }
 </script>
 
 <template>
-  <div>
+  <div id="header-content">
 
     <VOffline
         online-class="online"
@@ -127,15 +132,14 @@ export default {
               <b-badge class="badge-upgrade">Upgrade to Business Unlimited</b-badge>
             </a>
           </li>
-
           <li>
-            <button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })"><span>{{ $tc('Project', 2) }}</span></button>
+            <b-button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })"><span>{{ $tc('Project', 2) }}</span></b-button>
           </li>
           <li>
-            <button v-shortkey="['ctrl', 'n']" class="btn btn-secondary" @shortkey="goto({ name: 'dashboard.show' })" @click="goto({ name: 'dashboard.show' })"><span>{{ $t('My Next Tasks') }}</span></button>
+            <b-button v-shortkey="['ctrl', 'n']" class="btn btn-secondary" @shortkey="openSidebar"  @click="openSidebar"><span>{{ $t('My Next Tasks') }}</span></b-button>
           </li>
           <li v-if="!isMobile">
-            <button v-shortkey="['ctrl', 'm']" class="btn btn-secondary" @shortkey="goto({ name: 'marketplace.templates' })" @click="goto({ name: 'marketplace.templates' })"><span>{{ $t('Marketplace') }}</span></button>
+            <b-button v-shortkey="['ctrl', 'm']" class="btn btn-secondary" @shortkey="goto({ name: 'marketplace.templates' })" @click="goto({ name: 'marketplace.templates' })"><span>{{ $t('Marketplace') }}</span></b-button>
           </li>
         </b-navbar-nav>
 
@@ -148,10 +152,17 @@ export default {
           <HeaderUser v-if="!isMobile"></HeaderUser>
         </b-navbar-nav>
       </b-collapse>
-
+      
     </b-navbar>
     <slot name="submenu"> </slot>
     <div class="mt-50px"></div>
+
+    <b-sidebar v-model="statusMyNextTask" id="my-next-tasks" no-header right shadow backdrop>
+      <div class="px-3 py-3">
+        <MyNextTasks></MyNextTasks>
+      </div>
+    </b-sidebar>
+
   </div>
 
 </template>

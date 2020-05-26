@@ -142,37 +142,7 @@
     }
     
     .list-tasks {
-        .box-shadow {
-            box-shadow: 0 3px 4px rgba(108, 114, 147, 0.15);
-            padding: 0;
-            margin-bottom: 8px;
-            border: 1px solid rgba(158, 169, 193, 0.2);
-        }
-        .card {
-            .card-body {
-                padding: 7px 10px 0 6px;
-            }
-            border: 0 solid transparent;
-        }
-        h2 {
-            width: 100% !important;
-            cursor: pointer;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 13px;
-            line-height: 16px;
-            color: #2A3B9C;
-            display: flex;
-            margin-bottom: 0;
-            width: 98%;
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-        .task-users {
-            top: -1px;
-            position: relative;
-        }
+        cursor: default;
         .subtitle1 {
             font-weight: 400;
             font-size: 11px;
@@ -183,35 +153,9 @@
             border-radius: 4px;
             height: 4px !important;
         }
-        .task-card-content {
-            display: flex !important;
-            justify-content: space-between !important;
-            h2 {
-                width: 100%;
-            }
-            .task-users {
-                padding-right: 7px;
-            }
-        }
-        .task-card-badge {
-            display: flex !important;
-            margin-top: 5px;
-            span,
-            .timer {
-                height: 20px;
-            }
-            .timer {
-                margin: 0 4px 0 0;
-                .task-timer {
-                    position: relative;
-                    top: -3px;
-                }
-                .fas {
-                    top: 2px;
-                    position: relative;
-                    right: -2px;
-                }
-            }
+        hr {
+            margin-top: 0.6rem;
+            margin-bottom: 0.6rem;
         }
     }
     

@@ -344,3 +344,13 @@
         padding: 30px 9px 15px;
     }
 }
+
+#header-content {
+    .b-sidebar-outer {
+        z-index: 12 !important;
+    }
+    #my-next-tasks {
+        margin-top: 53px !important;
+        width: 550px;
+    }
+}

@@ -200,7 +200,7 @@ export default {
                       projectSlug: project.slug,
                     },
                   }"
-                  class="project-title"
+                  class="project-title txt-primary-title"
                 >
                   {{ project.name }}
                 </router-link>

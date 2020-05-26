@@ -2,7 +2,6 @@
 import Layout from '@layouts/empty'
 import Axios from '@utils/axios'
 import ButtonLoading from '@components/utils/button-loading'
-import VueGoodshare from "vue-goodshare";
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -11,7 +10,7 @@ export default {
     title: 'Form2Task',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, ButtonLoading, vSelect, VueGoodshare},
+  components: { Layout, ButtonLoading, vSelect},
   data() {
     return {
       fields: [],
@@ -128,7 +127,7 @@ export default {
     <div slot="content" class="form-shared">
       <b-overlay rounded="md" :show="loading">
         <div style="position:absolute; top:10px; right:15px; z-index: 2;">
-          <VueGoodshare class="share-social-networks" has_icon button_design="gradient"></VueGoodshare>
+        
         </div>
         <div class="container-fluid full-height">
           <div class="row row-height">
