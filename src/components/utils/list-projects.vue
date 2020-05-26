@@ -3,7 +3,6 @@
 import Axios from '@utils/axios'
 import ProjectVisibility from '@components/projects/project-visibility'
 import ListLabels from '@components/utils/list-labels'
-import moment from 'moment'
 import Draggable from 'vuedraggable'
 import ManageLabels from '@components/projects/modal/manage-label'
 
@@ -28,6 +27,7 @@ export default {
     return {
       currentUser: JSON.parse(localStorage.getItem('CURRENT_USER')),
       currentCompany: JSON.parse(window.localStorage.getItem('CURRENT_COMPANY')),
+      projectLabelSidebar: false,
       projectSelected: {},
       seriesTopSpark1: [
         {
@@ -80,10 +80,6 @@ export default {
     }
   },
   methods: {
-    moment() {
-			return moment()
-		},
-		
     seriesTopSpark(project) {
 			return [
 				{
@@ -92,9 +88,8 @@ export default {
 			]
 		},
 		updatePosition(evt) {
-			$(evt.item).removeClass('move-card')
+			
 			const projects = []
-
 			const elements = document.getElementsByClassName('project-card')
 
 			for (let i = 0; i < elements.length; i++) {
@@ -107,9 +102,9 @@ export default {
 				})
 				.then((response) => {})
     },
-		openLabelsManagementModal(project) {
+		selectProject(project) {
+      this.projectLabelSidebar = true;
 			this.projectSelected = project
-			this.$refs['modal'].show()
 		},
 		hideModal() {
 			this.closeModal(this.$refs['modal'])
@@ -117,11 +112,6 @@ export default {
 		toggleModal() {
 			this.$refs['modal'].toggle('#toggle-btn')
 		},
-
-		updateClass(event) {
-			$(event.item).addClass('move-card')
-		},
-
 		redirect(project) {
 			this.$router.push({
 				name: 'projects.board',
@@ -152,15 +142,25 @@ export default {
 <template>
   <div>
     
-    <b-modal id="modal" ref="modal" class="modal-manage-labels" hide-footer lazy size="xl">
-      <div slot="modal-title">
-        <span class="title">{{ projectSelected.name }}</span>
-        <span class="subTitle">{{ $t('Manage Labels') }}</span>
-      </div>
-      <div class="modalContent">
-        <ManageLabels :project="projectSelected"></ManageLabels>
-      </div>
-    </b-modal>
+    <b-sidebar
+      v-model="projectLabelSidebar"
+      no-header
+      backdrop
+      shadow
+      right
+      no-header-close="false"
+      class="sidebar-project-labels"
+    >
+      <template v-slot:default="{ hide }">
+        <div>
+          <div class="p-2">
+          <h5 id="sidebar-no-header-title">{{ projectSelected.name }}</h5>
+          <p>Project Labels are used to help you organize projects.</p>
+          </div>
+          <ManageLabels :project="projectSelected"></ManageLabels>
+        </div>
+      </template>
+    </b-sidebar>
     
     <div class="d-flex justify-content-center">
       <Draggable
@@ -168,7 +168,6 @@ export default {
           class="d-flex justify-content-center flex-wrap"
           ghost-class="ghost"
           draggable=".bunny-project-card"
-          @start="updateClass"
           @end="updatePosition">
 
 
@@ -221,9 +220,9 @@ export default {
                         <font-awesome-icon :icon="['far', 'angle-down']" class="ml-2" />
                       </b-badge>
                     </template>
-                    <b-dropdown-item v-if="project.status.code !== 0" @click="projectChangeStatus(project, 0)">In Progress</b-dropdown-item>
-                    <b-dropdown-item v-if="project.status.code !== 1" @click="projectChangeStatus(project, 1)">Completed</b-dropdown-item>
-                    <b-dropdown-item v-if="project.status.code !== 2" @click="projectChangeStatus(project, 2)">Archived</b-dropdown-item>
+                    <b-dropdown-item v-if="project.status.code !== 0" @click="projectChangeStatus(project, 0)">{{ $t('In Progress') }}</b-dropdown-item>
+                    <b-dropdown-item v-if="project.status.code !== 1" @click="projectChangeStatus(project, 1)">{{ $t('Completed') }}</b-dropdown-item>
+                    <b-dropdown-item v-if="project.status.code !== 2" @click="projectChangeStatus(project, 2)">{{ $t('Archived') }}</b-dropdown-item>
                   </b-dropdown>
 
                   <b-badge v-if="!canProjectChangeStatus(project)" variant="light">
@@ -236,22 +235,10 @@ export default {
                       :icon="['fa', 'chart-area']" />
                   </b-button>
 
-                </div>
+                  <b-button size="sm" class="ml-1"  @click="selectProject(project)">
+                    <font-awesome-icon :icon="['fa', 'tags']" />
+                  </b-button>
 
-                <div class="d-flex">
-                  <a
-                    class="project-text collapsed mr-8-px"
-                    href="javascript:;"
-                    aria-expanded="false"
-                    @click="openLabelsManagementModal(project)"
-                  >
-                    <font-awesome-icon
-                      :icon="['fa', 'tags']"
-                      style="font-size: 14px;"
-                    />
-                  </a>
-                  
-                   
                 </div>
                 
               </div>

@@ -592,6 +592,7 @@
     "Explore User Stories": "Project does not have User Stories | Explore {n} User Story | Explore {n} User Stories",
     "Explore Discussions": "Project does not have Discussions | Explore {n} Discussion | Explore {n} Discussions",
     "Explore Documents": "Project does not have Documents | Explore {n} Document | Explore {n} Documents",
+    "Explore Projects": "Does not have Projects | Explore {n} Project | Explore {n} Projects",
     "Sprint is one timeboxed iteration of a continuous cycle": "Sprint is one timeboxed iteration of a continuous cycle",
     "User stories are short and simple descriptions of capabilities": "User stories are short and simple descriptions of capabilities",
     "Discussion is essential to promote dialogue for project’s goals": "Discussion is essential to promote dialogue for project’s goals",

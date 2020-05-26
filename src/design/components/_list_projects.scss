@@ -84,12 +84,19 @@
         height: 60px;
         width: auto;
     }
+    .btn-outline-primary,
     .btn-secondary {
         height: 28px;
     }
     .btn-secondary.not-collapsed {
         background: $grey-A700;
         border: 1px solid $grey-A200;
+    }
+    .btn-outline-secondary {
+        height: 30px;
+        top: -1px;
+        position: relative;
+        border: 1px solid transparent !important;
     }
     .manage-labels-btn {
         font-style: normal;
@@ -129,4 +136,81 @@
             cursor: grabbing !important;
         }
     }
+}
+
+.sidebar-project-labels {
+    .b-sidebar {
+        background: #fff !important;
+        padding: 120px 15px 15px;
+    }
+    .nav-link {
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .label-create {
+        input {
+            width: 185px;
+            border-right: 1px solid transparent !important;
+        }
+        input.label-name {
+            width: 173px;
+        }
+    }
+    .label-search {
+        input {
+            width: 148px;
+            border-right: 1px solid transparent !important;
+        }
+        input.label-name {
+            width: 142px;
+        }
+    }
+    .b-sidebar>.b-sidebar-header {
+        font-size: 1rem;
+        line-height: 1.2rem;
+        padding: 5px 0 20px;
+    }
+}
+
+.project-label-line {
+    .vue-swatches__trigger {
+        width: 42px !important;
+        height: 31px !important;
+        border-radius: 4px !important;
+        margin-right: 5px !important;
+    }
+    button {
+        padding: 2px 10px;
+        height: 31px;
+        margin-left: -1px;
+        border: 1px solid #ced4da !important;
+        border-left: 1px solid transparent !important;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        .fa-times,
+        .fa-plus,
+        .fa-trash {
+            opacity: 0;
+        }
+    }
+    &:hover {
+        input {
+            border-right: 1px solid #ced4da !important;
+        }
+        button {
+            border-left: 1px solid #ced4da !important;
+            .fa-times,
+            .fa-plus,
+            .fa-trash {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.label-for-input {
+    text-transform: uppercase;
+    color: $grey-800;
+    font-size: 11px;
+    letter-spacing: 0.4px;
 }

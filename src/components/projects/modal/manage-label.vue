@@ -2,10 +2,12 @@
 import Axios from '@utils/axios'
 import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
+import ButtonLoading from '@components/utils/button-loading'
 
 export default {
   components: {
     Swatches,
+    ButtonLoading
   },
   props: {
     project: {
@@ -16,6 +18,7 @@ export default {
   data() {
     return {
       search: '',
+      btnLoading: false,
       selectableLabels: [],
       newLabel: this.defaultLabel(),
       labelColorStyleProps: {
@@ -34,29 +37,18 @@ export default {
       searchBtnLoading: false,
     }
   },
-  created() {
-    this.searchLabels()
+  watch: {
+    project() {
+      this.activeTab = 0
+    },
   },
   methods: {
     defaultLabel() {
       return {
         id: null,
         title: '',
-        color: '#ac725e',
-        blocked: false,
+        color: '#333333'
       }
-    },
-
-    setCurrentEditingLabel(label) {
-      this.currentEditingLabel.id = label.id
-      this.currentEditingLabel.slug = label.slug
-      this.currentEditingLabel.color = label.color
-      this.currentEditingLabel.title = label.title
-    },
-
-    resetFields() {
-      this.search = ''
-      this.newLabel = this.defaultLabel()
     },
 
     searchLabels() {
@@ -83,15 +75,13 @@ export default {
       this.searchLabels()
     },
 
-    onClickSelectLabel(label) {
-      this.addLabelToProject(label)
-    },
-
     editLabel(label) {
-      this.setCurrentEditingLabel(label)
+      this.currentEditingLabel.color = label.color
+      this.currentEditingLabel.title = label.title
     },
 
     updateLabel(label) {
+
       if (!label.title) {
         label.color = this.currentEditingLabel.color
         label.title = this.currentEditingLabel.title
@@ -214,7 +204,7 @@ export default {
     },
 
     saveLabel() {
-      this.createBtnLoading = true
+      this.btnLoading = true
       if (!this.newLabel.title) {
         return
       }
@@ -228,9 +218,10 @@ export default {
           this.newLabel
         )
         .then((response) => {
-          this.createBtnLoading = false
+          this.btnLoading = false
           this.project.labels.push(response.data.data)
-          this.resetFields()
+          this.search = ''
+          this.newLabel = this.defaultLabel()
         })
         .catch((e) => {
           console.error(e)
@@ -242,202 +233,89 @@ export default {
 
 <template>
   <div class="manage-labels">
-    <b-card no-body>
-      <b-tabs v-model="activeTab" pills card vertical @input="resetFields">
-        <b-tab :title="$tc('Project', 1)" lazy>
-          <b-card-text>
-            <div class="col-sm-12 new-label-content">
-              <div class="input-group">
-                <input
-                  ref="labelTitle"
-                  v-model="newLabel.title"
-                  class="col-sm-9 form-control"
-                  type="text"
-                  maxlength="45"
-                  :placeholder="$t('Label Name')"
-                  :disabled="newLabel.blocked"
-                  @keyup.enter="saveLabel"
-                />
-                <Swatches
+      <b-tabs v-model="activeTab" justified>
+        <b-tab :title="$t('Project Labels')" active>
+          <div  class="project-label-line label-create mt-3">
+            <label class="label-for-input">Create a new label</label>
+            <b-input-group>
+              <Swatches
                   v-model="newLabel.color"
                   colors="text-advanced"
-                  popover-to="left"
-                  class="col-sm-1 swatches-input"
+                  popover-to="right"
+                  class="swatches-input"
                 ></Swatches>
-                <span
-                  class="col-sm-2 input-group-btn d-flex justify-content-end"
-                >
-                  <b-button
-                    v-if="createBtnLoading"
-                    variant="primary"
-                    class="btn btn-primary font-weight-bold"
-                  >
-                    <b-spinner small type="grow"></b-spinner>
-                    {{ $t('Creating') }}
-                  </b-button>
+              <b-input-group-append>
+                <b-form-input 
+                v-model="newLabel.title" 
+                :placeholder="$t('Label Name')"
+                class="label-name"
+                type="text" size="sm"></b-form-input>
+                <ButtonLoading
+                  :loading="btnLoading"
+                  type="btn-sm"
+                  @action="saveLabel"
+                ></ButtonLoading>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
 
-                  <button
-                    v-if="!createBtnLoading"
-                    class="btn btn-primary btn-text"
-                    type="button"
-                    :disabled="!newLabel.title"
-                    @click="saveLabel"
-                  >
-                    {{ $t('Create') }}
-                  </button>
-                </span>
-              </div>
-            </div>
+          <hr>
 
-            <div class="col-sm-12 p-0">
-              <table class="table table-hover">
-                <!-- <thead>
-                  <tr>
-                    <th width="60">{{ $tc('Color', 1) }}</th>
-                    <th>{{ $tc('Label', 1) }}</th>
-                    <th width="190"></th>
-                  </tr>
-                </thead> -->
-                <tbody>
-                  <tr v-for="label in project.labels" :key="label.id">
-                    <td width="60">
-                      <Swatches
-                        v-model="label.color"
-                        colors="text-advanced"
-                        popover-to
-                        class="swatches-input"
-                        @input="updateLabel(label)"
-                      ></Swatches>
-                    </td>
-                    <td>
-                      <input
-                        v-model="label.title"
-                        class="form-control"
-                        type="text"
-                        maxlength="45"
-                        :placeholder="$t('Label Name')"
-                        @keyup.enter="updateLabel(label)"
-                        @focus="editLabel(label)"
-                        @blur="updateLabel(label)"
-                      />
-                    </td>
-                    <td width="190">
-                      <span
-                        class="icon-color cursor-pointer icon-remove"
-                        @click="onClickRemoveLabel(label)"
-                      >
-                        <i class="fas fa-minus"></i>
-                        <span class="icon-text">
-                          {{ $t('Remove from project') }}
-                        </span>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </b-card-text>
+          <div v-for="label in project.labels" :key="label.id" class="project-label-line label-create">
+            <b-input-group>
+              <Swatches
+                v-model="label.color"
+                colors="text-advanced"
+                popover-to
+                class="swatches-input"
+                @input="updateLabel(label)"
+              ></Swatches>
+              <b-input-group-append>
+                <b-form-input 
+                  v-model="label.title" 
+                  :placeholder="$t('Label Name')"
+                  type="text" size="sm"
+                  @focus="editLabel(label)"
+                  @blur="updateLabel(label)"></b-form-input>
+                <b-button v-b-tooltip.hover title="Remove Label" variant="light" @click="onClickRemoveLabel(label)">
+                  <font-awesome-icon :icon="['fas', 'times']" style="color:#1E1E2F"></font-awesome-icon>
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
         </b-tab>
-        <b-tab :title="$t('Search')" lazy>
-          <b-card-text>
-            <div class="col-sm-12 search-label-content">
-              <div class="input-group">
-                <input
-                  v-model="search"
-                  type="text"
-                  class="col-sm-9 form-control input"
-                  :placeholder="$t('Search for')"
-                  @keyup.enter="onClickSearchLabels"
-                />
-                <span
-                  class="col-sm-3 input-group-btn d-flex justify-content-end"
-                >
-                  <button
-                    v-if="!searchBtnLoading"
-                    class="btn btn-primary"
-                    type="button"
-                    @click="onClickSearchLabels"
-                  >
-                    <i class="fa fa-search"> </i
-                  ></button>
-
-                  <button
-                    v-if="searchBtnLoading"
-                    class="btn btn-primary"
-                    type="button"
-                  >
-                    <b-spinner
-                      :label="$t('Loading')"
-                      small
-                      class="title-loading"
-                    ></b-spinner>
-                  </button>
-                </span>
-              </div>
+        <b-tab  @click="searchLabels">
+          <template v-slot:title>
+            {{ $t('All Labels') }}&nbsp;&nbsp;<b-spinner v-if="searchBtnLoading" type="border" small></b-spinner> 
+          </template>
+          <div class="mt-3">
+            <div v-for="label in selectableLabels" :key="label.id" class="project-label-line label-search">
+              <b-input-group>
+                <Swatches
+                  v-model="label.color"
+                  colors="text-advanced"
+                  popover-to
+                  class="swatches-input"
+                  @input="updateLabel(label)"
+                ></Swatches>
+                <b-input-group-append>
+                  <b-form-input 
+                    v-model="label.title"
+                    :placeholder="$t('Label Name')"
+                    type="text" size="sm"
+                    @focus="editLabel(label)"
+                    @blur="updateLabel(label)"></b-form-input>
+                  <b-button v-b-tooltip.top.hover title="Add Label" variant="light" @click="addLabelToProject(label)">
+                    <font-awesome-icon :icon="['fas', 'plus']" style="color:#1E1E2F"></font-awesome-icon>
+                  </b-button>
+                  <b-button v-b-tooltip.hover title="Delete Label" variant="light" @click="onClickRemoveLabel(label)">
+                    <font-awesome-icon :icon="['fas', 'trash']" style="color:#1E1E2F"></font-awesome-icon>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
             </div>
-
-            <div class="col-sm-12 p-0">
-              <table
-                class="table table-hover"
-                style="border-top:1px solid #fff;"
-              >
-                <!-- <thead>
-                  <tr>
-                    <th width="60">{{ $tc('Color', 1) }}</th>
-                    <th>{{ $tc('Label', 1) }}</th>
-                    <th width="155"></th>
-                    <th width="56"></th>
-                  </tr>
-                </thead> -->
-                <tbody>
-                  <tr v-for="label in selectableLabels" :key="label.id">
-                    <td width="60">
-                      <Swatches
-                        v-model="label.color"
-                        colors="text-advanced"
-                        popover-to
-                        class="swatches-input"
-                        @input="updateLabel(label)"
-                      ></Swatches>
-                    </td>
-                    <td>
-                      <input
-                        v-model="label.title"
-                        class="form-control"
-                        type="text"
-                        maxlength="45"
-                        placeholder="Label Name"
-                        @keyup.enter="updateLabel(label)"
-                        @focus="editLabel(label)"
-                        @blur="updateLabel(label)"
-                      />
-                    </td>
-                    <td width="155">
-                      <span
-                        class="icon-color cursor-pointer icon-add"
-                        @click="onClickSelectLabel(label)"
-                      >
-                        <i class="fas fa-plus"></i>
-                        <span class="icon-text">
-                          {{ $t('Add to project') }}
-                        </span>
-                      </span>
-                    </td>
-                    <td width="56">
-                      <span
-                        class="icon-color cursor-pointer icon-remove"
-                        @click.stop.prevent="onClickDeleteLabel(label)"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </b-card-text>
+          </div>
         </b-tab>
       </b-tabs>
-    </b-card>
   </div>
 </template>

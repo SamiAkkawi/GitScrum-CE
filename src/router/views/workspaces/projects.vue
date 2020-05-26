@@ -184,7 +184,7 @@ export default {
           <b-col>
             <TitleLoading
               v-if="projects.length || loading"
-              :title="$tc('Project', 2)"
+              :title="$tc('Explore Projects', projects.length)"
               :subtitle="$t('Perfect project overview for modern teams')"
               :loading="loading"></TitleLoading>
           </b-col>
