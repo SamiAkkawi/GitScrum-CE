@@ -1,0 +1,116 @@
+.bunny-project-card {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 5px 10px;
+    transition: box-shadow ease-in 0.2s;
+    box-shadow: 0px 4px 4px rgba(108, 114, 147, 0.15);
+    &:hover {
+        box-shadow: 0px 7px 17px rgba(0, 0, 0, 0.07);
+    }
+    .card {
+        height: 100%;
+        background: $yellow-A100;
+        border: 1px solid $yellow-A100;
+        border-radius: 6px;
+        border: none;
+        .project-title {
+            color: $grey-900;
+            font-size: $font-size-md;
+            font-weight: 500;
+            line-height: $line-height;
+            display: flow-root;
+            margin: 10px 0 8px;
+        }
+        .img {
+            background-color: $grey-200 !important;
+            border-top-right-radius: 6px;
+            border-top-left-radius: 6px;
+        }
+        .card-shadow {
+            box-shadow: 0px 7px 17px rgba(0, 0, 0, 0.07);
+        }
+        .card-body {
+            padding: 0 10px;
+        }
+        .badge-light {
+            line-height: $line-height;
+            font-size: $font-size;
+        }
+    }
+    .collapse {
+        .card {
+            margin: 0;
+            padding: 0;
+            .card-body {
+                padding: 0;
+            }
+            .titles {
+                font-weight: 500;
+                font-size: 9px;
+                letter-spacing: 0.4px;
+                text-transform: uppercase;
+                color: $grey-600;
+                border-bottom: 1px solid $grey-200;
+                ;
+            }
+        }
+    }
+    img {
+        width: 100%;
+        height: 80px;
+        border-radius: 6px 6px 0px 0px;
+    }
+    img.logo {
+        margin: 10px;
+        border: 3px solid hsla(0, 0%, 100%, 0.4);
+        border-radius: 4px;
+        box-shadow: 0px 15px 46px rgba(0, 0, 0, 0.2);
+        height: 60px;
+        width: auto;
+    }
+    .btn-secondary {
+        height: 28px;
+    }
+    .btn-secondary.not-collapsed {
+        background: $grey-A700;
+        border: 1px solid $grey-A200;
+    }
+    .manage-labels-btn {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 26px;
+        /* or 289% */
+        display: flex;
+        align-items: center;
+        -webkit-text-decoration-line: none;
+        text-decoration-line: none;
+        color: #2b65f0;
+        cursor: pointer;
+        display: inline;
+    }
+    .manage-labels-btn:hover {
+        -webkit-text-decoration-line: underline;
+        text-decoration-line: underline;
+    }
+    .project-list-progress.progress {
+        height: 3px;
+        border-radius: 0;
+        .progress-bar {
+            background: $grey-A400;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+    }
+    .ghost {
+        opacity: 0.4;
+    }
+    .sortable-drag {
+        .card,
+        .list-group-item {
+            transform: rotate(2.6deg) !important;
+            cursor: grabbing !important;
+        }
+    }
+}

@@ -39,7 +39,7 @@ export default {
             enabled: true,
           },
         },
-        colors: ['#AFBBE2'],
+        colors: ['#606c87'],
         stroke: {
           curve: 'straight',
         },
@@ -65,7 +65,7 @@ export default {
           },
         },
         fill: {
-          opacity: 0.3,
+          opacity: 0.2,
         },
         xaxis: {
           crosshairs: {
@@ -80,65 +80,59 @@ export default {
   },
   methods: {
     moment() {
-      return moment()
-    },
+			return moment()
+		},
+		
     seriesTopSpark(project) {
-      let data = [
-        {
-          data: project.closed_tasks,
-        },
-      ]
-      return data
-    },
-    updatePosition(evt) {
-      $(evt.item).removeClass('move-card')
-      let projects = []
+			return [
+				{
+					data: project.closed_tasks,
+				},
+			]
+		},
+		updatePosition(evt) {
+			$(evt.item).removeClass('move-card')
+			const projects = []
 
-      let elements = document.getElementsByClassName('project-card')
+			const elements = document.getElementsByClassName('project-card')
 
-      for (let i = 0; i < elements.length; i++) {
-        projects.push(elements[i].getAttribute('data-slug'))
-      }
+			for (let i = 0; i < elements.length; i++) {
+				projects.push(elements[i].getAttribute('data-slug'))
+			}
 
-      Axios()
-        .put('/projects-positions/?company_slug=' + this.currentCompany.slug, {
-          projects: projects,
-        })
-        .then((response) => {
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+			Axios()
+				.put('/projects-positions/?company_slug=' + this.currentCompany.slug, {
+					projects: projects,
+				})
+				.then((response) => {})
+				.catch((e) => {
+					console.error(e)
+				})
     },
-    openLabelsManagementModal(project) {
-      this.projectSelected = project
-      this.$refs['modal'].show()
-    },
-    hideModal() {
-      this.closeModal(this.$refs['modal'])
-    },
-    toggleModal() {
-      this.$refs['modal'].toggle('#toggle-btn')
-    },
+		openLabelsManagementModal(project) {
+			this.projectSelected = project
+			this.$refs['modal'].show()
+		},
+		hideModal() {
+			this.closeModal(this.$refs['modal'])
+		},
+		toggleModal() {
+			this.$refs['modal'].toggle('#toggle-btn')
+		},
 
-    handleCardShadow(projectSlug) {
-      if ($('#' + projectSlug).hasClass('card-shadow')) {
-        $('#' + projectSlug).removeClass('card-shadow')
-      } else {
-        $('#' + projectSlug).addClass('card-shadow')
-      }
-    },
+		updateClass(event) {
+			$(event.item).addClass('move-card')
+		},
 
-    updateClass(event) {
-      $(event.item).addClass('move-card')
-    },
-
-    redirect(project) {
-      this.$router.push({
-        name: 'projects.board',
-        params: { companySlug: project.company.slug, projectSlug: project.slug },
-      })
-    },
+		redirect(project) {
+			this.$router.push({
+				name: 'projects.board',
+				params: {
+					companySlug: project.company.slug,
+					projectSlug: project.slug,
+				},
+			})
+    }
   },
 }
 </script>
@@ -161,29 +155,32 @@ export default {
           :disabled="disabled"
           class="d-flex justify-content-center flex-wrap"
           ghost-class="ghost"
-          draggable=".project-card"
+          draggable=".bunny-project-card"
           @start="updateClass"
-          @end="updatePosition"
-          
-        >
-        <div v-for="(project,index) in data" :key="index" :data-slug="project.slug" class="project-card">
+          @end="updatePosition">
+
+
+        <div v-for="(project,index) in data" :key="index"  class="bunny-project-card" :data-slug="project.slug">
           <div :id="project.slug" class="card">
             <div
               class="img cursor-grab"
               :style="
                 'background: url(' +
                   project.background_thumb +
-                  ') #DFE1E7;background-repeat: no-repeat;background-size: cover;'
+                  ') ;background-repeat: no-repeat;background-size: cover;'
               "
-              @click="redirect(project)"
             >
               <img v-lazy="project.logo" class="logo" :alt="project.name" />
             </div>
 
-            <b-progress class="project-list-progress" :value="project.percent" :max="100"></b-progress>
-            
+            <b-progress
+              class="project-list-progress"
+              :value="project.percent"
+              :max="100"
+            ></b-progress>
+
             <div class="card-body">
-              <div class="card-title" @click="redirect(project)">
+            
                 <router-link
                   :to="{
                     name: 'projects.board',
@@ -192,62 +189,96 @@ export default {
                       projectSlug: project.slug,
                     },
                   }"
+                  class="project-title"
                 >
                   {{ project.name }}
                 </router-link>
-              </div>
               <div class="project-details d-flex justify-content-between">
+                
                 <div class="d-flex justify-content-start ">
-                  <div class="border cursor-default padding">
-                    <ProjectVisibility :visibility="project.visibility"></ProjectVisibility>
+                  <b-badge variant="light">
+                    <ProjectVisibility
+                      :visibility="project.visibility"
+                    ></ProjectVisibility>
                     <span class="ml-1">
                       {{ project.visibility.title }}
                     </span>
-                  </div>
-                  <div class="border cursor-default padding ml-1 status-info">
+                  </b-badge>
+                  <b-badge variant="light">
                     {{ project.status.title }}
                     &nbsp;<b>{{ parseFloat(project.percent) | percent(0) }}</b>
-                  </div>
+                  </b-badge>
+                  <b-button v-b-toggle="'collapse' + project.slug" size="sm">
+                    <font-awesome-icon
+                      :icon="['fa', 'chart-area']" />
+                  </b-button>
                 </div>
-                <div class="icon d-flex">
+
+                <div class="d-flex">
                   <a
                     class="project-text collapsed mr-8-px"
                     href="javascript:;"
                     aria-expanded="false"
                     @click="openLabelsManagementModal(project)"
                   >
-                    <font-awesome-icon :icon="['fa', 'tags']" style="font-size: 14px;" />
+                    <font-awesome-icon
+                      :icon="['fa', 'tags']"
+                      style="font-size: 14px;"
+                    />
                   </a>
-                  <a
-                    class="project-text collapsed"
-                    data-toggle="collapse"
-                    :href="'#collapse' + project.slug"
-                    aria-expanded="false"
-                    :aria-controls="'collapse' + project.slug"
-                    @click="handleCardShadow(project.slug)"
-                  >
-                    <font-awesome-icon :icon="['fa', 'chart-area']" style="font-size: 18px;" />
-                  </a>
+                  
+                   
                 </div>
+                
               </div>
 
+              <ListLabels
+                v-show="project.labels[0]"
+                :labels="project.labels"
+                class="mt-1 labels-size"></ListLabels>
+              
+              <b-collapse :id="'collapse' + project.slug">
+                <b-card>
+                  <div class="titles mt-1">
+                    {{ $t('Project Progress in Last 7 Days') }}
+                  </div>
+                  
+                  <apexchart
+                    type="area"
+                    height="45"
+                    :options="chartOptionsTopSpark1"
+                    :series="seriesTopSpark(project)"
+                    class="mt-1" />
+                </b-card>
+              </b-collapse>
+<!--
               <div class="collapse-content card-shadow">
-                <div :id="'collapse' + project.slug" class="collapse card-body-overlay">
+                <div
+                  :id="'collapse' + project.slug"
+                  class="collapse card-body-overlay"
+                >
                   <div v-show="project.labels.length" class="titles mt-2">
                     {{ $t('labels') }}
                   </div>
-                  <ListLabels :labels="project.labels" class="mt-2 labels-size"></ListLabels>
-                  <div class="titles mt-2"> {{ $t('Project Progress in Last 7 Days') }}</div>
-                  <apexchart
-                    v-if="project.closed_tasks"
-                    type="area"
-                    height="50"
-                    :options="chartOptionsTopSpark1"
-                    :series="seriesTopSpark(project)"
-                    class=" mt-2"
-                  />
+                  <ListLabels
+                    :labels="project.labels"
+                    class="mt-2 labels-size"
+                  ></ListLabels>
+                  <div class="titles mt-2">
+                    {{ $t('Project Progress in Last 7 Days') }}
+                  </div>
+                  
+                    <apexchart
+                      v-if="project.closed_tasks"
+                      type="area"
+                      height="50"
+                      :options="chartOptionsTopSpark1"
+                      :series="seriesTopSpark(project)"
+                      class=" mt-2"
+                    />
+                   
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

@@ -1,0 +1,243 @@
+// Color
+$blue-50: #e9eafd;
+$blue-100: #c8cafa;
+$blue-200: #a3a6f7;
+$blue-300: #7e82f3;
+$blue-400: #6268f1;
+$blue-500: #464dee;
+$blue-600: #3f46ec;
+$blue-700: #373de9;
+$blue-800: #2f34e7;
+$blue-900: #2025e2;
+$blue-A100: #ffffff;
+$blue-A200: #e6e7ff;
+$blue-A400: #b3b5ff;
+$blue-A700: #9a9cff;
+$red-50: #fceded;
+$red-100: #f8d2d2;
+$red-200: #f4b4b4;
+$red-300: #ef9595;
+$red-400: #eb7f7f;
+$red-500: #e86868;
+$red-600: #e56060;
+$red-700: #e25555;
+$red-800: #de4b4b;
+$red-900: #d83a3a;
+$red-A100: #ffffff;
+$red-A200: #fff1f1;
+$red-A400: #ffbebe;
+$red-A700: #ffa4a4;
+$yellow-50: #fffae7;
+$yellow-100: #fef2c4;
+$yellow-200: #feea9c;
+$yellow-300: #fde274;
+$yellow-400: #fcdb57;
+$yellow-500: #fcd539;
+$yellow-600: #fcd033;
+$yellow-700: #fbca2c;
+$yellow-800: #fbc424;
+$yellow-900: #faba17;
+$yellow-A100: #ffffff;
+$yellow-A200: #fffdf7;
+$yellow-A400: #ffedc4;
+$yellow-A700: #ffe5ab;
+$grey-50: #edeef2;
+$grey-100: #d2d5dd;
+$grey-200: #b4bac7;
+$grey-300: #959eb1;
+$grey-400: #7f89a0;
+$grey-500: #68748f;
+$grey-600: #606c87;
+$grey-700: #55617c;
+$grey-800: #4b5772;
+$grey-900: #3a4460;
+$grey-A100: #b4c8ff;
+$grey-A200: #81a2ff;
+$grey-A400: #4e7dff;
+$grey-A700: #356aff;
+$pink-50: #ffedf2;
+$pink-100: #ffd3df;
+$pink-200: #ffb6c9;
+$pink-300: #ff98b3;
+$pink-400: #ff82a3;
+$pink-500: #ff6c93;
+$pink-600: #ff648b;
+$pink-700: #ff5980;
+$pink-800: #ff4f76;
+$pink-900: #ff3d64;
+$pink-A100: #ffffff;
+$pink-A200: #ffffff;
+$pink-A400: #ffe5ea;
+$pink-A700: #ffccd5;
+$lime-50: #f5fbf1;
+$lime-100: #e6f5db;
+$lime-200: #d5efc3;
+$lime-300: #c4e8ab;
+$lime-400: #b7e399;
+$lime-500: #aade87;
+$lime-600: #a3da7f;
+$lime-700: #99d574;
+$lime-800: #90d16a;
+$lime-900: #7fc857;
+$lime-A100: #ffffff;
+$lime-A200: #fcfffa;
+$lime-A400: #daffc7;
+$lime-A700: #c9ffad;
+$black-50: #e1e0e2;
+$black-100: #b3b3b7;
+$black-200: #818087;
+$black-300: #4f4d57;
+$black-400: #292633;
+$black-500: #03000f;
+$black-600: #03000d;
+$black-700: #02000b;
+$black-800: #020008;
+$black-900: #010004;
+$black-A100: #a6a6a6;
+$black-A200: #8c8c8c;
+$black-A400: #737373;
+$black-A700: #666666;
+
+/*
+*/
+
+$primary-300: $blue-300;
+$primary-500: $blue-500;
+$primary-400: $blue-400;
+$primary-600: $blue-600;
+$primary-700: darken($primary-500, 20);
+$darkgray-300: $black-300;
+$darkgray-400: $black-400;
+$darkgray-500: $black-500;
+$darkgray-600: $black-600;
+$lightgray-300: $black-50;
+$lightgray-500: $black-100;
+$lightgray-400: $black-200;
+$lightgray-600: $black-300;
+$green-300: $lime-300;
+$green-400: $lime-400;
+$green-500: $lime-500;
+$green-600: $lime-600;
+$orange-300: $yellow-300;
+$orange-400: $yellow-400;
+$orange-500: $yellow-500;
+$orange-600: $yellow-600;
+$red-300: $red-300;
+$red-400: $red-400;
+$red-500: $red-500;
+$red-600: $red-600;
+$purple-300: $pink-300;
+$purple-400: $pink-400;
+$purple-500: $pink-500;
+$purple-600: $pink-600;
+$warning-500: $yellow-800;
+$body-font-color: $darkgray-500;
+$body-bg: $lightgray-300;
+$link-color: $primary-500;
+$link-color-dark: $primary-600;
+$border-color: $lightgray-400;
+$code-color: $primary-600;
+// Fonts
+// Credit: https://css-tricks.com/snippets/css/system-font-stack/
+$base-font-family: -apple-system,
+BlinkMacSystemFont,
+'Segoe UI',
+Roboto,
+Helvetica,
+Arial,
+sans-serif !default;
+$body-font-family: $base-font-family;
+$mono-font-family: 'SF Mono',
+'Segoe UI Mono',
+'Roboto Mono',
+Menlo,
+Courier,
+monospace !default;
+$fallback-font-family: 'Helvetica Neue',
+sans-serif !default;
+$cjk-zh-font-family: $base-font-family,
+'PingFang SC',
+'Hiragino Sans GB',
+'Microsoft YaHei',
+$fallback-font-family !default;
+$cjk-jp-font-family: $base-font-family,
+'Hiragino Sans',
+'Hiragino Kaku Gothic Pro',
+'Yu Gothic',
+YuGothic,
+Meiryo,
+$fallback-font-family !default;
+$cjk-ko-font-family: $base-font-family,
+'Malgun Gothic',
+$fallback-font-family !default;
+$body-font-family: $base-font-family,
+$fallback-font-family !default;
+// Unit sizes
+$unit-o: 0.05rem !default;
+$unit-h: 0.1rem !default;
+$unit-1: 0.2rem !default;
+$unit-2: 0.4rem !default;
+$unit-3: 0.6rem !default;
+$unit-4: 0.8rem !default;
+$unit-5: 1rem !default;
+$unit-6: 1.2rem !default;
+$unit-7: 1.4rem !default;
+$unit-8: 1.6rem !default;
+$unit-9: 1.8rem !default;
+$unit-10: 2rem !default;
+$unit-12: 2.4rem !default;
+$unit-16: 3.2rem !default;
+// Font sizes
+$html-font-size: 18px !default;
+$html-line-height: 1.5 !default;
+$font-size: 0.7rem !default;
+$font-size-sm: 0.6rem !default;
+$font-size-md: 0.8rem !default;
+$font-size-lg: 1rem !default;
+$line-height: 1rem !default;
+// Sizes
+$layout-spacing: $unit-2 !default;
+$layout-spacing-sm: $unit-1 !default;
+$layout-spacing-lg: $unit-4 !default;
+$border-radius: $unit-1 !default;
+$border-width: $unit-o !default;
+$border-width-lg: $unit-h !default;
+$control-size: $unit-8 !default;
+$control-size-sm: $unit-7 !default;
+$control-size-lg: $unit-10 !default;
+$control-padding-x: $unit-2 !default;
+$control-padding-x-sm: $unit-2 * 0.75 !default;
+$control-padding-x-lg: $unit-2 * 1.5 !default;
+$control-padding-y: ($control-size - $line-height) / 2 - $border-width !default;
+$control-padding-y-sm: ($control-size-sm - $line-height) / 2 - $border-width !default;
+$control-padding-y-lg: ($control-size-lg - $line-height) / 2 - $border-width !default;
+$control-icon-size: 0.8rem !default;
+$control-width-xs: 180px !default;
+$control-width-sm: 320px !default;
+$control-width-md: 640px !default;
+$control-width-lg: 960px !default;
+$control-width-xl: 1280px !default;
+$navbar-width: 12rem;
+$actionbar-width: 16rem;
+// Responsive breakpoints
+$size-xs: 480px !default;
+$size-sm: 600px !default;
+$size-md: 840px !default;
+$size-lg: 960px !default;
+$size-xl: 1280px !default;
+$size-2x: 1440px !default;
+$responsive-breakpoint: $size-xs !default;
+// Z-index
+$zindex-0: 1 !default;
+$zindex-1: 100 !default;
+$zindex-2: 200 !default;
+$zindex-3: 300 !default;
+$zindex-4: 400 !default;
+$zindex-5: 500 !default;
+$zindex-6: 600 !default;
+$zindex-7: 700 !default;
+$zindex-8: 800 !default;
+$zindex-9: 900 !default;
+// Shadow
+$box-shadow: 0 0 1px #dbdbdb,
+0 0.1rem 5px rgba(0, 0, 0, 0.26);

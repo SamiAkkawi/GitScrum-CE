@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     backgroundColor(hexColor) {
-      return hexToRgba(hexColor, 0.2)
-    },
+      return hexToRgba(hexColor, 0.1)
+    }
   },
 }
 </script>
@@ -35,7 +35,7 @@ export default {
       :alt="label.title"
       :title="label.title"
       class="badge badge-text fw-600"
-      :style="'color: ' + label.color + ';background:' + backgroundColor(label.color)"
+      :style="'border:1px solid ' + label.color  + ';color: ' + label.color + ';background:' + backgroundColor(label.color)"
     >
       <div v-if="limit">{{ label.title | truncate(limit) }}</div>
       <div v-if="!limit">{{ label.title }}</div>

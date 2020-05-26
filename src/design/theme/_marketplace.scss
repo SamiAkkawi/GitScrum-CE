@@ -38,13 +38,18 @@
     }
 }
 
+.template-box-table {
+    td {
+        font-size: 13px;
+    }
+}
+
 .card-color-box {
     display: block;
     position: relative;
-    top: -2px;
     margin-right: 5px;
-    width: 15px;
-    height: 15px;
+    width: 22px;
+    height: 22px;
     border-radius: 4px;
 }
 

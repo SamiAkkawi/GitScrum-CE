@@ -78,6 +78,7 @@ export default {
       @click="$emit('action', true)"
       @keyup.enter="submit"
     >
+    
       <font-awesome-icon
         v-if="icon === ''"
         v-show="!loading"

@@ -4,10 +4,8 @@ import Axios from '@utils/axios'
 import ListProjects from '@components/utils/list-projects'
 import TitleLoading from '@components/utils/title-loading'
 import hexToRgba from 'hex-to-rgba'
-import { isMobile } from 'mobile-device-detect';
 import { modalManager } from '@state/helpers'
 import Alert from '@components/utils/alert'
-
 export default {
   page: {
     title: 'Projects',
@@ -22,8 +20,7 @@ export default {
   data() {
     return {
       loading: true,
-      canDragProjects: isMobile,
-      
+      canDragProjects: false,
       projects: [],
       projectsFiltered: [],
       seachByProjectName: '',
@@ -60,18 +57,15 @@ export default {
   },
   methods: {
     ...modalManager,
-
     modal(value) {
       this.open({ name: value, object: [] })
     },
-
     checkCompanySettings() {
       let company = this.userCompanies.find((company) => company.slug === this.currentCompany.slug)
       this.canCreateProjects = company.settings.can_create_projects
     },
-
     backgroundColor(hexColor) {
-      return hexToRgba(hexColor, '0.7')
+      return hexToRgba(hexColor, '0.1')
     },
     getProjects() {
       Axios()
@@ -81,38 +75,30 @@ export default {
           this.projectsFiltered = this.projects
           this.loading = false
           this.createStatuses()
+          this.filterByStatus()
         })
         .catch((e) => {
           console.error(e)
         })
     },
     getLabels() {
-
       this.labelsLoading = true
-
       let elements = document.getElementsByClassName('task-labels')
       let element = null;
       let arr = [];
       this.projectsLabels = []
       
       //if ( !this.projectsLabels[0] ){
-
         for (let i = 0; i < elements.length; i++) {
           element = elements[i].getElementsByClassName('badge')
-
           if ( element.length ){
-
-
             for (let y = 0; y < element.length; y++) {
-
               if ( !arr.includes(element[y].title) ){
-
                 this.projectsLabels.push({
                   color: element[y].style.color,
                   background: element[y].style.background,
                   title: element[y].title
                 });
-
               }
               arr.push(element[y].title)
             }
@@ -122,7 +108,6 @@ export default {
       //}
       this.labelsLoading = false
     },
-
     searchLabelsInProjects(project, searchLabels) {
       return project.labels.filter((label) => {
         for (let i = 0; i < searchLabels.length; i++) {
@@ -132,17 +117,15 @@ export default {
         }
       })
     },
-
     createStatuses() {
       for (let i = 0; i < this.projects.length; i++) {
-        if (!this.projectsStatuses.some((entry) => entry.code === this.projects[i].status.code)) {
+        console.log(this.projects[i].status)
+        if (!this.projectsStatuses.some((entry) => entry.value === this.projects[i].status.code)) {
           this.projectsStatuses.push({ value: this.projects[i].status.code, text: this.projects[i].status.title })
         }
       }
     },
-
     filterByStatus() {
-      
       this.projectsFiltered = this.projects
       if (this.projectsStatusSelect !== null) {
         this.projectsFiltered = this.projects.filter((project) => {
@@ -150,18 +133,15 @@ export default {
         })
       }
     },
-
     createProject() {
       this.openCreateProject()
     },
-
     searchTitle() {
       let titleStr = this.seachByProjectName.toUpperCase()
       this.projectsFiltered = this.projects.filter((project) => {
         return project.name.toUpperCase().includes(titleStr)
       })
     },
-
     filterLabels() {
       this.projectsFiltered = this.projects
       if (this.projectsLabelSelected.length) {
@@ -172,7 +152,6 @@ export default {
         })
       }
     },
-
     handleFilterByLabel(label) {
       if (label.selected) {
         this.removefilterByLabel(label)
@@ -180,7 +159,6 @@ export default {
         this.filterByLabel(label)
       }
     },
-
     filterByLabel(label) {
       if (this.projectsLabelSelected.indexOf(label) !== 0) {
         label.selected = true
@@ -188,7 +166,6 @@ export default {
         this.filterLabels()
       }
     },
-
     removefilterByLabel(label) {
       label.selected = false
       this.projectsLabelSelected.splice(this.projectsLabelSelected.indexOf(label), 1)
@@ -202,8 +179,9 @@ export default {
   <Layout>
     <div slot="content">
       <b-overlay :show="loading" no-wrap></b-overlay>
+      
       <b-container fluid>
-        <b-row v-if="projects.length" align-v="center" class="subheader">
+        <b-row v-if="projects.length" align-v="center" class="subheader shadow-sm">
           <b-col>
             <TitleLoading
               v-if="projects.length || loading"
@@ -221,19 +199,21 @@ export default {
               :placeholder="$t('Search by project name')"
             ></b-form-input>
 
-            <b-form-select v-if="!isMobile" v-model="projectsStatusSelect" :options="projectsStatuses" size="sm" @change="filterByStatus"></b-form-select>
+            <b-form-select v-model="projectsStatusSelect" :options="projectsStatuses" size="sm" @change="filterByStatus"></b-form-select>
 
-            <b-button v-if="!isMobile" v-b-toggle.collapse-1 variant="light" size="sm" @click="getLabels">
+            <b-button v-b-toggle.collapse-1 variant="light" size="sm">
               <font-awesome-icon :icon="['fa', 'tags']" />
               Labels
             </b-button>
 
           </b-col>
         </b-row>
+        <b-row style="height:70px;"></b-row>
         <b-row>
           <b-col>
-            <b-collapse id="collapse-1">
-              <div class="d-flex flex-wrap pt-2 pb-1 p-2">
+            <b-collapse id="collapse-1" @shown="getLabels">
+              <div class="d-flex justify-content-center flex-wrap pt-2 pb-1 p-2">
+                <div>
                 <div
                   v-for="(label, index) in projectsLabels"
                   :key="index"
@@ -249,6 +229,7 @@ export default {
                       <font-awesome-icon :icon="['fa', 'times']" class="ml-5-px" />
                     </span>
                   </div>
+                </div>
                 </div>
               </div>
             </b-collapse>

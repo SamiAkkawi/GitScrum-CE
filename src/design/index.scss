@@ -1,3 +1,4 @@
+@import 'components/variables';
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins/_breakpoints';
@@ -48,6 +49,7 @@
 *** Components
 **/
 
+@import 'components/list_projects';
 @import 'components/avatar';
 @import 'components/hero';
 @import 'components/discussions';

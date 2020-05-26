@@ -19,11 +19,21 @@ import Axios from '@utils/axios'
 import vueNotVisible from 'vue-not-visible'
 import VueAnalytics from 'vue-analytics';
 import appConfig from '@src/app.config'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fal } from '@fortawesome/pro-light-svg-icons'
-import { far } from '@fortawesome/pro-regular-svg-icons'
-import { fas } from '@fortawesome/pro-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+    library
+} from '@fortawesome/fontawesome-svg-core'
+import {
+    fal
+} from '@fortawesome/pro-light-svg-icons'
+import {
+    far
+} from '@fortawesome/pro-regular-svg-icons'
+import {
+    fas
+} from '@fortawesome/pro-solid-svg-icons'
+import {
+    FontAwesomeIcon
+} from '@fortawesome/vue-fontawesome'
 
 
 Vue.use(VueCookies)

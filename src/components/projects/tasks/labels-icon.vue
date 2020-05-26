@@ -372,7 +372,7 @@ export default {
         </div>
 
         <b-dropdown-group v-if="task.labels.length" class="dropdown-header-group-title" :header="$t('Remove Label')">
-          <div v-for="item in task.labels" :key="item.id" class="dropdown-item">
+          <div v-for="item in task.labels" :key="item.id" class="dropdown-item ">
             <div class="label-name" @click="removeLabel(item)">
               <span class="square" :style="'background:' + item.color"></span>
               <span class="fw-600 ml-5-px">{{ item.title }}</span>

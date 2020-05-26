@@ -6,6 +6,7 @@ import Draggable from 'vuedraggable'
 import { isMobile } from 'mobile-device-detect';
 import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
+import TitleLoading from '@components/utils/title-loading'
 
 export default {
   page: {
@@ -14,9 +15,10 @@ export default {
   },
   components: {
     Layout,
+    TitleLoading,
     BoardTask,
     Draggable,
-    Swatches,
+    Swatches
   },
   data() {
     return {
@@ -127,6 +129,14 @@ export default {
 <template>
   <Layout>
     
+    <template slot="header-left">
+      <TitleLoading :title="$t('Board')" :loading="loading"></TitleLoading>
+    </template>
+
+    <template slot="header-right">
+
+    </template>
+
     <div slot="content" class="">
       <div class="ui">
         <div class="lists" :style="'width:' + width + 'px'">

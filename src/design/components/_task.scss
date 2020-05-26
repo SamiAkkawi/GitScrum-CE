@@ -465,6 +465,9 @@
             font-weight: 400 !important;
             height: calc(1.5em + 10px);
         }
+        .custom-control.custom-checkbox {
+            font-size: 12px !important;
+        }
         .list-inline-item:not(:last-child) {
             margin-right: 0;
         }
@@ -477,6 +480,11 @@
         }
         .align-items-baseline {
             align-items: center !important;
+        }
+        .mt-8-px.mb-15px.container {
+            .col-12 {
+                padding-left: 0 !important;
+            }
         }
     }
     

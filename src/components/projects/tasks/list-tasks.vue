@@ -108,7 +108,7 @@ export default {
               <h2 v-if="!item.code">{{ item.title }}</h2>
               <div class="subtitle1">
                 <span>                  
-                <a @click.stop="redirect(item)" :link="true">
+                <a :link="true" @click.stop="redirect(item)">
                    <router-link
                   :to="{
                     name: 'projects.board',

@@ -135,17 +135,13 @@ export default {
       </div>
       
     </b-dropdown-form>
-    <div class="scroll-activate-h200">
-      <b-dropdown-item 
-        v-for="type in types"
-        :key="type.id"
-        
-        @click="changeTaskType(type)">
-        <div class="d-flex justify-content-start">
-          <span class="square-color" :style="'background:' + type.color"></span>
-          {{ type.title }}
+    <div class="scroll-activate-h200 label-line">
+      <div v-for="type in types" :key="type.id" class="dropdown-item ">
+        <div class="label-name" @click="changeTaskType(type)">
+          <span class="square" :style="'background:' + type.color"></span>
+          <span class="fw-600 ml-5-px">{{ type.title }}</span>
         </div>
-      </b-dropdown-item>
+      </div>
     </div>
   </b-dropdown>
   <ProjectTaskTypes></ProjectTaskTypes>

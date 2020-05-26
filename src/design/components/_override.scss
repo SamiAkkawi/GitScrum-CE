@@ -1,5 +1,11 @@
 .badge {
-    font-weight: 500;
+    font-weight: 500 !important;
+    padding: 5px 8px !important;
+}
+
+.badge.timer {
+    width: 80px;
+    text-align: left;
 }
 
 .container-fluid {

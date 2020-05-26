@@ -193,7 +193,7 @@ export default {
 
     closeTaskFilters(){
       this.sidebarStatus = false
-      document.getElementById('page-content').style.paddingLeft = "0";
+      document.getElementById('page-content').style.paddingLeft = "10px";
     }
   }
 }

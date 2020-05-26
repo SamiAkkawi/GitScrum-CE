@@ -310,7 +310,7 @@ export default {
 
           <b-container class="mt-8-px mb-15px">
             <b-row>
-              <b-col cols="6">
+              <b-col cols="12">
                 <b-form-checkbox
                   v-model="timer"
                   value="1"
@@ -318,7 +318,7 @@ export default {
                   Timer active
                 </b-form-checkbox>
               </b-col>
-              <b-col cols="6">
+              <b-col cols="12">
                 <b-form-checkbox
                   v-model="isBlocker"
                   value="1"
@@ -326,7 +326,7 @@ export default {
                   Blocked
                 </b-form-checkbox>
               </b-col>
-              <b-col cols="6">
+              <b-col cols="12">
                 <b-form-checkbox
                   v-model="isDraft"
                   value="1"
@@ -334,7 +334,7 @@ export default {
                   Draft
                 </b-form-checkbox>
               </b-col>
-              <b-col cols="6">
+              <b-col cols="12">
                 <b-form-checkbox
                   v-model="isBug"
                   value="1"

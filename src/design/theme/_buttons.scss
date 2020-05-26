@@ -158,10 +158,10 @@
 }
 
 .btn-small-loading {
-    position: relative;
+    position: inherit;
+    top: -6px;
     width: 16px;
     height: 16px;
-    margin-top: -1px;
     opacity: 1;
     border-width: 3px;
 }

@@ -153,11 +153,27 @@
                 }
             }
         }
+        .dropdown {
+            button {
+                padding: 10px 14px,
+            }
+        }
         .dropdown.show {
             button {
                 color: #68748f;
                 background: rgba(158, 169, 193, 0.4);
             }
+        }
+        .dropdown-header {
+            padding: 0 10px;
+        }
+        .dropdown-item {
+            padding: 10px;
+        }
+        .square {
+            display: flexbox;
+            width: 22px;
+            height: 22px;
         }
     }
     .task-content {

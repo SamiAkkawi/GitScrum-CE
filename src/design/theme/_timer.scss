@@ -15,11 +15,6 @@
     }
 }
 
-.divTableCell .timer {
-    width: 76px;
-}
-
-.divTableCell .timer,
 .task-timer .timer {
     position: relative;
     top: 1px;
@@ -27,9 +22,6 @@
     margin: 0 3px !important;
     .task-timer {
         margin: 0;
-    }
-    #time {
-        font-size: 10px;
     }
     span i {
         position: relative;

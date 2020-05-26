@@ -129,13 +129,13 @@ export default {
           </li>
 
           <li>
-            <button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })">{{ $tc('Project', 2) }}</button>
+            <button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })"><span>{{ $tc('Project', 2) }}</span></button>
           </li>
           <li>
-            <button v-shortkey="['ctrl', 'n']" class="btn btn-secondary" @shortkey="goto({ name: 'dashboard.show' })" @click="goto({ name: 'dashboard.show' })">{{ $t('My Next Tasks') }}</button>
+            <button v-shortkey="['ctrl', 'n']" class="btn btn-secondary" @shortkey="goto({ name: 'dashboard.show' })" @click="goto({ name: 'dashboard.show' })"><span>{{ $t('My Next Tasks') }}</span></button>
           </li>
           <li v-if="!isMobile">
-            <button v-shortkey="['ctrl', 'm']" class="btn btn-secondary" @shortkey="goto({ name: 'marketplace.templates' })" @click="goto({ name: 'marketplace.templates' })">{{ $t('Marketplace') }}</button>
+            <button v-shortkey="['ctrl', 'm']" class="btn btn-secondary" @shortkey="goto({ name: 'marketplace.templates' })" @click="goto({ name: 'marketplace.templates' })"><span>{{ $t('Marketplace') }}</span></button>
           </li>
         </b-navbar-nav>
 

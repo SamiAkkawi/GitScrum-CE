@@ -24,24 +24,7 @@ export default {
       copyTemplateLoading: false,
       template: [],
       meta: [],
-      currentCompany: JSON.parse(localStorage.getItem('CURRENT_COMPANY')),
-      list: [
-        {
-          topic: 'Free',
-          title: 'IT Helpdesk Workflow By Beck Computer Systems, Inc.',
-          type: 'Templates',
-        },
-        {
-          topic: 'Free',
-          title: 'IT Helpdesk Workflow By Beck Computer Systems, Inc.',
-          type: 'Templates',
-        },
-        {
-          topic: 'Free',
-          title: 'IT Helpdesk Workflow By Beck Computer Systems, Inc.',
-          type: 'Templates',
-        },
-      ],
+      currentCompany: JSON.parse(localStorage.getItem('CURRENT_COMPANY'))
     }
   },
   created() {
@@ -152,7 +135,6 @@ export default {
                   <b-img :src="template.company.logo" rounded :alt="template.company.name"></b-img>
                 </b-col>
                 <b-col class="ml-10px">
-
                   <b-row>
                     <b-col cols="8">
                       <div>
@@ -168,7 +150,7 @@ export default {
                       <h3 class="tx-18px fw-600 mb-0">{{ template.name }}</h3>
                       <span class="txt-9EA9C1 tx-12-px" v-text="template.company.name"></span>
                     </b-col>
-                    <b-col class="text-right">
+                    <b-col  cols="4" class="text-right pr-4">
                       <div v-show="!meta.is_mine">
                         <button v-show="!meta.copied" class="btn btn-sm btn-primary fw-600" @click="copyTemplate('')">
                           <span v-show="!copyTemplateLoading">{{ $t('Copy Template') }}</span>
@@ -196,36 +178,36 @@ export default {
                     <tbody>
                       <template v-for="item in template.items">
                         <tr v-if="meta.feature === 'workflow'" :key="item.id">
-                          <td class="pl-0 d-flex">
+                          <td class="d-flex">
                             <span class="card-color-box" :style="' background: #' + item.color"></span>
                             <span class="table-status-text" v-text="item.title"> </span>
                           </td>
-                          <td class="text-right pr-0">
+                          <td class="text-right">
                             <span v-if="item.state === 0">{{ $t('Open') }}</span>
                             <span v-if="item.state === 1">{{ $t('Done') }}</span>
                             <span v-if="item.state === 2">{{ $t('In Progress') }}</span>
                           </td>
                         </tr>
                         <tr v-if="meta.feature === 'type'" :key="item.id">
-                          <td class="pl-0 d-flex">
+                          <td class="d-flex">
                             <span class="card-color-box" :style="'background: #' + item.color"></span>
                             <span class="table-status-text"> {{ item.code }} - {{ item.title }} </span>
                           </td>
-                          <td class="text-right pr-0">
+                          <td class="text-right">
                             <span v-if="item.default">{{ $t('Default') }}</span>
                           </td>
                         </tr>
                         <tr v-if="meta.feature === 'effort'" :key="item.id">
-                          <td width="35" class="pl-0">
+                          <td width="35">
                             <span class="" v-text="item.title"></span>
                           </td>
-                          <td width="60" class="text-right pr-0">
+                          <td width="60" class="text-right">
                             <span class="" v-text="item.effort"></span>
                             <span v-if="item.default">{{ $t('Default') }}</span>
                           </td>
                         </tr>
                         <tr v-if="meta.feature === 'field'" :key="item.id">
-                          <td width="35" class="pl-0">
+                          <td width="35">
                             <span class="" v-text="item.name"></span>
                           </td>
                           <td width="60" class="text-right pr-0">
@@ -236,17 +218,17 @@ export default {
                           </td>
                         </tr>
                         <tr v-if="meta.feature === 'checklist'" :key="item.id">
-                          <td width="35" class="pl-0">
+                          <td width="35">
                             <span class="" v-text="item.title"></span>
                           </td>
-                          <td width="60" class="text-right pr-0"> </td>
+                          <td width="60" class="text-right"> </td>
                         </tr>
                         <tr v-if="meta.feature === 'priority'" :key="item.id">
-                          <td width="35" class="pl-0">
+                          <td width="35">
                             <span class="" :style="'background: #' + item.color"></span>
                             <span class="" v-text="item.title"></span>
                           </td>
-                          <td width="60" class="text-right pr-0">
+                          <td width="60" class="text-right">
                             <span v-if="item.default">{{ $t('Default') }}</span>
                           </td>
                         </tr>
