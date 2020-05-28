@@ -210,7 +210,7 @@ export default {
 </script>
 
 <template>
-  <div class="badge timer" @click.stop.prevent="clickhandler">
+  <div class="badge badge-light" @click.stop.prevent="clickhandler">
     <h5 v-if="displayTitle" class="mg-b-10">{{ $t('Task Time Tracking') }}</h5>
 
     <b-spinner v-if="!clockIsReady" v-show="!clockIsReady" :label="$t('Loading')" variant="secondary" small></b-spinner>

@@ -1,4 +1,4 @@
-#page-padding-left #header-navbar-project,
+#page-padding-left,
 #page-padding-left {
     transition: padding-left ease 0.1s;
     padding-left: 240px;
@@ -14,27 +14,8 @@
     }
 }
 
-#header-navbar-project {
-    .btn {
-        /*padding: 5px 10px 4px;*/
-        padding: 0 10px 0;
-        font-size: 12px;
-        border-color: #DADBFC;
-        color: #68748f;
-        background: #fff;
-        cursor: pointer;
-    }
-}
-
-#header-navbar-project.fixed-top {
-    z-index: 2;
-}
-
 .no-page-padding-left {
     margin-left: 3px;
-    #header-navbar-project {
-        padding-left: 0;
-    }
 }
 
 #sidebar-left {

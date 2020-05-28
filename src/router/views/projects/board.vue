@@ -3,10 +3,11 @@ import Layout from '@layouts/tpl-main-large'
 import Axios from '@utils/axios'
 import BoardTask from '@components/projects/board-task'
 import Draggable from 'vuedraggable'
-import { isMobile } from 'mobile-device-detect';
+import { isMobile } from 'mobile-device-detect'
 import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
 import TitleLoading from '@components/utils/title-loading'
+import ShareableBoard from '@layouts/partials/shareable-board'
 
 export default {
   page: {
@@ -18,7 +19,8 @@ export default {
     TitleLoading,
     BoardTask,
     Draggable,
-    Swatches
+    Swatches,
+    ShareableBoard
   },
   data() {
     return {
@@ -32,6 +34,12 @@ export default {
       workflows: [],
       boxNewColumn: false,
       nameColumn: '',
+
+      btnOptionSelected: '0',
+      btnOptions: [
+        { text: 'All Tasks', value: '0' },
+        { text: 'Archived Tasks', value: '1' }
+      ],
     }
   },
   computed: {
@@ -43,6 +51,12 @@ export default {
         ghostClass: 'ghost',
       }
     },
+  },
+  watch: {
+    btnOptionSelected() {
+      this.$store.dispatch('tasksArchived/setIsArchived', this.btnOptionSelected)
+      this.$eventBus.$emit('reload-column', false )
+    }
   },
   mounted() {
     this.getWorkflows()
@@ -135,71 +149,83 @@ export default {
 
     <template slot="header-right">
 
+      <b-button-toolbar id="header-navbar-project" aria-label="Toolbar with button groups and dropdown menu">
+        <b-form-radio-group
+          v-model="btnOptionSelected"
+          :options="btnOptions"
+          buttons
+          name="radios-btn-default"
+        ></b-form-radio-group>
+        <ShareableBoard v-if="authorize('header', 'share')" class="ml-8-px"></ShareableBoard>
+        <b-button-group class="mx-1">
+           <b-button v-b-toggle.sidebar-task-filter>
+              <font-awesome-icon :icon="['far', 'filter']"/>
+              {{ $t('Advanced Filters') }}
+            </b-button>
+        </b-button-group>
+      </b-button-toolbar>
+
     </template>
 
     <div slot="content" class="">
-      <div class="ui">
-        <div class="lists" :style="'width:' + width + 'px'">
-          <div class="">
-            <Draggable
-              :disabled="canDragColums"
-              class="list row"
-              style="min-width: calc(100% + 40px);"
-              tag="ul"
-              :list="workflows"
-              v-bind="dragOptions"
-              draggable=".draggableColumn"
-              @change="moveColumn"
-            >
-              <li
-                v-for="workflow in workflows"
-                :key="workflow.id"
-                class="draggableColumn"
-                style="max-height: calc(100vh - 100px);"
-              >
-                <BoardTask :workflow="workflow"></BoardTask>
-              </li>
-              <div v-show="!loading" class="mg-r-20 mg-l-0">
-                <div class="addColumnBox" @click="toggleNewColumn">
-                  <span v-if="!boxNewColumn">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                  <span v-if="boxNewColumn">
-                    <i class="fas fa-times"></i>
-                  </span>
-                </div>
-                <div v-show="boxNewColumn" class="addColumnForm" :style="'border-top-color:' + colorColumn">
-                  <div class="d-flex">
-                    <b-form-input
-                      v-model="nameColumn"
-                      class="input-sm"
-                      :placeholder="$t('Enter the name of your column')"
-                    ></b-form-input>
-                  </div>
-
-                  <div class="mt-2 justify-content-between d-flex">
-                    <Swatches
-                      v-model="colorColumn"
-                      colors="text-advanced"
-                      popover-to="left"
-                      max-height="400"
-                      class="justify-content-end"
-                    ></Swatches>
-
-                    <span v-if="!btnLoading" class="cursor-pointer add-column" @click="addNewColumn">
-                      {{ $t('+ Add Column') }}
-                    </span>
-
-                    <span v-if="btnLoading" class="cursor-pointer add-column">
-                      <b-spinner small type="grow"></b-spinner>
-                      {{ $t('Adding Column...') }}
-                    </span>
-                  </div>
-                </div>
+      <div class="lists" :style="'width:' + width + 'px'">
+        <Draggable
+          :disabled="canDragColums"
+          class="list row"
+          style="min-width: calc(100% + 40px);"
+          tag="ul"
+          :list="workflows"
+          v-bind="dragOptions"
+          draggable=".draggableColumn"
+          @change="moveColumn"
+        >
+          <li
+            v-for="workflow in workflows"
+            :key="workflow.id"
+            class="draggableColumn"
+            style="min-height: calc(100vh - 120px);"
+          >
+            <BoardTask :workflow="workflow"></BoardTask>
+          </li>
+          <div v-show="!loading" class="mg-r-20 mg-l-0">
+            <div class="addColumnBox" @click="toggleNewColumn">
+              <span v-if="!boxNewColumn">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span v-if="boxNewColumn">
+                <i class="fas fa-times"></i>
+              </span>
+            </div>
+            <div v-show="boxNewColumn" class="addColumnForm" :style="'border-top-color:' + colorColumn">
+              <div class="d-flex">
+                <b-form-input
+                  v-model="nameColumn"
+                  class="input-sm"
+                  :placeholder="$t('Enter the name of your column')"
+                ></b-form-input>
               </div>
-            </Draggable>
+
+              <div class="mt-2 justify-content-between d-flex">
+                <Swatches
+                  v-model="colorColumn"
+                  colors="text-advanced"
+                  popover-to="left"
+                  max-height="400"
+                  class="justify-content-end"
+                ></Swatches>
+
+                <span v-if="!btnLoading" class="cursor-pointer add-column" @click="addNewColumn">
+                  {{ $t('+ Add Column') }}
+                </span>
+
+                <span v-if="btnLoading" class="cursor-pointer add-column">
+                  <b-spinner small type="grow"></b-spinner>
+                  {{ $t('Adding Column...') }}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        </Draggable>
       </div>
     </div>
   </Layout>

@@ -95,7 +95,11 @@ export default {
     },
 
     openSidebar(){
-      this.statusMyNextTask = true;
+      if (this.statusMyNextTask){
+        this.statusMyNextTask = false
+      } else {
+        this.statusMyNextTask = true;
+      }
     }
   },
 }

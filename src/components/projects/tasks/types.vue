@@ -40,7 +40,7 @@ export default {
 <template>
   <span
     v-if="type !== null"
-    class="badge extra-selected mg-r-5"
+    class="badge mg-r-5"
     :style="'color: ' + invertColor(type.color, true) + ';background:' + type.color">
    {{type.title}}
   </span>

@@ -11,6 +11,7 @@
         -moz-text-size-adjust: none;
         background-color: $grey-50;
         width: 100%;
+        overflow-x: hidden;
     }
     
     *:focus,
@@ -194,13 +195,6 @@
         background-clip: padding-box;
         border: 1px solid #ced4da;
         border-radius: 2px;
-    }
-    
-    .project-info {
-        padding: 0 10px;
-        .txt-68748F {
-            color: #68748f !important;
-        }
     }
     
      ::placeholder {

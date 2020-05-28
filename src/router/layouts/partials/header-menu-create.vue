@@ -30,7 +30,7 @@ export default {
       <b-dropdown right @shown="gaClickDropdrownCreate">
         <template v-slot:button-content>
           <span>{{ $t('Create') }}</span>
-          <font-awesome-icon :icon="['far', 'angle-down']" style="position:relative; margin-left:4px;" />
+          <font-awesome-icon :icon="['far', 'angle-down']" style="position:relative; margin-left:4px;top: 2px;" />
         </template>
         <b-dropdown-item @click="modal('projectCreate')">
           <p>{{ $t('Create Project') }}</p>

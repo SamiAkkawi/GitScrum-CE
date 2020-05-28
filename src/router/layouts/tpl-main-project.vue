@@ -26,7 +26,6 @@ export default {
   </MasterHeader>
   <div id="page-padding-left" class="tlp-main-project">
     
-
     <div id="header-project-area" class="d-flex justify-content-between align-items-center tpl-main-project-area subheader">
       <div>
         <slot name="header-left"></slot>

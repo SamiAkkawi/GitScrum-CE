@@ -179,35 +179,33 @@ export default {
     <div slot="content">
       <b-overlay :show="loading" no-wrap></b-overlay>
       
+      <div v-if="projects.length" align-v="center" class="subheader shadow-sm d-flex justify-content-between">
+        <TitleLoading
+          v-if="projects.length || loading"
+          :title="$tc('Explore Projects', projects.length)"
+          :subtitle="$t('Perfect project overview for modern teams')"
+          :loading="loading"></TitleLoading>
+        
+        <div class="d-flex justify-content-end" >
+          <b-form-input
+            v-model="seachByProjectName"
+            autocomplete="off"
+            type="search"
+            size="sm"
+            :placeholder="$t('Search by project name')"
+          ></b-form-input>
+
+          <b-form-select v-model="projectsStatusSelect" :options="projectsStatuses" size="sm" @change="filterByStatus"></b-form-select>
+
+          <b-button v-b-toggle.collapse-1 variant="light" size="sm">
+            <font-awesome-icon :icon="['fa', 'tags']" />
+            {{ $t('Labels') }}
+          </b-button>
+
+        </div>
+      </div>
+
       <b-container fluid>
-        <b-row v-if="projects.length" align-v="center" class="subheader shadow-sm">
-          <b-col>
-            <TitleLoading
-              v-if="projects.length || loading"
-              :title="$tc('Explore Projects', projects.length)"
-              :subtitle="$t('Perfect project overview for modern teams')"
-              :loading="loading"></TitleLoading>
-          </b-col>
-          <b-col class="d-flex justify-content-end" >
-
-            <b-form-input
-              v-model="seachByProjectName"
-              autocomplete="off"
-              type="search"
-              size="sm"
-              :placeholder="$t('Search by project name')"
-            ></b-form-input>
-
-            <b-form-select v-model="projectsStatusSelect" :options="projectsStatuses" size="sm" @change="filterByStatus"></b-form-select>
-
-            <b-button v-b-toggle.collapse-1 variant="light" size="sm">
-              <font-awesome-icon :icon="['fa', 'tags']" />
-              {{ $t('Labels') }}
-            </b-button>
-
-          </b-col>
-        </b-row>
-        <b-row style="height:70px;"></b-row>
         <b-row>
           <b-col>
             <b-collapse id="collapse-1" @shown="getLabels">

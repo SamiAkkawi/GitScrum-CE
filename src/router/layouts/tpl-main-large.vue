@@ -34,7 +34,7 @@ export default {
       </div>
     </div>
     <div id="page-content" class="container-fluid">
-      <div style="max-width: 100%;overflow-x: auto;overflow-y: hidden;padding: 8px 15px 0;min-height: calc(100vh - 97px);">
+      <div style="max-width: 100%;overflow-x: auto;overflow-y: hidden;padding: 8px 15px 0 20px;min-height: calc(100vh - 0 );">
         <div class="row">
           <slot name="content"></slot>
         </div>

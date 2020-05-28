@@ -210,7 +210,8 @@
     background: $grey-100;
     padding: 10px 9px;
     min-height: 45px;
-    position: fixed;
+    position: sticky;
+    top: 35px;
     width: 100%;
     z-index: 10;
     border-bottom: 2px solid $grey-50;
@@ -260,8 +261,7 @@
     .vsm--toggle-btn {
         display: none !important;
     }
-    .v-sidebar-menu,
-    #header-project-info {
+    .v-sidebar-menu {
         display: none !important;
     }
     #page-padding-left {
@@ -355,6 +355,9 @@
         margin-bottom: 0;
     }
     .b-sidebar-outer {
+        z-index: 3;
+    }
+    .my-next-tasks {
         z-index: 12 !important;
     }
     #my-next-tasks {

@@ -93,7 +93,7 @@ export default {
     <b-dropdown right>
       <template v-slot:button-content>
         <span v-text="currentCompany.name"></span>
-        <font-awesome-icon :icon="['far', 'angle-down']" style="position:relative; margin-left:4px;" />
+        <font-awesome-icon :icon="['far', 'angle-down']" style="position:relative; margin-left:4px;top: 2px;" />
       </template>
       <b-dropdown-group :header="$t('Company Profiles') ">
       <b-dropdown-item v-for="(item, index) in companiesUser" v-show="currentCompany.slug !== item.slug"  :key="index"  @click="redirectToCompany(item)">

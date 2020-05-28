@@ -5,7 +5,6 @@ import ProjectVisibility from '@components/projects/project-visibility'
 import ListUsers from '@components/utils/list-users'
 import ProjectBoardFilters from '@layouts/partials/header-board-filters'
 import ProjectIntegrations from '@components/projects/modal/integrations/index'
-import ShareableBoard from '@layouts/partials/shareable-board'
 import { isMobile } from 'mobile-device-detect';
 import { modalManager } from '@state/helpers'
 import { SidebarMenu } from 'vue-sidebar-menu'
@@ -14,7 +13,6 @@ export default {
   components: {
     ProjectMenuSettings,
     ProjectVisibility,
-    ShareableBoard,
     ListUsers,
     ProjectBoardFilters,
     ProjectIntegrations,
@@ -32,20 +30,11 @@ export default {
       isMobile: isMobile,
       project: [],
       menu: [],
-      btnOptionSelected: '0',
-      btnOptions: [
-        { text: 'All Tasks', value: '0' },
-        { text: 'Archived Tasks', value: '1' }
-      ],
+      
       sidebarStatus: false
     }
   },
-  watch: {
-    btnOptionSelected() {
-      this.$store.dispatch('tasksArchived/setIsArchived', this.btnOptionSelected)
-      this.$eventBus.$emit('reload-column', false )
-    }
-  },
+  
   mounted(){
     this.$store.dispatch('tasksArchived/setIsArchived', this.btnOptionSelected)
     let state = this.getMenuProjectState()
@@ -155,12 +144,6 @@ export default {
 
         if (document.getElementById('page-padding-left'))
           document.getElementById('page-padding-left').style.paddingLeft = "50px";
-
-        if (document.getElementById('header-project-area'))
-          document.getElementById('header-project-area').style.paddingRight = "60px";
-          
-        if (document.getElementById('header-navbar-project'))
-          document.getElementById('header-navbar-project').style.paddingLeft = "50px";
        
       } else {
 
@@ -168,12 +151,6 @@ export default {
         
         if (document.getElementById('page-padding-left'))
           document.getElementById('page-padding-left').style.paddingLeft = '240px';
-
-        if (document.getElementById('header-project-area'))
-          document.getElementById('header-project-area').style.paddingRight = '250px';
-        
-        if (document.getElementById('header-navbar-project'))
-          document.getElementById('header-navbar-project').style.paddingLeft = "240px";
         
       }
 
@@ -216,33 +193,7 @@ export default {
       </div>
     </b-sidebar>
     <b-progress class="project-progress" :value="project.percent" :max="100"></b-progress>
-    <div v-if="!isMobile" id="header-navbar-project" class="header-project fixed-top">
-      <div v-if="background" id="header-project-info" class="project-info">
-        <div class="d-flex justify-content-between align-items-center header-project-options">
-          <div class="d-flex justify-content-between align-items-center">
-             
-            <b-form-group>
-              <b-form-radio-group
-                v-model="btnOptionSelected"
-                :options="btnOptions"
-                buttons
-                name="radios-btn-default"
-              ></b-form-radio-group>
-            </b-form-group>
-            <ShareableBoard v-if="authorize('header', 'share') && background" class="ml-8-px"></ShareableBoard>
-
-          </div>
-          <div>
-            <div class="d-flex align-items-center justify-content-end">
-              <b-button v-b-toggle.sidebar-task-filter>
-                <font-awesome-icon :icon="['far', 'filter']"/>
-                {{ $t('Advanced Filters') }}
-              </b-button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
 
     <SidebarMenu :menu="menu" :collapsed="getMenuProjectState()" @toggle-collapse="onToggleCollapse">
       <div slot="header">
