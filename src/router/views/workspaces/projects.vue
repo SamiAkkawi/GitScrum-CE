@@ -202,7 +202,7 @@ export default {
 
             <b-button v-b-toggle.collapse-1 variant="light" size="sm">
               <font-awesome-icon :icon="['fa', 'tags']" />
-              Labels
+              {{ $t('Labels') }}
             </b-button>
 
           </b-col>

@@ -1,11 +1,9 @@
 <script>
 import Axios from '@utils/axios'
-import Ads from '@components/utils/ads'
 import Alert from '@components/utils/alert'
 import TitleLoading from '@components/utils/title-loading'
+import ButtonLoading from '@components/utils/button-loading'
 import ListTasks from '@components/projects/tasks/list-tasks'
-import Activities from '@components/utils/activities'
-import GlanceYear from '@components/utils/glance-year'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -15,18 +13,16 @@ export default {
     meta: [{ name: 'description', content: 'ProjectsList' }],
   },
   components: {
-    Ads,
     Alert,
     vSelect,
     TitleLoading,
     ListTasks,
-    Activities,
-    GlanceYear,
+    ButtonLoading
   },
   data() {
     return {
-      loading: true,
       loadingTask: true,
+      btnLoading: false,
       projects: [],
       projectSelected: null,
       tasks: [],
@@ -39,6 +35,7 @@ export default {
       totalPages: 1,
       perPage: 15,
       currentPage: this.$route.query.page ? this.$route.query.page : 1,
+      searchTitle : ''
     }
   },
   created(){
@@ -48,7 +45,6 @@ export default {
   },
   methods: {
     getTasks(page) {
-      this.gotoScrollTop();
       this.loadingTask = true
       
       let projectSlug = null;
@@ -60,6 +56,7 @@ export default {
       Axios()
         .get('tasks?assignee=me&workflow=open&company_slug=' + this.currentCompany.slug + 
           '&project_slug=' + projectSlug + 
+          '&title=' + this.searchTitle + 
           '&page=' + page)
         .then((response) => {
           if (response.data.data.length === 0 && page !== 1) {
@@ -118,44 +115,68 @@ export default {
 <template>
     <div class="my-next-tasks">
       
-      <TitleLoading :title="$t('My Next Tasks')" :loading="loadingTask"></TitleLoading>
+      <div class="my-next-tasks-header shadow-sm">
+        
+        <TitleLoading :title="$t('My Next Tasks')" :loading="loadingTask"></TitleLoading>
 
-      <v-select
-        v-model="projectSelected"
-        :options="projects"
-        label="text"
-        @input="getTasks"
-      ></v-select>
+        <b-input-group>
+          <v-select
+            v-model="projectSelected"
+            :options="projects"
+            label="text"
+            class="mr-1"
+            @input="getTasks"
+          ></v-select>
+          <b-input-group-append>
+            <b-form-input 
+            v-model="searchTitle" 
+            :placeholder="$t('Search tasks by title')"
+            type="search" size="sm"></b-form-input>
+            <ButtonLoading
+              :loading="btnLoading"
+              type="btn-sm"
+              icon="search"
+              @action="getTasks"
+            ></ButtonLoading>
+          </b-input-group-append>
+        </b-input-group>
 
-      <ListTasks
-        id="task-assignees"
-        class="mt-20-px"
-        :items="tasks"
-        :search="true"
-        title=""
-        :flag="true"
-      ></ListTasks>
+        
 
-      <div v-if="!tasks.length && !loadingTask">
-        <Alert :message="$t('You have no tasks to do on this project')" :status="true"></Alert>
       </div>
 
-      <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-        <b-pagination
-          hide-goto-end-buttons
-          class="paginator"
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="getTasks"
-        >
-          <template slot="prev-text">
-            <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-          </template>
-          <template slot="next-text">
-            <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-          </template>
-        </b-pagination>
+      <div class="box-list-task">
+        <ListTasks
+          id="task-assignees"
+          class="mt-20-px"
+          :items="tasks"
+          :search="true"
+          title=""
+          :flag="true"
+          :display-assignees="false"
+        ></ListTasks>
+
+        <div v-if="!tasks.length && !loadingTask">
+          <Alert :message="$t('You have no tasks to do on this project')" :status="true"></Alert>
+        </div>
+
+        <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
+          <b-pagination
+            hide-goto-end-buttons
+            class="paginator"
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            @change="getTasks"
+          >
+            <template slot="prev-text">
+              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
+            </template>
+            <template slot="next-text">
+              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
+            </template>
+          </b-pagination>
+        </div>
       </div>
 
     </div>

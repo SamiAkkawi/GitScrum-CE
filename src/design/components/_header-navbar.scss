@@ -1,6 +1,5 @@
 .dropdown-style,
 #header-navbar {
-    height: 50px;
     padding: 0;
     z-index: 15;
     background: #fff;
@@ -346,11 +345,59 @@
 }
 
 #header-content {
+    position: sticky;
+    top: -1px;
+    z-index: 90;
+    ol,
+    ul,
+    dl {
+        margin-top: -1px;
+        margin-bottom: 0;
+    }
     .b-sidebar-outer {
         z-index: 12 !important;
     }
     #my-next-tasks {
-        margin-top: 53px !important;
-        width: 550px;
+        width: 550px !important;
+        padding: 55px 5px 15px 15px !important;
+        .my-next-tasks-header {
+            position: sticky;
+            top: 7px;
+            z-index: 9;
+            background: $grey-50;
+            padding: 8px 10px 6px;
+            border-radius: 6px;
+            border: 1px solid $grey-100;
+            margin-right: 10px;
+            .input-group-append {
+                width: 49%;
+            }
+            .v-select {
+                width: 49%;
+                .vs__dropdown-toggle {
+                    height: 31px;
+                }
+                .vs__selected-options {
+                    padding: 0px 2px !important;
+                    font-size: 14px;
+                }
+                .vs__search {
+                    border: 0 solid transparent !important;
+                }
+                .vs__dropdown-menu {
+                    font-size: 13px;
+                    overflow-x: hidden;
+                }
+            }
+            .titleLoading {
+                padding: 0 0 7px;
+            }
+        }
+        .b-sidebar-body {}
+        .box-list-task {
+            margin-bottom: 50px;
+            overflow-y: auto;
+            height: calc(100% - 100px) !important;
+        }
     }
 }

@@ -125,6 +125,15 @@ a.badge-secondary.focus {
     }
 }
 
+.input-group-append {
+    .btn-small.btn-primary {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        height: 31px;
+        padding-top: 4px;
+    }
+}
+
 
 /*
 

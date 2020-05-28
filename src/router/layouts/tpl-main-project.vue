@@ -20,10 +20,12 @@ export default {
 </script>
 
 <template>
-  <div id="page-padding-left" class="tlp-main-project">
-    <MasterHeader >
+<div>
+  <MasterHeader >
       <MasterHeaderMenuProject v-if="$route.params.projectSlug" slot="submenu" :background="false"></MasterHeaderMenuProject>
-    </MasterHeader>
+  </MasterHeader>
+  <div id="page-padding-left" class="tlp-main-project">
+    
 
     <div id="header-project-area" class="d-flex justify-content-between align-items-center tpl-main-project-area subheader">
       <div>
@@ -37,4 +39,5 @@ export default {
     
     <slot name="content"></slot>
   </div>
+</div>
 </template>

@@ -115,7 +115,7 @@ export default {
         </template>
       </VOffline>
 
-    <b-navbar id="header-navbar" fixed="top" toggleable="md" tag="ul">
+    <b-navbar id="header-navbar" toggleable="md" tag="ul">
       
       <Logo></Logo>
 
@@ -155,12 +155,17 @@ export default {
       
     </b-navbar>
     <slot name="submenu"> </slot>
-    <div class="mt-50px"></div>
 
-    <b-sidebar v-model="statusMyNextTask" id="my-next-tasks" no-header right shadow backdrop>
-      <div class="px-3 py-3">
-        <MyNextTasks></MyNextTasks>
-      </div>
+    <b-sidebar 
+      id="my-next-tasks"
+      v-model="statusMyNextTask" 
+      no-header
+      backdrop
+      shadow
+      left
+      no-header-close="false"
+      class="my-next-tasks">
+       <MyNextTasks></MyNextTasks>      
     </b-sidebar>
 
   </div>
