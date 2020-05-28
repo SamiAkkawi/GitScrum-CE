@@ -32,7 +32,9 @@ export default {
       </div>
       <div>
         <slot name="header-right"></slot>
-        <Invite></Invite>
+        <b-button-toolbar id="header-navbar-project" aria-label="Toolbar with button groups and dropdown menu">
+          <Invite></Invite>
+        </b-button-toolbar>
       </div>
     </div>
     

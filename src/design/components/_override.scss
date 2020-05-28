@@ -163,8 +163,9 @@ a.badge-secondary.focus {
                 font-size: 12px !important;
             }
             &:hover {
+                border: 1px solid $grey-A100;
                 color: $black-50 !important;
-                background: $black-A400 !important;
+                background: $grey-A700 !important;
             }
         }
     }
@@ -222,6 +223,10 @@ a.badge-secondary.focus {
         color: $grey-700;
         font-weight: 500;
     }
+}
+
+.b-sidebar>.b-sidebar-header {
+    padding: 0.5rem 0 !important;
 }
 
 

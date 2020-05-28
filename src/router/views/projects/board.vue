@@ -8,6 +8,7 @@ import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
 import TitleLoading from '@components/utils/title-loading'
 import ShareableBoard from '@layouts/partials/shareable-board'
+import Invite from '@components/projects/team-members/invite'
 
 export default {
   page: {
@@ -20,7 +21,8 @@ export default {
     BoardTask,
     Draggable,
     Swatches,
-    ShareableBoard
+    ShareableBoard,
+    Invite
   },
   data() {
     return {
@@ -156,13 +158,14 @@ export default {
           buttons
           name="radios-btn-default"
         ></b-form-radio-group>
-        <ShareableBoard v-if="authorize('header', 'share')" class="ml-8-px"></ShareableBoard>
         <b-button-group class="mx-1">
            <b-button v-b-toggle.sidebar-task-filter>
               <font-awesome-icon :icon="['far', 'filter']"/>
               {{ $t('Advanced Filters') }}
             </b-button>
         </b-button-group>
+        <ShareableBoard v-if="authorize('header', 'share')" class="ml-2 mr-1"></ShareableBoard>
+        <Invite></Invite>
       </b-button-toolbar>
 
     </template>

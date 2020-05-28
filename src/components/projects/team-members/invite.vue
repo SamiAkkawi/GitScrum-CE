@@ -25,6 +25,9 @@ export default {
       ],
     }
   },
+  created(){
+    this.getActiveUsers()
+  },
   methods:{
 
     getInvitationLink() {
@@ -193,117 +196,115 @@ export default {
 </script>
 
 <template>
-  <div>
-    <b-button
-    v-if="activeUsers.invitation && authorize('teamMembers', 'create')" 
-    variant="primary"
-    @click="toggleShowInvite">{{ $t('Invite Members') }}</b-button>
+  <b-dropdown v-if="activeUsers.invitation && authorize('teamMembers', 'create')"
+    class="dropdown-invite styled-dropdown" right @shown="toggleShowInvite">
+    <template v-slot:button-content>
+      <font-awesome-icon :icon="['fa', 'user-plus']" />&nbsp;
+      {{ $t('Invite Members') }}
+    </template>
 
-    <b-dropdown right class="dropdown-invite styled-dropdown" :text="$t('Invite Members')" @shown="getInvitationLink">
-      <b-dropdown-form>
-
-        <div class="d-flex justify-content-between mb-20-px">
-          <b-form-checkbox
-            v-model="enableShareableLink"
-            :disabled="invitationLinkLoading"
-            @change="handleShareableLink"
-          >
-            <TitleLoading
-              :title="$t('Shareable Link')"
-              :subtitle="$t('Anyone with this link can join the project')"
-              :loading="invitationLinkLoading"
-              class="mt-2px"
-            ></TitleLoading>
-          </b-form-checkbox>
-          <div>
-              <a
-                v-show="enableShareableLink"
-                href="javascript:;"
-                class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase"
-                @click="updateInvitationLink"
-              >
-                {{ $t('Update Link') }}
-              </a>
-          </div>
+    <b-dropdown-form>
+      <div class="d-flex justify-content-between mb-20-px">
+        <b-form-checkbox
+          v-model="enableShareableLink"
+          :disabled="invitationLinkLoading"
+          @change="handleShareableLink"
+        >
+          <TitleLoading
+            :title="$t('Shareable Link')"
+            :subtitle="$t('Anyone with this link can join the project')"
+            :loading="invitationLinkLoading"
+            class="mt-2px"
+          ></TitleLoading>
+        </b-form-checkbox>
+        <div>
+            <a
+              v-show="enableShareableLink"
+              href="javascript:;"
+              class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase"
+              @click="updateInvitationLink"
+            >
+              {{ $t('Update Link') }}
+            </a>
         </div>
+      </div>
 
-        <div v-show="enableShareableLink">
-          <b-input-group class="mb-3">
-            <b-input v-model="inviteProjectLink" 
-              :readonly="true" 
-              autocomplete="off"></b-input>
-            <b-input-group-append>
-              <b-button 
-              v-clipboard:copy="inviteProjectLink"
-              v-clipboard:success="onCopy"
-              variant="outline-secondary" >
-                <font-awesome-icon :icon="['far', 'copy']" />
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </div>
+      <div v-show="enableShareableLink">
+        <b-input-group class="mb-3">
+          <b-input v-model="inviteProjectLink" 
+            :readonly="true" 
+            autocomplete="off"></b-input>
+          <b-input-group-append>
+            <b-button 
+            v-clipboard:copy="inviteProjectLink"
+            v-clipboard:success="onCopy"
+            variant="outline-secondary" >
+              <font-awesome-icon :icon="['far', 'copy']" />
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </div>
 
 
-        <b-tabs content-class="mt-3" justified>
-          <b-tab :title="$t('Invite External Users')" active>
-            
-            <div v-for="invite in totalInvites" :key="invite" class="form-row">
-              <div class="col-md-6 form-group">
-                <div role="group">
-                  <label for="input-live">{{ $t('Full Name') }}</label>
-                  <b-form-input
-                    v-model="inviteNames[invite]"
-                    type="text"
-                    :placeholder="$t('Full Name')"
-                    trim
-                  ></b-form-input>
-                </div>
-              </div>
-              <div class="col-md-6 form-group">
-                <div role="group">
-                  <label for="input-live">{{ $t('Email') }}</label>
-                  <b-form-input
-                    v-model="inviteEmails[invite]"
-                    type="email"
-                    :placeholder="$t('Email')"
-                    trim
-                  ></b-form-input>
-
-                </div>
+      <b-tabs content-class="mt-3" justified>
+        <b-tab :title="$t('Invite External Users')" active>
+          
+          <div v-for="invite in totalInvites" :key="invite" class="form-row">
+            <div class="col-md-6 form-group">
+              <div role="group">
+                <label for="input-live">{{ $t('Full Name') }}</label>
+                <b-form-input
+                  v-model="inviteNames[invite]"
+                  type="text"
+                  :placeholder="$t('Full Name')"
+                  trim
+                ></b-form-input>
               </div>
             </div>
+            <div class="col-md-6 form-group">
+              <div role="group">
+                <label for="input-live">{{ $t('Email') }}</label>
+                <b-form-input
+                  v-model="inviteEmails[invite]"
+                  type="email"
+                  :placeholder="$t('Email')"
+                  trim
+                ></b-form-input>
 
-            <ButtonLoading 
-              :loading="sendInvitesLoading"
-              :title="$t('Send Invite')"
-              :title-loading="$t('Sending')"
-              mode="button"
-              type="btn-md"
-              class="d-flex justify-content-end"
-              @action="sendInvites"></ButtonLoading>
-
-          </b-tab>
-          <b-tab :title="$t('Invite Internal Users')" @click="getListCompanyTeamMembers">
-            
-              <div style="height:208px; overflow-y:auto;">
-                <b-table class="table-small" hover :items="listCompanyTeamMembers" :fields="fields" >
-                  <template v-slot:cell(user.name)="data">
-                    <div class="d-flex align-items-center">
-                      <ListUsers :user="data.item.user" :link="true" size="22"></ListUsers>
-                      <div class="ml-2">{{ data.item.user.name }}</div>
-                    </div>
-                  </template>
-                  <template v-slot:cell(user.username)="data">
-                    <div class="d-flex justify-content-end">
-                      <b-button size="sm" @click="addTeamMember(data.item.user.username)">Add to Project</b-button>
-                    </div>
-                  </template>
-                </b-table>
               </div>
+            </div>
+          </div>
 
-          </b-tab>
-        </b-tabs>
-      </b-dropdown-form>
-    </b-dropdown>
-  </div>
+          <ButtonLoading 
+            :loading="sendInvitesLoading"
+            :title="$t('Send Invite')"
+            :title-loading="$t('Sending')"
+            mode="button"
+            type="btn-md"
+            class="d-flex justify-content-end"
+            @action="sendInvites"></ButtonLoading>
+
+        </b-tab>
+        <b-tab :title="$t('Invite Internal Users')" @click="getListCompanyTeamMembers">
+          
+            <div style="height:208px; overflow-y:auto;">
+              <b-table class="table-small" hover :items="listCompanyTeamMembers" :fields="fields" >
+                <template v-slot:cell(user.name)="data">
+                  <div class="d-flex align-items-center">
+                    <ListUsers :user="data.item.user" :link="true" size="22"></ListUsers>
+                    <div class="ml-2">{{ data.item.user.name }}</div>
+                  </div>
+                </template>
+                <template v-slot:cell(user.username)="data">
+                  <div class="d-flex justify-content-end">
+                    <b-button size="sm" @click="addTeamMember(data.item.user.username)">Add to Project</b-button>
+                  </div>
+                </template>
+              </b-table>
+            </div>
+
+        </b-tab>
+      </b-tabs>
+    </b-dropdown-form>
+  </b-dropdown>
 </template>

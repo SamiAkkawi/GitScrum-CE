@@ -50,13 +50,13 @@
 .v-sidebar-menu.vsm_collapsed .vsm--link_level-1 .vsm--icon,
 .v-sidebar-menu.vsm_collapsed .vsm--icon {
     background-color: transparent;
-    color: #42526E;
+    color: $black-600;
 }
 
 .v-sidebar-menu.vsm_collapsed .vsm--link_level-1.vsm--link_hover .vsm--icon,
 .v-sidebar-menu.vsm_collapsed .vsm--link_level-1:hover .vsm--icon {
     background: transparent !important;
-    color: #fff !important;
+    color: $black-600 !important;
 }
 
 .v-sidebar-menu.vsm_collapsed .vsm--link_mobile-item {
@@ -66,13 +66,13 @@
 }
 
 .v-sidebar-menu.vsm_collapsed .vsm--item_open .vsm--link_level-1 .vsm--title {
-    color: #fff !important;
-    background-color: #68748F;
+    color: $black-600;
+    background: transparent !important;
 }
 
 .v-sidebar-menu.vsm_collapsed .vsm--dropdown .vsm--title {
     font-size: 10px;
-    color: #42526E !important;
+    color: $black-600 !important;
 }
 
 .v-sidebar-menu .vsm--title {
@@ -82,7 +82,7 @@
 .v-sidebar-menu .vsm--link_level-1 .vsm--icon,
 .v-sidebar-menu .vsm--icon {
     background-color: transparent;
-    color: #42526E;
+    color: $black-600;
 }
 
 .v-sidebar-menu.vsm_collapsed .sidebar-left {
@@ -130,27 +130,27 @@
     z-index: 20;
     -webkit-transition: 0.3s all ease;
     transition: 0.3s all ease;
-    color: #42526E;
+    color: $black-900;
     line-height: 24px;
 }
 
 .v-sidebar-menu .vsm--link_hover,
 .v-sidebar-menu .vsm--link:hover {
-    background-color: #F5F7FB;
+    background-color: transparent;
     border-radius: 4px;
     color: #464DEE;
 }
 
 .v-sidebar-menu .vsm--toggle-btn {
-    color: #fff;
+    color: $black-600;
     margin-top: 10px;
     padding: 8px 0 25px 0px;
     height: 10px !important;
-    background-color: #42526E;
+    background-color: transparent;
 }
 
 .v-sidebar-menu .vsm--dropdown .vsm--list {
-    background-color: #F5F7FB;
+    background-color: #fff;
     padding: 5px 0 !important;
 }
 
@@ -172,6 +172,9 @@
             line-height: 14px;
         }
         a {
+            display: flow-root;
+            line-height: 14px;
+            margin-top: 5px;
             font-size: 12px;
             color: #68748F;
         }
@@ -305,8 +308,8 @@
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--item_open .vsm--link_level-1 {
-    color: #fff !important;
-    background-color: #68748F !important;
+    color: $black-700;
+    background-color: transparent !important;
     border-radius: 4px !important;
     outline: 0 !important;
     &:focus {
@@ -315,7 +318,7 @@
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--item_open .vsm--link_level-1 .vsm--icon {
-    color: #fff;
+    color: $black-700;
     background-color: transparent;
 }
 

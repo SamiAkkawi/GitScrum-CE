@@ -5,7 +5,7 @@ import MasterHeaderMenuProject from '@layouts/partials/header-menu-project'
 export default {
   components: {
     MasterHeader,
-    MasterHeaderMenuProject
+    MasterHeaderMenuProject,
   },
   data() {
     return {
@@ -30,7 +30,6 @@ export default {
       </div>
       <div>
         <slot name="header-right"></slot>
-        <Invite></Invite>
       </div>
     </div>
     <div id="page-content" class="container-fluid">
