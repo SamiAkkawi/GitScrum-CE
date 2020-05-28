@@ -278,7 +278,7 @@ export default {
         :title="$t('Time Tracking')" :loading="loading"></TitleLoading>
     </template>
 
-    <div slot="content" class="time-stracking pt-60px">
+    <div slot="content" class="time-stracking pt-10px">
       <div class="container">
         <div class="row mb-30-px">
           <div class="col-md-12">

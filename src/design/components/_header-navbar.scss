@@ -1,5 +1,6 @@
 .dropdown-style,
 #header-navbar {
+    height: 42px;
     padding: 0;
     z-index: 15;
     background: #fff;
@@ -207,20 +208,20 @@
 }
 
 .subheader {
-    background: $grey-100;
-    padding: 10px 9px;
+    background: $black-400;
+    padding: 10px 9px 10px 15px;
     min-height: 45px;
     position: sticky;
-    top: 35px;
+    top: 42px;
     width: 100%;
     z-index: 10;
     border-bottom: 2px solid $grey-50;
     .titleLoading {
         h1 {
-            color: $grey-900;
+            color: $black-50;
         }
         p {
-            color: $grey-500;
+            color: $black-A200;
         }
     }
     .dropdown-menu {
@@ -248,6 +249,10 @@
     .fa-times {
         margin-left: 5px !important;
         height: 0.8em !important;
+    }
+    .title-loading {
+        top: 2px;
+        color: #fff;
     }
 }
 

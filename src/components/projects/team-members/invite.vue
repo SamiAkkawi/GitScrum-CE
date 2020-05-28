@@ -199,7 +199,7 @@ export default {
     variant="primary"
     @click="toggleShowInvite">{{ $t('Invite Members') }}</b-button>
 
-    <b-dropdown class="dropdown-invite styled-dropdown" :text="$t('Invite Members')" @shown="getInvitationLink">
+    <b-dropdown right class="dropdown-invite styled-dropdown" :text="$t('Invite Members')" @shown="getInvitationLink">
       <b-dropdown-form>
 
         <div class="d-flex justify-content-between mb-20-px">

@@ -157,48 +157,42 @@ export default {
   <div>
     <div class="d-flex justify-content-between">
       <div v-if="!hideOptions || showAddCard" class="d-flex align-items-center board-task-title">
+        <div v-if="!hideOptions && !showAddCard" class="board-task-icon align-items-center d-flex pr-2">
+          <font-awesome-icon :icon="workflowState(workflow.status.code)" />
+        </div>
         {{ workflow.title | truncate(20) }}
         <span class="task-total d-flex" v-text="total"></span>
       </div>
 
+
+
       <div v-if="!showAddCard" class="d-flex">
-        <div v-if="!hideOptions && !showAddCard" class="board-task-icon align-items-center d-flex pr-2">
-          <font-awesome-icon :icon="workflowState(workflow.status.code)" style="font-size: 16px; color: #68748F;" />
-        </div>
-        <div v-if="!hideOptions && !showAddCard && !hideOptionsMenu" class="dropdown board-task-options" style="color:#68748F;">
-          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fas fa-ellipsis-h" color="#68748F"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-right">
-            <li>
-              <div class="nav">
-                <div class="nav-item show">
-                  <a href="javascript:;" class="dropdown-item" @click="editNotifications">
-                    <span class="icon-size"><font-awesome-icon :icon="['far', 'bell']"/></span>
-                    {{ $t('Notifications') }}
-                  </a>
-                  <a href="javascript:;" class="dropdown-item" @click="editColor">
-                    <span class="icon-size"><font-awesome-icon :icon="['far', 'palette']"/></span>
-                    {{ $t('Change Color') }}
-                  </a>
-                  <a href="javascript:;" class="dropdown-item" @click="editStatus">
-                    <span class="icon-size"><font-awesome-icon :icon="['fal', 'toggle-on']"/></span>
-                    {{ $t('Change Status') }}
-                  </a>
-                  <a href="javascript:;" class="dropdown-item" @click="editColumn">
-                    <span class="icon-size"><font-awesome-icon :icon="['far', 'pencil-alt']"/></span>
-                    {{ $t('Rename Column') }}
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="javascript:;" class="dropdown-item" @click="deleteColumn">
-                    <span class="icon-size"><font-awesome-icon :icon="['far', 'trash-alt']"/></span>
-                    {{ $t('Delete Column') }}
-                  </a>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <b-dropdown v-if="!hideOptions && !showAddCard && !hideOptionsMenu" size="md" variant="link" right class="board-task-options styled-dropdown">
+          <template v-slot:button-content>
+            <font-awesome-icon :icon="['fas', 'ellipsis-h']"/>
+          </template>
+          <b-dropdown-item @click="editNotifications">
+            <font-awesome-icon :icon="['far', 'bell']"/>
+            {{ $t('Notifications') }}
+          </b-dropdown-item>
+          <b-dropdown-item @click="editColor">
+            <font-awesome-icon :icon="['far', 'palette']"/>
+            {{ $t('Change Color') }}
+          </b-dropdown-item>
+          <b-dropdown-item @click="editStatus">
+            <font-awesome-icon :icon="['fal', 'toggle-on']"/>
+            {{ $t('Change Status') }}
+          </b-dropdown-item>
+          <b-dropdown-item @click="editColumn">
+            <font-awesome-icon :icon="['far', 'pencil-alt']"/>
+            {{ $t('Rename Column') }}
+          </b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item @click="deleteColumn">
+            <font-awesome-icon :icon="['far', 'trash-alt']"/>
+            {{ $t('Delete Column') }}
+          </b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
 

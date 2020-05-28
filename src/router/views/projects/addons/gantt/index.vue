@@ -85,7 +85,7 @@ export default {
       <TitleLoading :title="$t('Gantt Chart')" :loading="loading"></TitleLoading>
     </template>
 
-    <div slot="content" class="gantt-chart pt-60px">
+    <div slot="content" class="gantt-chart pt-10px">
       <div v-show="!loading" class="gantt">
         <div class="container-fluid">
           <div class="gantt-dates">

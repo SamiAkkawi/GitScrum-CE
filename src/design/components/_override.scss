@@ -14,6 +14,23 @@
     text-align: left;
 }
 
+.table {
+    border-radius: 6px;
+}
+
+.table th,
+.table td {
+    border-top: 1px solid $grey-50 !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: $lime-50 !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: $lime-100 !important;
+}
+
 .container-fluid {
     width: 100%;
     padding-right: 0;
@@ -108,10 +125,10 @@ a.badge-secondary.focus {
 
 .tlp-main-project {
     .tpl-main-project-area {
-        position: fixed;
+        position: sticky;
         width: 100%;
         z-index: 9;
-        top: 52px;
+        top: 41px;
     }
     .subheader {
         padding: 10px 15px 10px;
@@ -125,6 +142,34 @@ a.badge-secondary.focus {
     }
 }
 
+#header-project-area {
+    .btn-toolbar {
+        .btn-secondary.active {
+            background: $black-50 !important;
+            &:hover {
+                cursor: default;
+                color: $black-700 !important;
+                background: $black-50 !important;
+            }
+        }
+        .btn-secondary {
+            background: $black-100 !important;
+            color: $black-700 !important;
+            font-weight: 600;
+            line-height: 13px !important;
+            padding: 4px 0.75rem !important;
+            font-size: 12px !important;
+            span {
+                font-size: 12px !important;
+            }
+            &:hover {
+                color: $black-50 !important;
+                background: $black-A400 !important;
+            }
+        }
+    }
+}
+
 .input-group-append {
     .btn-small.btn-primary {
         border-top-left-radius: 0;
@@ -134,8 +179,57 @@ a.badge-secondary.focus {
     }
 }
 
+.table-rockstar-team {
+    background: #fff;
+    td:nth-child(1) {
+        color: $grey-A700;
+        font-weight: 700;
+        align-items: center !important;
+        .ranking-number {
+            font-size: 24px;
+            min-width: 24px;
+        }
+    }
+    td:nth-child(2) {
+        display: flex;
+        align-items: center !important;
+        .box-useravatar {
+            padding: 6px 0 0 0;
+        }
+    }
+    th:nth-child(3),
+    th:nth-child(4),
+    th:nth-child(5) {
+        text-align: right;
+    }
+    td:nth-child(3),
+    td:nth-child(4),
+    td:nth-child(5) {
+        text-align: right;
+        color: $grey-A700;
+        font-size: 24px;
+        font-weight: 700;
+        align-items: center !important;
+    }
+}
 
-/* Let's get this party started */
+.box-useravatar {
+    display: flex;
+    align-items: center !important;
+    a {
+        font-size: 12px;
+        margin-left: 5px;
+        color: $grey-700;
+        font-weight: 500;
+    }
+}
+
+
+/*
+
+Scrollbar
+
+*/
 
 ::-webkit-scrollbar {
     width: 8px;

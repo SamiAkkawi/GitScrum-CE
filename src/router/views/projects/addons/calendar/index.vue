@@ -45,7 +45,7 @@ export default {
         :title="$t('Calendar')"></TitleLoading>
     </template>
 
-    <div slot="content" class="calendar pt-60px">
+    <div slot="content" class="calendar pt-10px">
       <div class="container">
         <div class="row mb-30-px">
           <div class="col-md-12 pr-0">

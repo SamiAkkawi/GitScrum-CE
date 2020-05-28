@@ -178,7 +178,7 @@ export default {
       <TitleLoading :title="$t('Form2Task')" :loading="loading"></TitleLoading>
     </template>
 
-    <div slot="content" class="form2task pt-60px">
+    <div slot="content" class="form2task pt-10px">
       
       <div class="container">
         <div class="row mb-30-px">

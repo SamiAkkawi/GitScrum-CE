@@ -63,13 +63,13 @@ export default {
           <div class="">
             <div
               class="list row"
-              style="min-width: calc(100% + 40px);"
+              style="min-width: calc(100% + 50px);"
             >
               <li
                 v-for="workflow in workflows"
                 :key="workflow.id"
                 class="draggableColumn"
-                style="max-height: calc(100vh - 40px) !important;"
+                style="max-height: calc(100vh - 0) !important;"
               >
                 <BoardTask :workflow="workflow" :token="token"></BoardTask>
               </li>

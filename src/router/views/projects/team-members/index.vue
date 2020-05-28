@@ -206,7 +206,7 @@ export default {
 
     <template slot="header-right"></template>
 
-    <div slot="content" class="project-members pt-60px">
+    <div slot="content" class="project-members pt-10px">
       
       <div class="container-fluid">
 

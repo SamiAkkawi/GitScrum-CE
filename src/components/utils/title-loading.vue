@@ -35,7 +35,7 @@ export default {
         <span v-if="!titleAlternative" v-text="title"></span>
         <span v-if="!loading && titleAlternative" v-text="title"></span>
         <span v-if="loading" v-text="titleAlternative"></span>
-        <b-spinner v-show="loading" :label="$t('Loading')" class="title-loading"></b-spinner>
+        <b-spinner v-show="loading" :label="$t('Loading')" small class="ml-2"></b-spinner>
       </h1>
       <p v-if="subtitle" v-text="subtitle"></p>
   </div>

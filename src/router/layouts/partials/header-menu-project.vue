@@ -242,6 +242,7 @@ export default {
               :users="project.users"
               :link="false"
               :limit="50"
+              :wrap="true"
               size="24"
               class="mr-15-px d-none d-sm-block"
             ></ListUsers>

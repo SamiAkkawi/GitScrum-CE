@@ -5,6 +5,8 @@ import ListLabels from '@components/utils/list-labels'
 import StartDueDates from '@components/projects/tasks/start-due-dates'
 import BoardTaskOptions from '@components/projects/board-task-options'
 import hexToRgba from 'hex-to-rgba'
+import Types from '@components/projects/tasks/types'
+import Efforts from '@components/projects/tasks/efforts'
 
 export default {
   components: {
@@ -12,6 +14,8 @@ export default {
     StartDueDates,
     ListLabels,
     BoardTaskOptions,
+    Types,
+    Efforts
   },
   props: {
     workflow: {
@@ -204,73 +208,59 @@ export default {
               </div>
 
               <div v-if="task.type || task.effort" class="d-flex align-items-center flex-wrap">
-                <div
-                  v-if="task.type"
-                  :alt="$t('Task Type')"
-                  :title="$t('Task Type')"
-                  class="task-type"
-                  :style="'color: ' + invertColor(task.type.color, true) + ';background: ' + task.type.color"
-                  >
-                  <span >{{ task.type.title }}</span>
-                </div>
-                <div
-                  v-if="task.effort"
-                  :alt="$t('EFFORT')"
-                  :title="$t('EFFORT')"
-                  class="task-effort"
-                >
-                  <span >{{ task.effort.title }}</span>
-                </div>
+                <Types v-if="task.type" :task="task"></Types>
+                <Efforts :task="task"></Efforts>
               </div>
 
               <div
                 v-if="task.users.length > 0"
                 class="col-md d-flex justify-content-start"
-                style="padding: 0 0 10px 10px;"
+                style="padding: 5px 0 5px 5px;"
               >
-                <ListUsers size="26" :users="task.users" :link="false" :limit="6"></ListUsers>
+                <ListUsers size="26" :users="task.users" :link="true" :limit="6"></ListUsers>
               </div>
 
               <StartDueDates class="task-startDueDates" :task="task"></StartDueDates>
 
-              <div v-if="hasIcons(task)" class="has-icons" style="padding-bottom: 10px;">
+              <div v-if="hasIcons(task)" class="badge badge-light has-icons" style="padding-bottom: 0;">
+                
                 <div class="d-flex justify-content-between">
                   <div>
                     <span class="d-flex task-stats">
-                      <small v-if="task.stats.checklists" class="tx-gray-600 pd-r-10"
-                        ><i v-b-popover.hover.top="$t('Checklist')" class="fas fa-list-ol"></i>
-                        {{ task.stats.checklists }}</small
-                      >
-                      <small v-if="task.stats.time_trackers" class="tx-gray-600 pd-r-10"
-                        ><i v-b-popover.hover.top="$t('Time Tracking')" class="fas fa-clock"></i>
-                        {{ task.stats.time_trackers }}</small
-                      >
-                      <small v-if="task.stats.videos" class="tx-gray-600 pd-r-10"
-                        ><i v-b-popover.hover.top="$t('Video')" class="far fa-play-circle"></i>
-                        {{ task.stats.videos }}</small
-                      >
-                      <small v-if="task.stats.comments" class="tx-gray-600 pd-r-10"
-                        ><i v-b-popover.hover.top="$t('Comment')" class="fas fa-comment-alt"></i>
-                        {{ task.stats.comments }}</small
-                      >
-                      <small v-if="task.stats.attachments" class="tx-gray-600 pd-r-10"
-                        ><i v-b-popover.hover.top="$t('Attachment')" class="fas fa-paperclip"></i>
-                        {{ task.stats.attachments }}</small
-                      >
+                      <small v-if="task.stats.checklists" v-b-tooltip.hover :title="$t('Checklist')">
+                        <font-awesome-icon :icon="['far', 'list-ol']" />
+                        {{ task.stats.checklists }}
+                      </small>
+                      <small v-if="task.stats.time_trackers" v-b-tooltip.hover :title="$t('Time Tracking')">
+                        <font-awesome-icon :icon="['far', 'clock']" />
+                        {{ task.stats.time_trackers }}
+                      </small>
+                      <small v-if="task.stats.videos" v-b-tooltip.hover :title="$t('Video')">
+                        <font-awesome-icon :icon="['far', 'play-circle']" />
+                        {{ task.stats.videos }}
+                      </small>
+                      <small v-if="task.stats.comments" v-b-tooltip.hover :title="$t('Comment')">
+                        <font-awesome-icon :icon="['far', 'comments-alt']" />
+                        {{ task.stats.comments }}
+                      </small>
+                      <small v-if="task.stats.attachments" v-b-tooltip.hover :title="$t('Attachment')">
+                        <font-awesome-icon :icon="['far', 'paperclip']" />
+                        {{ task.stats.attachments }}
+                      </small>
                     </span>
                   </div>
 
                   <div class="task-icons">
-                    <small v-if="isBug(task.settings.is_bug)" class="tx-danger pd-l-10"
-                      ><i v-b-popover.hover.top="Bug" class="fas fa-bug"></i
-                    ></small>
+                    <small v-if="isBug(task.settings.is_bug)" v-b-tooltip.hover :title="$t('Bug')">
+                      <font-awesome-icon :icon="['far', 'bug']" />
+                    </small>
 
-                    <small v-if="isBlocker(task.settings.is_blocker)" class="tx-warning pd-l-10"
-                      ><i v-b-popover.hover.top="$t('Blocker')" class="fas fa-shield-alt"></i
-                    ></small>
+                    <small v-if="isBlocker(task.settings.is_blocker)" v-b-tooltip.hover :title="$t('Blocker')">
+                      <font-awesome-icon :icon="['far', 'shield-alt']" />
+                    </small>
 
-                    <small v-if="isDraft(task.settings.is_draft)" class="tx-primary pd-l-10">
-                      <i v-b-popover.hover.top="$t('Task Draft - Only you can see')" class="fas fa-eye"></i>
+                    <small v-if="isDraft(task.settings.is_draft)" v-b-tooltip.hover :title="$t('Task Draft - Only you can see')">
+                      <font-awesome-icon :icon="['far', 'eye']" />
                     </small>
                   </div>
                 </div>

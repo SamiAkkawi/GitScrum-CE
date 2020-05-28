@@ -74,7 +74,7 @@ export default {
 }
 </script>
 
-<template class="teste">
+<template>
   <Layout>
 
     <template slot="header-left">
@@ -84,7 +84,7 @@ export default {
         :loading="loading"></TitleLoading>
     </template>
     
-    <div slot="content" class="mind-mapping pt-60px">
+    <div slot="content" class="mind-mapping">
       <div v-if="jsonData" >
         <div style="padding:0 50px">
           <MindMapping 

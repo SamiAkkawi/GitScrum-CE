@@ -332,20 +332,6 @@
         background: url('/images/check.svg') no-repeat 0px 0px;
     }
     
-    .rockstar-king {
-        .ranking-number {
-            padding: 10px 0 10px 18px;
-            display: flex;
-            line-height: 14px;
-        }
-        .ranking-crown {
-            margin-top: 3px;
-            i {
-                font-size: 12px;
-            }
-        }
-    }
-    
     .dropdown .dropdown-toggle:after,
     .dropdown-toggle::after {
         display: none;

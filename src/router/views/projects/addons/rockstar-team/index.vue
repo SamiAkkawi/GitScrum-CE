@@ -17,14 +17,6 @@ export default {
       dates: '',
       items: [],
       gridConfig: {
-        style: [
-          'max-width:100px; width:100px;',
-          'max-width:55px; width:55px;',
-          '',
-          'max-width:95px; width:95px;',
-          'max-width:95px; width:95px;',
-          'max-width:200px; width:200px;',
-        ],
         crownColor: [
           '#FBD01E',
           '#C0C0C0',
@@ -38,6 +30,28 @@ export default {
           'transparent',
         ],
       },
+      fields: [
+        {
+          key: 'user.avatar',
+          label: 'Position',
+        },
+        {
+          key: 'user.name',
+          label: 'Team Member',
+        },
+        {
+          key: 'total_efforts',
+          label: 'Effort',
+        },
+        {
+          key: 'closed_issues_count',
+          label: 'Tasks',
+        },
+        {
+          key: 'duration_worked',
+          label: 'worked',
+        }
+      ],
     }
   },
   created() {
@@ -84,90 +98,42 @@ export default {
         :title="$t('Rockstar Team')" :loading="loading"></TitleLoading>
     </template>
 
-    <div slot="content" class="rockstar-team pt-60px">
+    <div slot="content" class="rockstar-team pt-10px">
       <div class="container">
 
         <div class="row mb-30-px">
           <div class="col-md-12 pr-0">
             
-            <div>
+            <div class="mb-3">
               <DatePicker v-model="dates" range lang="en" type="date" confirm @change="changeDate"></DatePicker>
             </div>
 
-            <div class="mt-4 mb-4">
-              <div class="divTable">
-                <div class="divTableHead">
-                  <div class="divTableRow">
-                    <div class="divTableCell text-left" :style="gridConfig.style[0]">
-                      {{ $t('Position') }}
-                    </div>
-                    <div class="divTableCell" :style="gridConfig.style[1]"> </div>
-                    <div class="divTableCell text-left" :style="gridConfig.style[2]">
-                      {{ $t('Member') }}
-                    </div>
-                    <div class="divTableCell text-right" :style="gridConfig.style[3]"> {{ $tc('Effort') }}</div>
-                    <div class="divTableCell text-right" :style="gridConfig.style[4]"> {{ $t('Tasks') }}</div>
-                    <div class="divTableCell text-right" :style="gridConfig.style[5]"> {{ $t('Worked') }}</div>
-                  </div>
+            <b-table class="table-rockstar-team" striped hover :items="items" :fields="fields" >
+              <template v-slot:cell(user.avatar)="data">
+                <div class="d-flex align-items-center">
+                  <span class="ranking-number">
+                    {{data.index + 1 }}
+                  </span>
+                  <span class="ranking-crown" :style="'color:' + gridConfig.crownColor[data.index] + '!important'">
+                    <font-awesome-icon :icon="['fas', 'crown']" />
+                  </span>
                 </div>
-                <div class="divTableBody">
-                  <div v-for="(item, key) in items" :key="item.user.username" class="divTableRowBg">
-                    <div v-if="key <= 10">
-                      <div class="divTableRow d-flex align-items-center ">
-                        <div class="d-flex divTableCell text-left rockstar-king" :style="gridConfig.style[0]">
-                          <span class="ranking-number tx-36-px fw-700 text-primary">
-                            {{ key + 1 }}
-                          </span>
-                          <span class="ranking-crown">
-                            <i :style="'color:' + gridConfig.crownColor[key]" class="fas fa-crown"></i>
-                          </span>
-                        </div>
-                        <div class="divTableCell text-center d-flex align-items-center " :style="gridConfig.style[1]">
-                          <ListUsers :user="item.user" :link="true"></ListUsers>
-                        </div>
-                        <div class="divTableCell d-flex align-items-center" :style="gridConfig.style[2]">
-                          <div class="text-left wd-100">
-                            <router-link
-                              :to="{
-                                name: 'profile.user',
-                                params: { username: item.user.username },
-                              }"
-                              class="txt-primary-title txt-link"
-                            >
-                              {{ item.user.name }}
-                            </router-link>
-                            <span v-if="item.user.headline" class="d-block info">
-                              {{ item.user.headline }}
-                            </span>
-                          </div>
-                        </div>
-                        <div
-                          class="divTableCell text-right rockstar-king d-flex align-items-center "
-                          :style="gridConfig.style[3]"
-                        >
-                          <span class="ranking-number text-right d-block tx-20px fw-700 text-primary">
-                            {{ item.total_efforts }}
-                          </span>
-                        </div>
-                        <div class="divTableCell rockstar-king d-flex align-items-center " :style="gridConfig.style[4]">
-                          <span class="ranking-number text-right d-block tx-20px fw-700 text-primary">
-                            {{ item.closed_issues_count }}
-                          </span>
-                        </div>
-                        <div
-                          class="divTableCell text-right rockstar-king d-flex"
-                          :style="gridConfig.style[5]"
-                        >
-                          <span class="ranking-number text-right d-block tx-20px fw-700 text-primary">
-                            {{ item.duration_worked }}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              </template>
+              <template v-slot:cell(user.name)="data" >
+                <div class="box-useravatar">
+                  <ListUsers :user="data.item.user" :link="true" size="22"></ListUsers>
+                  <router-link
+                  :to="{
+                    name: 'profile.user',
+                    params: { username: data.item.user.username },
+                  }"
+                  >
+                    {{data.item.user.name}}
+                  </router-link>
                 </div>
-              </div>
-            </div>
+              </template>
+            </b-table>
+
           </div>
         </div>
       </div>

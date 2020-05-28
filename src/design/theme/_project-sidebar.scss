@@ -212,6 +212,9 @@
         text-transform: uppercase;
         font-weight: 600;
     }
+    .list-users {
+        margin-bottom: 7px;
+    }
     .list-users .qtd-more-users {
         top: -1px;
         min-width: 24px;
@@ -222,7 +225,10 @@
     .list-users span {
         display: flex;
         margin-right: -2px !important;
-        margin-bottom: 2px !important;
+        margin-bottom: -3px !important;
+    }
+    .justify-content-end {
+        justify-content: flex-start !important;
     }
 }
 
@@ -317,14 +323,14 @@
 .v-sidebar-menu .vsm--link_level-1.vsm--link_active .vsm--icon,
 .v-sidebar-menu .vsm--link_level-2.vsm--link_exact-active .vsm--icon,
 .v-sidebar-menu .vsm--link_level-2.vsm--link_active .vsm--icon {
-    color: #464DEE;
+    color: $black-700;
     background-color: transparent;
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--link.vsm--link_active {
-    background-color: #E5EFFF;
+    background-color: $black-50;
     border-radius: 8px;
-    color: #464DEE;
+    color: $black-700;
 }
 
 .v-sidebar-menu .vsm--link_level-1.vsm--link_exact-active,
