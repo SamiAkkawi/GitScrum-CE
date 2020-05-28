@@ -392,6 +392,11 @@
             .titleLoading {
                 padding: 0 0 7px;
             }
+            .btn-primary {
+                color: #fff;
+                background-color: $grey-600;
+                border-color: $grey-600;
+            }
         }
         .b-sidebar-body {}
         .box-list-task {

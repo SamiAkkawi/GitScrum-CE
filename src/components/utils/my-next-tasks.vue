@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      loadingTask: true,
+      loadingTask: false,
       btnLoading: false,
       projects: [],
       projectSelected: null,
@@ -39,21 +39,23 @@ export default {
     }
   },
   created(){
-     this.getProjects()
+    this.getProjects()
     this.getTasks(this.currentPage)
-   
   },
   methods: {
     getTasks(page) {
-      this.loadingTask = true
       
-      let projectSlug = null;
+      if (!this.loadingTask){
 
-      if ( this.projectSelected ){
-        projectSlug = this.projectSelected.value
-      }
+        this.loadingTask = true
+        
+        let projectSlug = null;
 
-      Axios()
+        if ( this.projectSelected ){
+          projectSlug = this.projectSelected.value
+        }
+
+        Axios()
         .get('tasks?assignee=me&workflow=open&company_slug=' + this.currentCompany.slug + 
           '&project_slug=' + projectSlug + 
           '&title=' + this.searchTitle + 
@@ -76,9 +78,8 @@ export default {
           this.loadingTask = false
 
         })
-        .catch((e) => {
-          console.error(e)
-        })
+
+      }
     },
     getProjects() {
       
@@ -117,7 +118,12 @@ export default {
       
       <div class="my-next-tasks-header shadow-sm">
         
-        <TitleLoading :title="$t('My Next Tasks')" :loading="loadingTask"></TitleLoading>
+        <div class="d-flex justify-content-between align-items-start">
+          <TitleLoading :title="$t('My Next Tasks')" :loading="loadingTask"></TitleLoading>
+          <div v-b-tooltip.hover :title="$t('Refresh tasks')" class="mr-2 cursor-pointer" @click="getTasks">
+            <font-awesome-icon :icon="['far', 'sync-alt']" style="font-size:14px;color: #909CB8;position:relative; top:-2px;" />
+          </div>
+        </div>
 
         <b-input-group>
           <v-select
