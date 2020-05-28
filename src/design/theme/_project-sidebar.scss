@@ -33,7 +33,7 @@
     z-index: 800;
     transition: background ease 0.2s;
     z-index: 10;
-    padding: 58px 0px 0px;
+    padding: 53px 0 0;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 10px -5px, rgba(0, 0, 0, 0.14) 0px 16px 24px 2px, rgba(0, 0, 0, 0.12) 0px 6px 30px 5px;
 }
 
@@ -236,18 +236,18 @@
 }
 
 .header-project-title {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 16px;
-    margin: 5px 0 0 0;
+    margin: 0 0 0 0;
     display: block;
     line-height: 20px;
-    color: #001737;
-    .txt-68748F {
-        position: relative;
-        top: -2px;
+    color: $grey-700;
+    .badge.badge-light {
+        border: 0 solid transparent;
+        padding: 5px 3px 0 0 !important;
     }
     .fa-lock-alt {
-        color: #909CB8;
+        color: $grey-900;
         font-size: 12px;
         top: -1px;
         position: relative;

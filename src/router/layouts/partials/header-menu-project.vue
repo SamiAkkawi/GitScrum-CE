@@ -198,41 +198,38 @@ export default {
     <SidebarMenu :menu="menu" :collapsed="getMenuProjectState()" @toggle-collapse="onToggleCollapse">
       <div slot="header">
         <div id="sidebar-left" class="sidebar-left">
-
-          <div>
             
-            <div class="d-flex justify-content-start">
-              
+          <div class="d-flex justify-content-start">
+            
+            <router-link
+              :to="{
+                name: 'projects.board',
+                params: {
+                  companySlug: this.$route.params.companySlug,
+                  projectSlug: this.$route.params.projectSlug,
+                },
+              }"
+              class="header-project-title"
+            >
+              <ProjectVisibility :visibility="project.visibility"></ProjectVisibility>
+              <span v-text="project.pure_name"></span>
+            </router-link>
+          </div>
+          
+          <hr>
+
+          <div class="header-project-logo">
+            <img :src="project.logo" />
+            <div>
+              <p class="vsm--header">{{ $t('Project Leader') }}</p>
               <router-link
                 :to="{
-                  name: 'projects.board',
-                  params: {
-                    companySlug: this.$route.params.companySlug,
-                    projectSlug: this.$route.params.projectSlug,
-                  },
+                  name: 'profile.user',
+                  params: { username: project.owner.username },
                 }"
-                class="header-project-title"
               >
-                <ProjectVisibility :visibility="project.visibility"></ProjectVisibility>
-                <span class="ml-5-px" v-text="project.pure_name"></span>
+                {{project.owner.name}}
               </router-link>
-            </div>
-            
-            <hr>
-
-            <div class="header-project-logo">
-              <img :src="project.logo" />
-              <div>
-                <p class="vsm--header">{{ $t('Project Leader') }}</p>
-                <router-link
-                  :to="{
-                    name: 'profile.user',
-                    params: { username: project.owner.username },
-                  }"
-                >
-                  {{project.owner.name}}
-                </router-link>
-              </div>
             </div>
           </div>
 

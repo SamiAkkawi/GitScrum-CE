@@ -38,7 +38,13 @@ export default {
           'max-width: 45px; padding-top:2px',
         ],
       },
-      searchTerm: ''
+      searchTerm: '',
+      fields: [
+        {
+          key: 'comment',
+          label: 'Discussions',
+        },
+      ],
     }
   },
   mounted() {
@@ -115,7 +121,7 @@ export default {
       </TitleLoading>
     </template>
 
-    <div slot="content" class="project-discussions pt-70px">
+    <div slot="content" class="project-discussions pt-10px">
        <div class="container">
         <div class="row mb-30-px">
           <div class="col-md-12 pr-0">
@@ -170,73 +176,48 @@ export default {
               ></CommentEditor>
             </div>
 
-            <div class="divTable">
-              <div class="divTableHead">
-                <div class="divTableRow">
-                  <div class="divTableCell text-left" :style="gridConfig.style[1]"
-                    >{{ $tc('Discussion', 2, { n: '' }) }} {{ $tc('List', 1) }}
-                  </div>
-                  <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[2]">{{
-                    $t('Comments')
-                  }}</div>
-                  <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[3]">{{
-                    $tc('Participant', 2)
-                  }}</div>
-                </div>
-              </div>
-
-              <div class="divTableBody">
-                <div v-for="(comment, index) in comments" :key="index" class="divTableRowBg">
-                  <div class="divTableRow">
-                    <div class="divTableCell text-center" :style="gridConfig.style[0] + ';padding:15px;'">
-                      <ListUsers :user="comment.user" :link="true"></ListUsers>
-                    </div>
-                    <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                      <router-link
-                        :to="{
-                          name: 'projects.discussions.show',
-                          params: {
-                            companySlug: $route.params.companySlug,
-                            discussionId: comment.id,
-                          },
-                        }"
-                        class="txt-primary-title txt-link"
-                        :alt="comment.comment"
-                      >
-                        {{ comment.comment | truncate(220) }}
-                      </router-link>
-                      <p class="mb-0">
-                        <span v-b-popover.hover.top="comment.created_at.timezone">
-                          {{ $t('Created at') }}
-                          {{ comment.created_at.date_for_humans }}
-                        </span>
-                        /
-                        <span v-b-popover.hover.top="comment.updated_at.timezone">
-                          {{ $tc('Last reply at') }}
-                          {{ comment.updated_at.date_for_humans }}
-                        </span>
-                      </p>
-                    </div>
-                    <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[2]">
-                      <span class="info">
-                        <font-awesome-icon :icon="['far', 'comments-alt']" style="font-size: 16px;" />
-                        {{ comment.replies.length }}
-                      </span>
-                    </div>
-                    <div
-                      class="divTableCell d-flex align-items-center justify-content-end participants"
-                      :style="gridConfig.style[3]"
+            <b-table class="table-discussions" :items="comments" :fields="fields" >
+              <template v-slot:cell(comment)="data" >
+                <router-link
+                  :to="{
+                    name: 'projects.discussions.show',
+                    params: {
+                      companySlug: $route.params.companySlug,
+                      discussionId: data.item.id,
+                    },
+                  }" class="txt-primary-title">
+                  {{ data.item.comment | truncate(420) }}
+                </router-link>
+                <div class="stats d-flex justify-content-start">
+                  <div class="box-useravatar mr-2 pr-2">
+                    <ListUsers :user="data.item.user" :link="true" size="14"></ListUsers>
+                    <router-link
+                    :to="{
+                      name: 'profile.user',
+                      params: { username: data.item.user.username },
+                    }"
                     >
-                      <ListUsers
-                        :users="comment.replies.map((reply) => reply.user)"
-                        :owner="comment.user"
-                        :link="true"
-                      ></ListUsers>
-                    </div>
+                      {{data.item.user.name}}
+                    </router-link>
+                  </div>
+                  <div>
+                    <span>
+                      {{ $t('Created at') }}
+                      {{ data.item.created_at.date_for_humans }}
+                    </span>
+                    /
+                    <span >
+                      {{ $tc('Last reply at') }}
+                      {{ data.item.updated_at.date_for_humans }}
+                    </span>
+                  </div>
+                  <div class="ml-2 pl-2">
+                    <font-awesome-icon :icon="['far', 'comments-alt']" />
+                    {{ data.item.replies.length }}
                   </div>
                 </div>
-              </div>
-            </div>
+              </template>
+            </b-table>
 
             <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
               <b-pagination

@@ -42,6 +42,8 @@ export default {
         { text: 'All Tasks', value: '0' },
         { text: 'Archived Tasks', value: '1' }
       ],
+
+      cardColors: false
     }
   },
   computed: {

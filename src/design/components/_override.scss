@@ -214,6 +214,28 @@ a.badge-secondary.focus {
     }
 }
 
+.table-discussions {
+    background: #fff;
+    td:nth-child(1) {
+        font-size: 0.9rem !important;
+        .box-useravatar {
+            padding: 0;
+        }
+    }
+    .b-avatar {
+        margin: 0;
+    }
+    .stats {
+        padding: 5px 0 0;
+        font-size: 13px;
+        color: $grey-600;
+    }
+    .txt-primary-title {
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
 .box-useravatar {
     display: flex;
     align-items: center !important;

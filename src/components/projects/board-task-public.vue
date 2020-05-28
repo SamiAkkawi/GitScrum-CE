@@ -193,7 +193,11 @@ export default {
             :data-username="getUsers(task.users)"
             class="list-group-item task-card">
 
-            <div class="content-task-card" :style="(task.type) ? 'background: ' + backgroundColor(task.type.color) : ''">
+            <div class="content-task-card" 
+              :data-uuid="task.uuid" 
+              :data-color="(task.type) ? backgroundColor(task.type.color) : ''" 
+              :style="(task.type) ? 'background: ' + backgroundColor(task.type.color) : ''">
+
               <span class="task-title">
                 <strong v-if="task.code">{{ task.code }} - </strong>
                 {{ task.title }}
