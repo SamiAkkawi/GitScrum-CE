@@ -6,6 +6,7 @@ import Mentions from '@components/utils/mentions'
 import CommentEditor from '@components/utils/comment-editor'
 import ListOtherDiscussions from '@components/projects/discussions/list-other-discussions'
 import ListComments from '@components/utils/list-comments'
+import ListUsers from '@components/utils/list-users'
 
 export default {
   page: {
@@ -19,6 +20,7 @@ export default {
     CommentEditor,
     ListOtherDiscussions,
     ListComments,
+    ListUsers
   },
   data() {
     return {
@@ -120,31 +122,37 @@ export default {
       </TitleLoading>
     </template>
 
-    <div slot="content" class="project-discussions pt-70px">
+    <div slot="content" class="project-discussions pt-15px">
       
       <div class="container">
 
         <div class="row mb-30-px">
           <div class="col-md-8">
             
-            <div class="txt-909CB8 tx-11-px mb-10-px mt-30-px">
-              <router-link
-                :to="{
-                  name: 'profile.user',
-                  params: { username: item.user.username },
-                }"
-                class="lh-16px fw-600 tx-12-px txt-1E1E2F mr-5-px"
-                v-text="item.user.name"
-              >
-              </router-link>
-              {{ $t('Posted at') }}
-                    <span v-text="item.created_at.date_for_humans"></span>
-            </div>
+            
 
             <div class="title mb-30-px">
               <div v-show="!editComment">
                 
-                <div v-html="item.comment_mention"></div>
+                <div class="comments-title" v-html="item.comment_mention"></div>
+
+                <div class="d-flex justify-content-between">
+                  <div class="box-useravatar mr-2 pr-2">
+                    <ListUsers :user="item.user" :link="true" size="14"></ListUsers>
+                    <router-link
+                    :to="{
+                      name: 'profile.user',
+                      params: { username: item.user.username },
+                    }"
+                    >
+                      {{item.user.name}}
+                    </router-link>
+                  </div>
+                  <div style="font-size: 12px;color: #55617c;font-weight: 500;">
+                     {{ $t('Posted at') }}
+                    <span v-text="item.created_at.date_for_humans"></span>
+                  </div>
+                </div>
                 
                 <hr />
                 

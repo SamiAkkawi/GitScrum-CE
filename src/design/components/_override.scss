@@ -231,8 +231,18 @@ a.badge-secondary.focus {
         color: $grey-600;
     }
     .txt-primary-title {
-        font-size: 14px;
+        font-size: 14px !important;
+        line-height: 20px;
         font-weight: 600;
+    }
+}
+
+.project-discussions {
+    .txt-primary-title,
+    .txt-primary-title p {
+        color: $grey-900;
+        font-size: 20px;
+        font-weight: 500;
     }
 }
 
@@ -292,7 +302,8 @@ BASE
 
 */
 
-.txt-primary-title {
+.txt-primary-title,
+.txt-primary-title p {
     color: $grey-900;
     font-size: $font-size-lg;
     font-weight: 600;

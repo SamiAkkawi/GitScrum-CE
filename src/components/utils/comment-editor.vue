@@ -230,7 +230,7 @@ export default {
         </div>
       </EditorMenuBar>
 
-      <a v-if="cancelMode" href="javascript:;" style="left: 18px;position: absolute;top: 10px;" @click="cancel">{{ $t('Cancel') }}</a>
+      <a v-if="cancelMode" href="javascript:;" style="left: 18px;position: absolute; font-size:13px;" @click="cancel">{{ $t('Cancel') }}</a>
 
         <ButtonLoading
           v-if="!editMode"

@@ -176,7 +176,7 @@ export default {
               ></CommentEditor>
             </div>
 
-            <b-table class="table-discussions" :items="comments" :fields="fields" >
+            <b-table class="table-discussions" striped hover="" :items="comments" :fields="fields" >
               <template v-slot:cell(comment)="data" >
                 <router-link
                   :to="{

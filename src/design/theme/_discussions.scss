@@ -10,15 +10,14 @@
     padding: 5px;
 }
 
-.discussion {
-    .comments-title {
+.project-discussions {
+    .comments-title,
+    .comments-title p {
         font-style: normal;
         font-weight: 600;
-        font-size: 18px;
-        line-height: 27px;
-        display: flex;
-        align-items: center;
-        color: #001737;
+        font-size: 18px !important;
+        line-height: 22px;
+        color: $grey-900;
     }
 }
 
@@ -35,11 +34,8 @@
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
-        line-height: 27px;
-        display: flex;
-        align-items: center;
-        letter-spacing: 0.05em;
-        color: #001737;
+        line-height: 18px;
+        color: $grey-700;
     }
     .list {
         margin-top: 20px;
