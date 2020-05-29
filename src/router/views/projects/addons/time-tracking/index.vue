@@ -45,10 +45,6 @@ export default {
           label: 'Time Tracking',
         },
         {
-          key: 'when',
-          label: 'Datetime',
-        },
-        {
           key: 'time.total',
           label: 'Worked',
         }
@@ -315,10 +311,17 @@ export default {
 
         <b-table class="table-time-tracking" striped hover :items="items" :fields="fields" >
           <template v-slot:cell(user.name)="data" >
-            <a href="javascript:;" class="txt-primary-title txt-link"  @click="modal('task', data.item.task)">
-              {{ data.item.task.title }}
-            </a>
-            <div class="time-comment" v-text="data.item.comment"></div>
+            
+            <b-link v-if="data.item.task.code" href="#" class="txt-primary-title" @click="modal('task', data.item.task)">{{ data.item.task.code }} - {{ data.item.task.title }}</b-link >
+            <b-link v-if="!data.item.task.code" href="#" class="txt-primary-title" @click="modal('task', data.item.task)">{{ data.item.task.title }}</b-link>
+
+            <div class="date-time">
+              <span v-text="data.item.time.start.timezone"></span>
+                - 
+              <span v-text="data.item.time.end.timezone"></span>
+               <div class="time-comment" v-text="data.item.comment"></div>
+            </div>
+
             <div class="box-useravatar">
               <router-link
               :to="{
@@ -328,13 +331,6 @@ export default {
               >
                 {{data.item.user.name}}
               </router-link>
-            </div>
-          </template>
-          <template v-slot:cell(when)="data" >
-            <div class="date-time">
-                <span v-text="data.item.time.start.timezone"></span>
-                <br>
-                <span v-text="data.item.time.end.timezone"></span>
             </div>
           </template>
           <template v-slot:cell(time.total)="data" >

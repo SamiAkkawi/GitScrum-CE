@@ -24,11 +24,11 @@
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: $lime-50 !important;
+    background-color: rgba(225, 224, 226, 0.3) !important;
 }
 
 .table-hover tbody tr:hover {
-    background-color: $lime-100 !important;
+    background-color: rgba(225, 224, 226, 0.5) !important;
 }
 
 .container-fluid {
@@ -315,6 +315,6 @@ BASE
 .txt-primary-title,
 .txt-primary-title p {
     color: $grey-900;
-    font-size: $font-size-lg;
+    font-size: 14px;
     font-weight: 600;
 }

@@ -53,9 +53,10 @@
             padding: 0;
         }
     }
-    th:nth-child(3),
-    td:nth-child(3) {
+    th:nth-child(2),
+    td:nth-child(2) {
         text-align: right;
+        width: 130px;
         a {
             opacity: 0;
             display: flow-root;
@@ -65,20 +66,25 @@
         }
     }
     tr:hover {
-        td:nth-child(3) {
+        td:nth-child(2) {
             a {
                 opacity: 1;
             }
         }
     }
     .date-time {
-        color: $grey-700;
+        color: $grey-600;
         font-size: 12px;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        padding: 4px 0 2px;
+        margin: 2px 0 5px;
     }
     .time-comment {
-        margin: 0 0 6px 0;
         color: $grey-600;
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: 400
     }
     .box-useravatar a {
         padding: 0;
