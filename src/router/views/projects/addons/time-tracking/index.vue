@@ -4,6 +4,7 @@ import Axios from '@utils/axios'
 import DatePicker from 'vue2-datepicker'
 import ListUsers from '@components/utils/list-users'
 import TitleLoading from '@components/utils/title-loading'
+import ButtonLoading from '@components/utils/button-loading'
 import moment from 'moment'
 import { modalManager } from '@state/helpers'
 
@@ -17,114 +18,41 @@ export default {
     DatePicker,
     ListUsers,
     TitleLoading,
+    ButtonLoading
   },
   data() {
     return {
       loading: false,
+      btnLoading: false,
       totalRows: 0,
       totalPages: 1,
       perPage: 15,
       currentPage: this.$route.query.page ? this.$route.query.page : 1,
-      gridConfig: {
-        style: ['max-width:55px; width:55px;', '', 'max-width:250px; width:250px;'],
-      },
+      
+      dateStart: '',
+      dateEnd: '',
+      filterTitle: '',
+      filterMembers: [],
+      optionMembers: [],
       dates: [],
       items: [],
       stats: [],
       resume: [],
-      series: [],
-      chartOptions: {
-        chart: {
-          type: 'bar',
+      
+      fields: [
+        {
+          key: 'user.name',
+          label: 'Time Tracking',
         },
-        plotOptions: {
-          bar: {
-            dataLabels: {
-              position: 'top',
-            },
-          },
+        {
+          key: 'when',
+          label: 'Datetime',
         },
-        dataLabels: {
-          enabled: true,
-          formatter: function(val) {
-            return val
-          },
-          offsetY: -20,
-          style: {
-            fontSize: '11px',
-            colors: ['#304758'],
-          },
-        },
-
-        xaxis: {
-          categories: [
-            '00-01',
-            '01-02',
-            '02-03',
-            '03-04',
-            '04-05',
-            '05-06',
-            '06-07',
-            '07-08',
-            '08-09',
-            '09-10',
-            '10-11',
-            '11-12',
-            '12-13',
-            '13-14',
-            '14-15',
-            '15-16',
-            '16-17',
-            '17-18',
-            '18-19',
-            '19-20',
-            '20-21',
-            '21-22',
-            '22-23',
-            '23-24',
-          ],
-          position: 'top',
-          labels: {
-            offsetY: -18,
-          },
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-          tooltip: {
-            enabled: false,
-            offsetY: -35,
-          },
-        },
-        fill: {
-          gradient: {
-            shade: 'light',
-            type: 'horizontal',
-            shadeIntensity: 0.25,
-            gradientToColors: undefined,
-            inverseColors: true,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [50, 0, 100, 100],
-          },
-        },
-        yaxis: {
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-          labels: {
-            show: false,
-            formatter: function(val) {
-              return val
-            },
-          },
-        },
-      },
+        {
+          key: 'time.total',
+          label: 'Worked',
+        }
+      ],
     }
   },
   created() {
@@ -145,6 +73,17 @@ export default {
       })
     },
 
+    setProjectMembers(){
+
+      this.optionMembers = []
+      let project = this.$store.getters['project/getProject']
+
+      for (let i = 0; i < project.users.length; i++) {
+        this.optionMembers.push(project.users[i].name)
+      }
+
+    },
+
     getTimeTracking(page, dateStart, dateEnd) {
       this.scrollToTop()
       this.loading = true
@@ -158,6 +97,8 @@ export default {
             dateStart +
             '&end=' +
             dateEnd +
+            '&users=' + 
+            this.filterMembers +
             '&page=' +
             page
         )
@@ -173,30 +114,35 @@ export default {
           this.currentPage = response.data.current_page
           this.resume = response.data.data.resume
 
+          this.loading = false
+          this.setProjectMembers()
+
           this.series = [
             {
               name: this.$t('Closed tasks'),
               data: response.data.data.stats,
             },
           ]
-          this.loading = false
-        })
-        .catch((error) => {
-          console.error(error)
         })
     },
 
     changeDate(date) {
-      this.loading = true
-      let d0 = new Date(date[0])
-      let d1 = new Date(date[1])
-      let dateStart = d0.getFullYear() + '-' + (d0.getMonth() + 1) + '-' + d0.getDate() + ' 00:00'
-      let dateEnd = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate() + ' 23:59'
-      this.getTimeTracking(
-        1,
-        moment.utc(dateStart).format('YYYY-MM-DD HH:mm:ss'),
-        moment.utc(dateEnd).format('YYYY-MM-DD HH:mm:ss')
-      )
+
+      this.dateStart = ''
+      this.dateEnd = ''
+
+      if (date[0]){
+        let d0 = new Date(date[0])
+        let dateStart = d0.getFullYear() + '-' + (d0.getMonth() + 1) + '-' + d0.getDate() + ' 00:00'
+        this.dateStart = moment.utc(dateStart).format('YYYY-MM-DD HH:mm:ss')
+      }
+
+      if (date[1]){
+        let d1 = new Date(date[1])
+        let dateEnd = d1.getFullYear() + '-' + (d1.getMonth() + 1) + '-' + d1.getDate() + ' 23:59'
+        this.dateEnd = moment.utc(dateEnd).format('YYYY-MM-DD HH:mm:ss')
+      }
+
     },
 
     periodStart() {
@@ -218,6 +164,8 @@ export default {
             this.$route.params.companySlug +
             '&project_slug=' +
             this.$route.params.projectSlug +
+            '&users=' + 
+            this.filterMembers +
             '&start_date=' +
             this.resume.period_start +
             '&end_date=' +
@@ -231,9 +179,6 @@ export default {
           link.setAttribute('download', 'time-tracking.xlsx')
           document.body.appendChild(link)
           link.click()
-        })
-        .catch((e) => {
-          console.error(e)
         })
     },
 
@@ -267,6 +212,10 @@ export default {
       })
       
     },
+
+    addFilter(){
+      this.getTimeTracking(1, this.dateStart, this.dateEnd)
+    }
   },
 }
 </script>
@@ -279,52 +228,174 @@ export default {
     </template>
 
     <div slot="content" class="time-stracking pt-10px">
+
+      <div class="container">
+        
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start">
+                <div class="media border-right mr-4">
+                  <div class="media-body mr-4">
+                    <label class="mb-0 fw-700">{{ $t('Hours Worked') }}</label>
+                    <p class="mb-0" v-text="periodHours()"></p>
+                  </div>
+                </div>
+                <div class="media">
+                  <div class="media-body mr-4">
+                    <label class="mb-0 fw-700">{{ $t('Start Date') }}</label>
+                    <p class="mb-0" v-text="periodStart()"></p>
+                  </div>
+                </div>
+                <div class="media">
+                  <div class="media-body mr-4">
+                    <label class="mb-0 fw-700">{{ $t('Due Date') }}</label>
+                    <p class="mb-0" v-text="periodEnd()"></p>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" @click="downloadExcel">
+                {{ $t('Export to CSV') }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-start mb-2">
+          <b-form-tags v-model="filterMembers" size="sm" add-on-change no-outer-focus class="mb-2">
+            <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+              <b-form-select
+                :options="optionMembers"
+                size="sm"
+                v-bind="inputAttrs"
+                v-on="inputHandlers"
+                >
+                <template v-slot:first>
+                  <option disabled value="">{{ $t('Filter by team member') }}</option>
+                </template>
+              </b-form-select>
+              <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+                <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                  <b-form-tag
+                    :title="tag"
+                    :disabled="disabled"
+                    @remove="removeTag(tag)"
+                  >{{ tag }}</b-form-tag>
+                </li>
+              </ul>
+            </template>
+          </b-form-tags>
+
+          <DatePicker
+            v-model="dates"
+            range
+            lang="en"
+            type="date"
+            confirm
+            :not-after="new Date()"
+            @change="changeDate"></DatePicker>
+
+          <b-form-input 
+            v-model="filterTitle" 
+            type="search" 
+            autocomplete="off" 
+            size="sm"
+            :placeholder="$t('Search by title')"></b-form-input>
+
+          <div>
+            <ButtonLoading
+              :loading="btnLoading"
+              type="btn-sm"
+              icon="search"
+              @action="addFilter"
+            ></ButtonLoading>
+          </div>
+
+        </div>
+
+        <b-table class="table-time-tracking" striped hover :items="items" :fields="fields" >
+          <template v-slot:cell(user.name)="data" >
+            <a href="javascript:;" class="txt-primary-title txt-link"  @click="modal('task', data.item.task)">
+              {{ data.item.task.title }}
+            </a>
+            <div class="time-comment" v-text="data.item.comment"></div>
+            <div class="box-useravatar">
+              <router-link
+              :to="{
+                name: 'profile.user',
+                params: { username: data.item.user.username },
+              }"
+              >
+                {{data.item.user.name}}
+              </router-link>
+            </div>
+          </template>
+          <template v-slot:cell(when)="data" >
+            <div class="date-time">
+                <span v-text="data.item.time.start.timezone"></span>
+                <br>
+                <span v-text="data.item.time.end.timezone"></span>
+            </div>
+          </template>
+          <template v-slot:cell(time.total)="data" >
+            <div class="worked">
+                <span v-text="data.item.time.total"></span>
+            </div>
+            <a v-if="authorize('tasks', 'delete')" 
+              href="javascript:;"
+              @click="removeTime(data.item.time.id)"
+            > {{ $t('Delete') }} </a>
+          </template>
+        </b-table>
+
+        <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
+          <b-pagination
+            hide-goto-end-buttons
+            class="paginator"
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            @change="getTimeTracking($event, '', '')"
+          >
+            <template slot="prev-text">
+              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
+            </template>
+            <template slot="next-text">
+              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
+            </template>
+          </b-pagination>
+        </div>
+
+      </div>
+
+      
+
+
+
+
+      
+
+
+
+
       <div class="container">
         <div class="row mb-30-px">
           <div class="col-md-12">
             
-            <div class="d-flex justify-content-between">
-              <DatePicker
-                v-model="dates"
-                range
-                lang="en"
-                type="date"
-                class="mt-1"
-                confirm
-                @change="changeDate"
-                :not-after="new Date()"
-              ></DatePicker>
-              <div></div>
-              <div>
-                <button class="btn btn-primary" @click="downloadExcel">
-                  {{ $t('Export') }}
-                </button>
-              </div>
-            </div>
-            <div class="d-flex justify-content-start mt-10-px mb-15-px">
-              <div class="media">
-                <div class="media-body mr-4">
-                  <label class="mb-0">{{ $t('Start Date') }}</label>
-                  <p v-text="periodStart()"></p>
-                </div>
-              </div>
-              <div class="media">
-                <div class="media-body mr-4">
-                  <label class="mb-0">{{ $t('Due Date') }}</label>
-                  <p v-text="periodEnd()"></p>
-                </div>
-              </div>
+            
+            
 
-              <div class="media">
-                <div class="media-body mr-4">
-                  <label class="mb-0">{{ $t('Hours Worked') }}</label>
-                  <p v-text="periodHours()"></p>
-                </div>
-              </div>
-            </div>
+            
 
-            <apexchart type="bar" height="250" :options="chartOptions" :series="series" class="row" />
 
+
+            
+
+            
+
+            
+
+  <!--
             <div class="divTable">
               <div class="divTableHead">
                 <div class="divTableRow">
@@ -345,9 +416,7 @@ export default {
                     </div>
 
                     <div class="divTableCell text-left rockstar-king" :style="gridConfig.style[1]">
-                      <a href="javascript:;" class="txt-primary-title txt-link"  @click="modal('task', item.task)">
-                        {{ item.task.title }}
-                      </a>
+                      
                       <span class="d-block info">
                         <span v-text="item.time.start.timezone"></span>
                         /
@@ -391,24 +460,10 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
-                <b-pagination
-                  hide-goto-end-buttons
-                  class="paginator"
-                  v-model="currentPage"
-                  :total-rows="totalRows"
-                  :per-page="perPage"
-                  @change="getTimeTracking($event, '', '')"
-                >
-                  <template slot="prev-text">
-                    <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-                  </template>
-                  <template slot="next-text">
-                    <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-                  </template>
-                </b-pagination>
-              </div>
-            </div>
+            </div> 
+            -->
+
+
           </div>
         </div>
       </div>

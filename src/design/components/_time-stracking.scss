@@ -1,0 +1,92 @@
+.time-stracking {
+    .b-form-tags {
+        width: 400px;
+        background: transparent;
+        border: 0;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .list-inline {
+        margin: 8px 2px 0 !important;
+        .list-inline-item {
+            margin: 0;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus,
+        input:active,
+        select:active,
+        textarea:active,
+        button:active {
+            border: 0 !important;
+            outline: none !important;
+        }
+    }
+    .mx-datepicker-range {
+        margin: 0 0 0 10px;
+    }
+    .mx-input {
+        height: 32px;
+        border: 1px solid #ced4da !important;
+    }
+    .mx-datepicker-popup {
+        top: 35px !important;
+    }
+    .form-control-sm {
+        height: 32px;
+        margin: 0 10px;
+    }
+    select.custom-select {
+        height: 32px;
+    }
+    input.form-control-sm {
+        width: 350px;
+    }
+}
+
+.table-time-tracking {
+    background: #fff;
+    td:nth-child(1) {
+        font-size: 0.9rem !important;
+        .box-useravatar {
+            padding: 0;
+        }
+    }
+    th:nth-child(3),
+    td:nth-child(3) {
+        text-align: right;
+        a {
+            opacity: 0;
+            display: flow-root;
+            position: relative;
+            margin-top: -3px;
+            font-size: 12px;
+        }
+    }
+    tr:hover {
+        td:nth-child(3) {
+            a {
+                opacity: 1;
+            }
+        }
+    }
+    .date-time {
+        color: $grey-700;
+        font-size: 12px;
+    }
+    .time-comment {
+        margin: 0 0 6px 0;
+        color: $grey-600;
+        font-size: 13px;
+    }
+    .box-useravatar a {
+        padding: 0;
+        margin: 0;
+    }
+    .worked {
+        color: $grey-700;
+        font-size: 14px;
+        font-weight: 700;
+    }
+}

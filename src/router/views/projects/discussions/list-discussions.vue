@@ -125,7 +125,7 @@ export default {
        <div class="container">
         <div class="row mb-30-px">
           <div class="col-md-12 pr-0">
-            <div class="d-flex justify-content-between mb-30-px">
+            <div class="d-flex justify-content-between mb-3">
               
               <div class="d-flex justify-content-end">
                 <div>

@@ -10,7 +10,6 @@ import DescriptionEditable from '@components/utils/description-editable'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import LabelEdit from 'label-edit'
-import Activities from '@components/utils/activities'
 
 export default {
   page: {
@@ -26,7 +25,6 @@ export default {
     DescriptionEditable,
     vSelect,
     LabelEdit,
-    Activities,
     TitleLoading
   },
   data() {

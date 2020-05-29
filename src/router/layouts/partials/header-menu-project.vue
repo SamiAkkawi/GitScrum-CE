@@ -31,7 +31,9 @@ export default {
       project: [],
       menu: [],
       
-      sidebarStatus: false
+      sidebarStatus: false,
+      projectExtra: false,
+      projectExtraIcon: 'minus-square'
     }
   },
   
@@ -58,6 +60,9 @@ export default {
     getSidebarMenu(){
 
       let sidebar = this.$store.getters['projectSidebar/getSidebar']
+
+      this.projectExtra = Boolean(localStorage.getItem('EXTRA_PROJECT_' + this.project.slug))
+      this.statusProjectExtra() 
 
       if ( sidebar !== null ) {
         this.menu = sidebar
@@ -171,6 +176,20 @@ export default {
     closeTaskFilters(){
       this.sidebarStatus = false
       document.getElementById('page-content').style.paddingLeft = "10px";
+    },
+
+    statusProjectExtra(){
+
+      if (this.projectExtra){
+        this.projectExtraIcon = 'minus-square'
+        localStorage.setItem('EXTRA_PROJECT_' + this.project.slug, true)
+      } else {
+        this.projectExtraIcon = 'plus-square'
+        localStorage.removeItem('EXTRA_PROJECT_' + this.project.slug)
+      }
+
+      this.projectExtra = !this.projectExtra 
+
     }
   }
 }
@@ -218,36 +237,48 @@ export default {
           
           <hr>
 
-          <div class="header-project-logo">
-            <img :src="project.logo" />
-            <div>
-              <p class="vsm--header">{{ $t('Project Leader') }}</p>
-              <router-link
-                :to="{
-                  name: 'profile.user',
-                  params: { username: project.owner.username },
-                }"
-              >
-                {{project.owner.name}}
-              </router-link>
+          <div class="statusProjectExtra">
+
+            <font-awesome-icon 
+              :icon="['far', projectExtraIcon]" 
+              class="cursor-pointer" 
+              style="font-size:18px; color: #909CB8;" 
+              @click="statusProjectExtra" />
+
+          </div>
+
+          <div v-show="projectExtra">
+            <div class="header-project-logo">
+              <img :src="project.logo" :alt="project.name" />
+              <div>
+                <p class="vsm--header">{{ $t('Project Leader') }}</p>
+                <router-link
+                  :to="{
+                    name: 'profile.user',
+                    params: { username: project.owner.username },
+                  }"
+                >
+                  {{project.owner.name}}
+                </router-link>
+              </div>
             </div>
-          </div>
 
-          <div v-if="authorize('header', 'users')" id="project-team-members" class="header-project-team-members">
-            <h3>{{ $t('Project Team Members') }}</h3>
-            <ListUsers
-              :users="project.users"
-              :link="false"
-              :limit="50"
-              :wrap="true"
-              size="24"
-              class="mr-15-px d-none d-sm-block"
-            ></ListUsers>
-          </div>
+            <div v-if="authorize('header', 'users')" id="project-team-members" class="header-project-team-members">
+              <h3>{{ $t('Project Team Members') }}</h3>
+              <ListUsers
+                :users="project.users"
+                :link="true"
+                :limit="50"
+                :wrap="true"
+                size="22"
+                class="d-none d-sm-block"
+              ></ListUsers>
+            </div>
 
-          <div class="header-project-collaboration">
-            <b-progress class="project-list-progress" :value="project.my_contribution" :max="100"></b-progress>
-            <p>{{ $t('My contribution') }}: {{ parseFloat(project.my_contribution) | percent(0) }}</p>
+            <div class="header-project-collaboration">
+              <b-progress class="project-list-progress" :value="project.my_contribution" :max="100"></b-progress>
+              <p>{{ $t('My contribution') }}: {{ parseFloat(project.my_contribution) | percent(0) }}</p>
+            </div>
           </div>
 
         </div>

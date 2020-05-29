@@ -167,7 +167,6 @@ export default {
       backdrop
       shadow
       left
-      no-header-close="false"
       class="my-next-tasks">
        <MyNextTasks></MyNextTasks>      
     </b-sidebar>

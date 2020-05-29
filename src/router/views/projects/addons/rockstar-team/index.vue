@@ -49,7 +49,7 @@ export default {
         },
         {
           key: 'duration_worked',
-          label: 'worked',
+          label: 'Worked',
         }
       ],
     }
