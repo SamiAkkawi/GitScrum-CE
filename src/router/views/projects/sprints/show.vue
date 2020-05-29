@@ -260,11 +260,12 @@ export default {
      <TitleLoading
         :title="$t('Sprints')"
         :subtitle="$t('Sprint is one timeboxed iteration of a continuous cycle')"
+        :loading="loading"
       >
       </TitleLoading>
     </template>
 
-    <div slot="content" class="sprint pt-70px">
+    <div slot="content" class="sprint pt-10px">
       
       <div class="container">
         <div v-if="sprint" class="row mb-30-px">
@@ -475,6 +476,7 @@ export default {
                   :link="true"
                   :users="sprint.users"
                   :limit="100"
+                  :wrap="true"
                 ></ListUsers>
               </div>
             </div>

@@ -174,7 +174,7 @@ export default {
       </TitleLoading>
     </template>
 
-    <div slot="content" class="user-story pt-70px">
+    <div slot="content" class="user-story pt-10px">
       
       <div class="container">
         

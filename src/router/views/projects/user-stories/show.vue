@@ -232,7 +232,7 @@ export default {
       </TitleLoading>
     </template>
 
-    <div slot="content" class="user-story pt-70px">
+    <div slot="content" class="user-story pt-10px">
       
       <div class="container">
     
@@ -347,7 +347,44 @@ export default {
               </div>
             </div>
 
-            <div v-if="userStory.users" class="hero-card text-left mb-10-px">
+            <span class="mt-10-px btn btn-secondary btn-sm txt-link d-block" @click="downloadExcel">
+              <font-awesome-icon :icon="['fal', 'cloud-download']" class="mr-4-px tx-14-px" />
+              {{ $t('Download TimeSheet') }}
+            </span>
+
+            <div class="mt-1">
+              <router-link
+                :to="{
+                  name: 'projects.user-stories.assign-tasks',
+                  params: {
+                    companySlug: $route.params.companySlug,
+                    projectSlug: $route.params.projectSlug,
+                    userStorySlug: $route.params.userStorySlug,
+                  },
+                }"
+                class="btn btn-success btn-sm wd-100"
+              >
+                {{ $tc('Assign Tasks', 2) }}
+              </router-link>
+            </div>
+
+            <div class="mt-1 mb-2">
+              <router-link
+                :to="{
+                  name: 'projects.board',
+                  params: {
+                    companySlug: this.$route.params.companySlug,
+                    projectSlug: this.$route.params.projectSlug,
+                  },
+                  query: { userStorySlug: this.$route.params.userStorySlug },
+                }"
+                class="btn btn-primary btn-sm wd-100"
+              >
+                {{ $t('User Story in Board') }} ({{ tasks.length }})
+              </router-link>
+            </div>
+
+            <div v-if="userStory.users" class="hero-card text-left mb-2">
               <h3 class="tx-16-px fw-600 m-0">{{ $tc('Team', 1) }}</h3>
               <div class="p-5-px">
                 <ListUsers
@@ -401,7 +438,7 @@ export default {
             </div>
           </div>
 
-          <div class="col-lg-7">
+          <div class="col-lg-9">
 
             <ListTasks class="mg-t-20" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
           
@@ -424,51 +461,6 @@ export default {
               </b-pagination>
             </div>
 
-          </div>
-
-          <div class="col-lg-2">
-
-            <span class="btn-download txt-link d-block" @click="downloadExcel">
-              <font-awesome-icon :icon="['fal', 'cloud-download']" class="mr-4-px tx-14-px" />
-              {{ $t('Download TimeSheet') }}
-            </span>
-
-            <div class="mt-20-px">
-              <router-link
-                :to="{
-                  name: 'projects.user-stories.assign-tasks',
-                  params: {
-                    companySlug: $route.params.companySlug,
-                    projectSlug: $route.params.projectSlug,
-                    userStorySlug: $route.params.userStorySlug,
-                  },
-                }"
-                class="btn btn-success btn-sm wd-100"
-              >
-                {{ $tc('Assign Tasks', 2) }}
-              </router-link>
-            </div>
-
-            <div class="mt-10-px">
-              <router-link
-                :to="{
-                  name: 'projects.board',
-                  params: {
-                    companySlug: this.$route.params.companySlug,
-                    projectSlug: this.$route.params.projectSlug,
-                  },
-                  query: { userStorySlug: this.$route.params.userStorySlug },
-                }"
-                class="btn btn-primary btn-sm wd-100"
-              >
-                {{ $t('User Story in Board') }} ({{ tasks.length }})
-              </router-link>
-            </div>
-
-            <div>
-              
-            </div>
-            
           </div>
         </div>
       </div>
