@@ -200,22 +200,13 @@ export default {
         :title="$tc('Explore Documents', totalRows)"
         :title-alternative="$t('Documents')"
         :subtitle="$t('Documents that teams rely on to successfully guide projects')"
+        :loading="loading"
       ></TitleLoading>
     </template>
 
-    <div slot="content" class="project-documents pt-70px">
+    <div slot="content" class="project-documents pt-10px">
       <div class="container">
-        <div class="d-flex justify-content-between mb-30-px">
-          <div>
-            
-            <b-form-checkbox
-              v-model="seeAll"
-              value="all"
-              unchecked-value=""
-            >
-              Include attachments that are in tasks
-            </b-form-checkbox>
-          </div>
+        <div class="d-flex justify-content-between mb-10-px">
           <div>
 
             <b-form-input 
@@ -227,6 +218,17 @@ export default {
             ></b-form-input>
 
           </div>
+          <div>
+            
+            <b-form-checkbox
+              v-model="seeAll"
+              value="all"
+              unchecked-value=""
+            >
+              Include attachments that are in tasks
+            </b-form-checkbox>
+          </div>
+          
         </div>
 
         <div class="d-flex justify-content-between">
@@ -288,7 +290,7 @@ export default {
                       </div>
                       <silentbox-item :src="attachment.download.url" :description="attachment.filename">
                         <div class="gallery-image">
-                          <ListUsers :user="attachment.user" :link="true" size="22"></ListUsers>
+                          <ListUsers :user="attachment.user" :link="true" size="22" style="position: absolute;padding: 10px;"></ListUsers>
                           <img :src="attachment.download.url" class="cover" />
                         </div>
                       </silentbox-item>
@@ -322,7 +324,7 @@ export default {
                     </div>
                   </div>
                   <div class="document-details">
-                    <a :href="attachment.download.url" class="" target="_blank">
+                    <a :href="attachment.download.url" class="d-flex" target="_blank">
                       <span class="txt-68748F tx-12-px fw-500">{{ attachment.filename }}</span>
                     </a>
                     <div class="d-flex justify-content-between">

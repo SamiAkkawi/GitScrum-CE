@@ -6,6 +6,9 @@
         .document-image {
             height: 200px;
             background: #e7eaed;
+            .gallery-dropdown {
+                position: absolute;
+            }
             &:hover {
                 .gallery-dropdown {
                     opacity: 1;
