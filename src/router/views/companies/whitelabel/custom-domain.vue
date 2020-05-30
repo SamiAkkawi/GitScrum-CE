@@ -197,19 +197,26 @@ export default {
 
 <template>
   <Layout>
-    <div slot="content" class="white-label">
+
+    <template slot="header-left">
+      <TitleLoading 
+        :title="$t('White Label Setup')" 
+        :loading="loading"></TitleLoading>
+    </template>
+
+    <div slot="content" class="white-label pt-10px">
       <div class="row mb-30-px">
         <div class="col-md-2">
           <SideBar></SideBar>
         </div>
 
         <div class="col-md-5 offset-md-1">
-          <div class="mb-20-px d-lg-flex">
-            <TitleLoading title="White Label Setup" :loading="loading"></TitleLoading>
-          </div>
-          <div class="row flex-column-reverse flex-md-row">
+          
+          <div class="flex-column-reverse flex-md-row">
             
-            <div class="col-md-12">
+            <div class="card">
+
+              <div class="card-body">
 
                 <p class="tx-18-px txt-001737 fw-600 mb-5-px">
                   {{ $t('STEP 1') }}
@@ -269,12 +276,13 @@ export default {
                     <tbody>
                       <tr v-for="domain in domains" :key="domain.id">
                         <td>
-                          <h6 class="mt-0 mb-0">
-                            <a :href="'http://' + domain.domain" target="_blank">{{ domain.domain }}</a>
-                          </h6>
+                          <b-link :href="'http://' + domain.domain" target="_blank">{{ domain.domain }}</b-link>
                         </td>
                         <td class="text-right">
-                          <i class="fa fa-trash text-danger cursor-pointer" @click="deleteDomain(domain.domain)"> </i>
+                          <b-link @click="deleteDomain(domain.domain)">
+                            <font-awesome-icon 
+                              :icon="['far', 'trash-alt']" />
+                          </b-link>
                         </td>
                       </tr>
                     </tbody>
@@ -355,10 +363,12 @@ export default {
                   {{ $t('CNAME_Text1') }}
                 </p>
 
+              </div>
+
             </div>
           </div>
         </div>
-        <div class="col-md-3 offset-md-1">
+        <div class="col-md-4">
           
           <Ads v-show="!whiteLabel" type="square"></Ads>
 
