@@ -789,5 +789,6 @@
     "Project Leader": "Project Leader",
     "Project Private": "Project Private",
     "Invite External Users": "Invite External Users",
-    "Invite Internal Users": "Invite Internal Users"
+    "Invite Internal Users": "Invite Internal Users",
+    "Accepted at XXX": "Accepted at {datetime}"
 }

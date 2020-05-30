@@ -4,6 +4,13 @@
     box-shadow: none !important;
 }
 
+small {
+    display: flow-root;
+    color: $black-200 !important;
+    line-height: 18px;
+    font-size: 13px;
+}
+
 .badge {
     font-weight: 500 !important;
     padding: 5px 8px !important;
@@ -255,6 +262,37 @@ a.badge-secondary.focus {
         font-size: 14px !important;
         line-height: 20px;
         font-weight: 600;
+    }
+}
+
+.table-team-members {
+    background: #fff;
+    td:nth-child(1) {
+        font-size: 0.9rem !important;
+        width: 300px;
+    }
+    td:nth-child(2) {
+        a {
+            opacity: 0;
+            color: $black-400;
+            margin-left: 4px;
+        }
+    }
+    td:nth-child(3) {
+        a {
+            opacity: 0;
+        }
+    }
+    tr:hover {
+        td:nth-child(2),
+        td:nth-child(3) {
+            a {
+                opacity: 1;
+            }
+        }
+    }
+    .b-avatar {
+        margin: 0;
     }
 }
 

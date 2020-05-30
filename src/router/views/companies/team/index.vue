@@ -28,16 +28,7 @@ export default {
       alertStatus: false,
       currentCompany: JSON.parse(window.localStorage.getItem('CURRENT_COMPANY')),
       loading: false,
-      gridConfig: {
-        style: [
-          'max-width: 45px; padding: 15px 10px 15px 20px;',
-          '',
-          'max-width:150px; width:150px;',
-          'max-width:220px; width:220px;',
-          'max-width:50px; width:50px;',
-          'max-width: 45px; padding-top:2px',
-        ],
-      },
+      
       showInvite: false,
       inviteCompanyLink: '',
       invitationLinkLoading: false,
@@ -45,6 +36,23 @@ export default {
       linkCopied: false,
       emailExpression: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       sendInvitesLoading: false,
+
+      totalInvites: [0,1,2],
+
+      fields: [
+        {
+          key: 'user',
+          label: 'Team Member',
+        },
+        {
+          key: 'status',
+          label: 'Status',
+        },
+        {
+          key: 'create_project',
+          label: 'Can create project',
+        },
+      ],
     }
   },
   mounted() {
@@ -199,23 +207,11 @@ item.status.can_create_projects = true;
         })
     },
 
-    copyLink() {
+    onCopy() {
+
+      this.$copyText(this.tokenShareableBoard)
       this.linkCopied = false
-      let taElement = document.getElementById('shareableLink')
-
-      const el = document.createElement('textarea')
-      el.value = this.inviteCompanyLink || ''
-      el.setAttribute('readonly', '')
-      el.style.position = 'absolute'
-      el.style.left = '-9999px'
-      document.body.appendChild(el)
-      el.select()
-      document.execCommand('copy')
-      document.body.removeChild(el)
-
-      taElement.focus()
-      taElement.select()
-      this.linkCopied = true
+      
     },
 
     resetInviteFields() {
@@ -276,272 +272,236 @@ item.status.can_create_projects = true;
 
 <template>
   <Layout>
-    <div slot="content" class="company-team">
+
+    <template slot="header-left">
+      <TitleLoading
+        :title="$t('Company Team Members')"
+        :loading="loading"
+      ></TitleLoading>
+    </template>
+
+    <div slot="content" class="company-team pt-10px">
+
       <div class="row mb-30-px">
-        <div class="col-md-3">
+        <div class="col-md-2">
           <SideBar></SideBar>
         </div>
-        <div class="col-md-9">
-          <div class="d-flex justify-content-between align-items-center">
-            <TitleLoading
-              :title="$t('Company Team Members')"
-              :loading="loading"
-              addclass="text-dark font-weight-bold mb-0 mr-5"
-            >
-            </TitleLoading>
-            <div v-not-visible="'tablet'">
-              <a v-if="activeUsers.invitation" class="tx-14-px" href="javascript:;" @click="toggleShowInvite">
-                {{ $t('Invite Members') }}
-              </a>
-              <span v-else class="tx-12-px font-weight-bold txt-EF5958">
-                {{ $t('You need to upgrade your account') }}
-              </span>
-            </div>
-          </div>
+        <div class="col-md-9 offset-md-1">
 
-          <div class="txt-6C7293">
-            {{ currentCompany.stats.plan.title }} /
-            <span v-if="currentCompany.stats.plan.users == 'Unlimited'">
-              {{ $t('Unlimited users') }}
-            </span>
-            <span v-else>
-              {{ $t('up to users', { users: currentCompany.stats.plan.users }) }}
-            </span>
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  {{ currentCompany.stats.plan.title }} - 
+                  <span v-if="currentCompany.stats.plan.users == 'Unlimited'">
+                    {{ $t('Unlimited users') }}
+                  </span>
+                  <span v-else>
+                    {{ $t('up to users', { users: currentCompany.stats.plan.users }) }}
+                  </span>
+                  <span v-if="!activeUsers.invitation && !loading" class="d-block tx-12-px font-weight-bold txt-EF5958">
+                    {{ $t('You need to upgrade your account') }}
+                  </span>
+                </div>
+
+                <div v-not-visible="'tablet'">
+                  <a v-if="activeUsers.invitation" class="small fw-600" href="javascript:;" @click="toggleShowInvite">
+                    {{ $t('Invite Members') }}
+                    <font-awesome-icon :icon="['far', 'angle-down']" style="position:relative; margin-left:4px;" />
+                  </a>
+                  <router-link :to="{ 'name': 'companies.teams.log' }" class="ml-3 small">
+                    {{ $t('See the people you have already invited') }}  
+                    <font-awesome-icon :icon="['far', 'angle-right']" class="ml-1" />
+                  </router-link>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div v-show="!loading && activeUsers">
             <Ads v-if="currentCompany.subscription === 'free' || !activeUsers.invitation" type="large"></Ads>
           </div>
 
-          <Alert :message="alertMessage" :status="alertStatus" class="mg-b-20 mt-10-px"></Alert>
+          <Alert :message="alertMessage" :status="alertStatus" class="mt-2"></Alert>
 
-          <div v-show="showInvite" v-not-visible="'tablet'" class="row invite-container mt-10-px">
-            <div class="col-md-12">
-              <div class="d-flex justify-content-between mb-10-px">
-                
-                <TitleLoading
-                  :title="$t('Shareable Link')"
-                  :subtitle="$t('Anyone with this link can join the company')"
-                  :loading="invitationLinkLoading"
-                >
-                </TitleLoading>
+          <div v-show="showInvite" v-not-visible="'tablet'" class="card">
+            <div class="card-body">
 
-                <div class="d-flex justify-content-between">    
+              <div class="invite-container">
+                <div class="d-flex justify-content-between">
                   <b-form-checkbox
                     v-model="enableShareableLink"
                     :disabled="invitationLinkLoading"
                     @change="handleShareableLink"
-                  >
-                    <span>{{ $t('Enable') }}</span>
+                    class="mb-3">
+                    <TitleLoading
+                      :title="$t('Shareable Link')"
+                      :subtitle="$t('Anyone with this link can join the company')"
+                      :loading="invitationLinkLoading">
+                    </TitleLoading>
                   </b-form-checkbox>
+
+                  <a v-show="enableShareableLink"
+                    href="javascript:;"
+                    class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase mt-5-px"
+                    @click="updateInvitationLink" >
+                    {{ $t('Update Link') }}
+                  </a>
                 </div>
 
-              </div>
-              <div>
-                
-
-                <div v-show="enableShareableLink" class="mt-8-px">
-                  <textarea
-                    id="shareableLink"
-                    v-model="inviteCompanyLink"
-                    :disabled="invitationLinkLoading"
-                    type="text"
-                    class="form-control tx-12-px cursor-pointer"
-                    style="word-break: break-all; line-height: 15px; padding: 10px 15px; height:50px; background-color: #ffffff"
-                    readonly
-                    @click="
-                      $event.target.focus()
-                      $event.target.select()
-                      copyLink()
-                    "
-                  />
-
-                  <div class="d-flex justify-content-between">
-                    <div class="text-left tx-10-px fw-500 mt-5-px">
-                      <span v-show="!linkCopied" class="txt-9EA9C1">
-                        {{ $t('Click to copy') }}
-                      </span>
-                      <span v-show="linkCopied" class="txt-3D4F9F">
-                        {{ $t('Copied to clipboard') }}
-                      </span>
-                    </div>
-                    <a
-                      v-show="enableShareableLink"
-                      href="javascript:;"
-                      class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase mt-5-px"
-                      @click="updateInvitationLink"
-                    >
-                      {{ $t('Update Link') }}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-12 mt-15-px">
-              <div class="d-flex justify-content-between mb-15-px">
-                <TitleLoading
-                  :title="$t('Invite your Team')"
-                  :subtitle="$t('Bring teammates to your company. After accepting the invitation, you must add teammates to the projects.')"
-                  :loading="sendInvitesLoading"
-                >
-                </TitleLoading>
-              </div>
-              <div class="invite-form invite-form-company">
-                  <div class="form-row">
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteNames[0]" type="text" :placeholder="$t('Full Name')" />
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteEmails[0]" type="email" :placeholder="$t('Enter the email address')" />
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteNames[1]" type="text" :placeholder="$t('Full Name')" />
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteEmails[1]" type="email" :placeholder="$t('Enter the email address')" />
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteNames[2]" type="text" :placeholder="$t('Full Name')" />
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <input v-model="inviteEmails[2]" type="email" :placeholder="$t('Enter the email address')" />
-                    </div>
-                  </div>
-
-                  <div class="d-flex justify-content-end justify-content-end p-0">
-                    <ButtonLoading
-                    :loading="loading"
-                    :title="$t('Send Invite')"
-                    :title-loading="$t('Sending')"
-                    type="btn-md"
-                    @action="sendInvites"
-                    ></ButtonLoading>
-                  </div>
+                <b-input-group v-show="enableShareableLink" class="mt-2">
+                  <b-input v-model="inviteCompanyLink" 
+                    :readonly="true" 
+                    autocomplete="off"></b-input>
+                  <b-input-group-append>
+                    <b-button 
+                    v-clipboard:copy="inviteCompanyLink"
+                    v-clipboard:success="onCopy"
+                    variant="outline-secondary" >
+                      <font-awesome-icon :icon="['far', 'copy']" />
+                    </b-button>
+                  </b-input-group-append>
+                </b-input-group>
                   
-              </div>
-            </div>
-            
-          </div>
-
-          <div v-not-visible="'tablet'" class="mt-10-px">
-            <router-link :to="{ 'name': 'companies.teams.log' }" class="txt-link txt-68748F">
-              {{ $t('See the people you have already invited') }}  
-              <font-awesome-icon :icon="['far', 'angle-right']" class="ml-5-px" />
-            </router-link>
-          </div>
-
-          <div class="divTable mt-20-px">
-            <div v-not-visible="'tablet'" class="divTableHead">
-              <div class="divTableRow">
-                <div class="divTableCell text-center" :style="gridConfig.style[5]">
-                  <font-awesome-icon :icon="['far', 'portrait']" style="font-size: 16px;" />
-                </div>
-                <div class="divTableCell text-left" :style="gridConfig.style[1]">{{ $t('Name') }} </div>
-                <div class="divTableCell text-center" :style="gridConfig.style[2]">
-                  {{ $t('Status') }}
-                </div>
-                <div class="divTableCell text-left" :style="gridConfig.style[3]">
-                  {{ $t('Can be create project') }}
-                </div>
-                <div class="divTableCell" :style="gridConfig.style[4]"></div>
-              </div>
-            </div>
-
-            <div class="divTableBody">
-              <div v-for="(item, index) in teammates" :key="index" class="divTableRowBg">
-                <div class="divTableRow">
-                  <div class="divTableCell text-center" :style="gridConfig.style[0]">
-                    <ListUsers :user="item.user" :link="true"></ListUsers>
-                  </div>
-                  <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                    <router-link
-                      :to="{
-                        name: 'profile.user',
-                        params: { username: item.user.username },
-                      }"
-                      class="txt-primary-title"
-                      v-text="item.user.name"
-                    />
-                    <span class="info">
-                      <span v-text="item.user.headline"></span>
-                      <span v-if="item.user.headline"> / </span>
-                      {{ $t('Accepted') }}
-                      <span v-if="item.accepted_at"> {{ $t('at') }} <span v-text="item.accepted_at"></span> </span>
-                    </span>
-                  </div>
-                  <div
-                    class="divTableCell d-flex align-items-center justify-content-center"
-                    :style="gridConfig.style[2]"
+                <div class="d-flex justify-content-between mt-3 mb-2">
+                  <TitleLoading
+                    :title="$t('Invite your Team')"
+                    :subtitle="$t('Bring teammates to your company. After accepting the invitation, you must add teammates to the projects.')"
+                    :loading="sendInvitesLoading"
                   >
-                  <div v-if="item.status.current === 'active'" >
-                    <span class="badge" style="background:#26DC8E;margin-top:2px;">
-                      {{ $t('Active') }}
-                    </span>
-                    </div>
-                    <div v-else class="d-flex align-items-center">
-                    <span class="badge" style="background:#A7AFB7;margin-top:2px;">{{ $t('Inactive') }}</span>
-                    <font-awesome-icon v-b-popover.hover.top="$t('XXX does not have access to your company and projects', { username: item.user.name })" :icon="['fal', 'question-circle']" class="ml-5-px"  />
-                    </div>
-                  </div>
-                  <div
-                    v-not-visible="'tablet'" 
-                    class="divTableCell d-flex align-items-center justify-content-start"
-                    :style="gridConfig.style[3]"
-                  >
-                    <div v-if="!item.status.company_owner" class="d-flex align-items-center">
-                      <b-form-checkbox
-                        
-                        :checked="item.status.can_create_projects"
-                        switch
-                        @change="canCreateProject(item.user.username, item)"
-                      >
-                      </b-form-checkbox>
-                      <font-awesome-icon v-show="item.status.can_create_projects" v-b-popover.hover.top="$t('XXX can create projects within his company', { username: item.user.name })" :icon="['fal', 'question-circle']" class="ml-5-px"  />
-                      <font-awesome-icon v-show="!item.status.can_create_projects" v-b-popover.hover.top="$t('XXX cannot create projects within his company', { username: item.user.name })" :icon="['fal', 'question-circle']" class="ml-5-px"  />
-                    </div>
-                    <div v-else>
-                      <strong  class="txt-68748F tx-12-px">Company Owner</strong>
-                    </div>
-                  </div>
-                  <div v-not-visible="'tablet'" class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[4]">
-                    <div v-if="!item.status.company_owner" class="dropdown header-dropdown">
-                      <div class="dropdown-toggle" data-toggle="dropdown">
-                        <div class="dropdown-ellipsis">
-                          <font-awesome-icon :icon="['far', 'ellipsis-v']" />
-                        </div>
+                  </TitleLoading>
+                </div>
+
+                <div class="invite-form invite-form-company">
+                  <div v-for="invite in totalInvites" :key="invite" class="form-row">
+                    <div class="col-md-6 form-group">
+                      <div role="group">
+                        <label for="input-live">{{ $t('Full Name') }}</label>
+                        <b-form-input
+                          v-model="inviteNames[invite]"
+                          type="text"
+                          :placeholder="$t('Full Name')"
+                          trim
+                        ></b-form-input>
                       </div>
-                      <div class="dropdown-menu dropdown-menu-right" style="min-width: 222px; padding:6px 10px 6px">
-                        <a
-                          class="header-dropdown-item"
-                          style="margin-top:10px"
-                          href="javascript:;"
-                          @click="updateStatusCurrent(item.user.username)"
-                        >
-                          <span v-if="item.status.current === 'active'">
-                            <span class="icon-size"><font-awesome-icon :icon="['fa', 'user-slash']"/></span>
-                            <span class="fw-600 ml-2">{{ $t('Disable') }}</span>
-                          </span>
-                          <span v-if="item.status.current !== 'active'">
-                            <span class="icon-size"><font-awesome-icon :icon="['fa', 'user-alt']"/></span>
-                            <span class="ml-2">{{ $t('Activate') }}</span>
-                          </span>
-                        </a>
-                        <a class="header-dropdown-item" href="javascript:;" @click="remove(item.user.username, index)">
-                          <span class="icon-size"><font-awesome-icon :icon="['fa', 'user-times']"/></span>
-                          <span class="ml-2">{{ $t('Remove') }}</span>
-                        </a>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <div role="group">
+                        <label for="input-live">{{ $t('Email') }}</label>
+                        <b-form-input
+                          v-model="inviteEmails[invite]"
+                          type="email"
+                          :placeholder="$t('Email')"
+                          trim
+                        ></b-form-input>
+
                       </div>
                     </div>
                   </div>
+
+                  <div class="mt-3 mb-2">
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                      <div></div>
+                      <ButtonLoading
+                      :loading="loading"
+                      :title="$t('Send Invite')"
+                      :title-loading="$t('Sending')"
+                      type="btn-md"
+                      @action="sendInvites"></ButtonLoading>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          
+          <b-table class="table-team-members" striped hover="" :items="teammates" :fields="fields" >
+            <template v-slot:cell(user)="data">
+              <div class="box-useravatar">
+                <ListUsers :user="data.item.user" :link="true" size="22"></ListUsers>
+                <router-link
+                :to="{
+                  name: 'profile.user',
+                  params: { username: data.item.user.username },
+                }" >
+                  {{data.item.user.name}}
+                </router-link>
+              </div>
+            </template>
+            <template v-slot:cell(status)="data">
+              <div v-if="data.item.status.current === 'active'" >
+                <div class="d-flex align-items-center">
+                  <span class="badge" style="background:#26DC8E;margin-top:2px;">
+                    {{ $t('Active') }}
+                     <font-awesome-icon 
+                      v-if="!data.item.status.company_owner"
+                      v-b-popover.hover.top="$t('Accepted at XXX', 
+                      { datetime: data.item.accepted_at })" 
+                      :icon="['far', 'calendar-check']" 
+                      class="ml-5-px" />
+                  </span>
+                  <b-link 
+                    v-if="!data.item.status.company_owner"
+                    href="javascript:;" 
+                    class="small" 
+                    @click="updateStatusCurrent(data.item.user.username)">{{ $t('Deactivate') }}</b-link>
+                </div>
+              </div>
+              <div v-else class="d-flex align-items-center">
+                <span class="badge" style="background:#A7AFB7;margin-top:2px;">{{ $t('Disabled') }}
+                  <font-awesome-icon 
+                    v-b-popover.hover.top="$t('XXX does not have access to your company and projects', 
+                      { username: data.item.user.name })" 
+                    :icon="['fal', 'question-circle']" 
+                    class="ml-5-px" />
+                </span>
+                <b-link 
+                    v-if="!data.item.status.company_owner"
+                    href="javascript:;" 
+                    class="small" 
+                    @click="updateStatusCurrent(data.item.user.username)">{{ $t('Activate') }}</b-link>
+              </div>
+            </template>
+            <template v-slot:cell(create_project)="data">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div v-if="!data.item.status.company_owner" class="d-flex align-items-center">
+                    <b-form-checkbox
+                      switch
+                      :checked="data.item.status.can_create_projects"
+                      @change="canCreateProject(data.item.user.username, data.item)">
+                    </b-form-checkbox>
+                    <font-awesome-icon 
+                      v-show="data.item.status.can_create_projects" 
+                      v-b-popover.hover.top="$t('XXX can create projects within his company', 
+                        { username: data.item.user.name })" 
+                      :icon="['fal', 'question-circle']" 
+                      class="ml-5-px" />
+                    <font-awesome-icon 
+                      v-show="!data.item.status.can_create_projects" 
+                      v-b-popover.hover.top="$t('XXX cannot create projects within his company', 
+                        { username: data.item.user.name })" 
+                      :icon="['fal', 'question-circle']" 
+                      class="ml-5-px" />
+                  </div>
+                  <div v-else>
+                    <strong  class="txt-68748F tx-12-px">Company Owner</strong>
+                  </div>
+                </div>
+                <div>
+                  <b-link v-if="!data.item.status.company_owner" 
+                    @click="remove(data.item.user.username, data.index)">
+                    <font-awesome-icon 
+                      :icon="['far', 'trash-alt']" />
+                  </b-link>
+                </div>
+              </div>
+              
+              
+            </template>
+          </b-table>
+
           <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
             <b-pagination
               v-model="currentPage"
@@ -559,6 +519,7 @@ item.status.can_create_projects = true;
               </template>
             </b-pagination>
           </div>
+
         </div>
       </div>
     </div>

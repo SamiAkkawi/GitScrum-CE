@@ -26,9 +26,9 @@ export default {
 
 <template>
   <div>
-    <div v-if="type === 'large'" class="gitscrum-upgrade-large mt-20-px mb-20-px">
+    <div v-if="type === 'large'" class="gitscrum-upgrade-large">
       <div class="d-flex justify-content-start">
-        <div class="span-cicle-dark"><font-awesome-icon :icon="['fa', 'star']"/></div>
+        <div class="span-cicle-dark"><font-awesome-icon :icon="['fal', 'sun']"/></div>
         <div class="gitscrum-upgrade-content d-flex justify-content-between align-items-center">
           <div>
             <a href="https://site.gitscrum.com/pricing" class="tx-16-px txt-FFFFFF fw-600 d-block">{{ $t('Upgrade your Account') }}</a>

@@ -25,12 +25,23 @@ export default {
           slot="submenu"
         ></MasterHeaderMenuProject>
       </MasterHeader>
-
-      <div id="page-content" class="container-fluid page-body-wrapper">
+    
+      <div id="header-project-area" class="tpl-main-project-area subheader">
         <div class="container">
-          <slot name="content"></slot>
+          <div class="d-flex justify-content-between align-items-center ">
+            <div>
+              <slot name="header-left"></slot>
+            </div>
+            <div>
+              <slot name="header-right"></slot>
+            </div>
+          </div>
         </div>
       </div>
-      
+
+      <div id="page-content" class="container">
+        <slot name="content"></slot>
+      </div>
+
   </div>
 </template>

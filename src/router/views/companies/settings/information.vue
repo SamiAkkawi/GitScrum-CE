@@ -5,7 +5,6 @@ import SideBar from '@components/companies/side-bar'
 import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
 import UploadImage from '@components/utils/upload-image'
-import DescriptionEditable from '@components/utils/description-editable'
 import ButtonLoading from '@components/utils/button-loading'
 
 export default {
@@ -18,7 +17,6 @@ export default {
     SideBar,
     TitleLoading,
     UploadImage,
-    DescriptionEditable,
     ButtonLoading,
   },
   data: function() {
@@ -89,7 +87,7 @@ export default {
     },
 
     updateCompany() {
-      this.btnLoading = true
+      this.loading = true
       
       Axios()
         .put('companies/' + this.currentCompany.slug, {
@@ -100,7 +98,7 @@ export default {
           has_company_labels: this.settingsLabels,
         })
         .then((response) => {
-          this.btnLoading = false
+          this.loading = false
           this.getCompany(response.data.data.slug)
           this.getCompanies()
         })
@@ -118,112 +116,113 @@ export default {
 
 <template>
   <Layout>
-    <div slot="content" class="company-information information">
+
+    <template slot="header-left">
+      <TitleLoading
+        :title="$t('Company Details')"
+        :loading="loading"
+      ></TitleLoading>
+    </template>
+
+    <div slot="content" class="company-information pt-10px">
       <div class="row mb-30-px">
         <div class="col-md-2">
           <SideBar></SideBar>
         </div>
         <div class="col-md-9 offset-md-1">
-          <div class="row">
-            <div class="col-md-12">
-              <TitleLoading
-                :title="$t('Company Details')"
-                :loading="loading"
-                addclass="tx-18-px fw-600 txt-001737"
-              ></TitleLoading>
-            </div>
-          </div>
-          <div class="row mt-20-px">
-            <div class="col-md-12">
-              <div class="mb-30-px">
+
+          <div class="card">
+            <div class="card-body">
                 <span class="tx-12-px txt-68748F">{{ $t('Active license for the company') }}</span>
-                <h3>{{ currentCompany.stats.plan.title }}</h3>
-              </div>
-              <label class="form-label tx-12-px txt-68748F mb-5-px">
-                {{ $t('Company Name') }}
-                <span class="tx-danger">*</span>
-              </label>
-              <input
-                v-model="companyName"
-                maxlength="45"
-                class="form-control tx-12-px txt-68748F company-name"
-                type="text"
-              />
+                <h5>{{ currentCompany.stats.plan.title }}</h5>
             </div>
           </div>
-          <div class="row mt-20-px">
-            <div class="col-md-2">
-              <span class="tx-14-px fw-500 txt-001737 sub-title">{{ $t('Company Logo') }}</span>
-              <div class="mt-20-px logo">
-                <img v-show="logo !== null" :src="logo" />
-                <div class="buttons">
-                  <div class=" d-flex justify-content-center">
-                    <UploadImage :two-buttons="true" :options="logoOptions" :has-image="true" @get-image="updateLogo"></UploadImage>
+
+          <div class="card">
+            <div class="card-body">
+
+              <b-form-group
+                :label="$t('Company Name')"
+                label-for="company-name"
+              >
+                <b-form-input id="company-name" v-model="companyName" trim></b-form-input>
+              </b-form-group>
+
+              <b-form-group
+                :label="$t('Company Description')"
+                label-for="company-name"
+              >
+                <b-form-textarea
+                  id="textarea"
+                  v-model="companyDescription"
+                  :placeholder="$t('Company description')"
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+              </b-form-group>
+
+              <div class="row mt-2">
+                <div class="col-lg">
+                  
+                  <label>{{ $t('Company Logo') }}</label>
+
+                  <div class="mt-3 logo">
+                    <img v-show="logo !== null" :src="logo" />
+                    <div class="buttons">
+                      <UploadImage 
+                        :two-buttons="true" 
+                        :options="logoOptions" 
+                        :has-image="true" 
+                        @get-image="updateLogo"></UploadImage>
+                    </div>
                   </div>
+                  <div class="mt-2">
+                    <small>
+                      {{
+                        $t(
+                          'You can upload a logo image to appear in your projects and email notifications. Must be at least 128x128 pixels.'
+                        )
+                      }}
+                    </small>
+                  </div>
+
+                </div>
+
+                <div class="col-lg">
+                  <b-form-checkbox v-model="settingsEmail" :checked="settingsEmail">
+                    <span>
+                      {{ $t('Emails - Personalised Brand') }}
+                    </span>
+                  </b-form-checkbox>
+                  <small >
+                    {{ $t('Company logo and description will appear in emails sent.') }}
+                  </small>
+
+                  <b-form-checkbox v-model="settingsLabels" :checked="settingsLabels" class="mt-2">
+                    <span>
+                      {{ $t('Share Project Labels') }}
+                    </span>
+                  </b-form-checkbox>
+                  <small>
+                    {{ $t('Project Labels can be used inside other projects.') }}
+                  </small>
                 </div>
               </div>
-              <div class="mt-15-px">
-                <span class="tx-10-px txt-A7AFB7 lh-12-px informative-text">
-                  {{
-                    $t(
-                      'You can upload a logo image to appear in your projects and email notifications. Must be at least 128x128 pixels.'
-                    )
-                  }}
-                </span>
-              </div>
-            </div>
-            <div class="offset-md-1 col-md-9">
-              <span class="tx-14-px fw-500 txt-001737 sub-title">{{ $tc('Description', 1) }}</span>
-              <div class="mt-20-px">
-                <DescriptionEditable
-                  :description="companyDescription"
-                  :description-mention="companyDescriptionMention"
-                  :endpoint="'companies/' + currentCompany.slug"
-                  param-name="description"
-                  placeholder="Company description"
-                  :company-slug="currentCompany.slug"
-                  permission-feature="company"
-                ></DescriptionEditable>
-              </div>
-            </div>
-          </div>
 
-          <div class="row mt-30-px">
-            <div class="col-lg">
-              <b-form-checkbox v-model="settingsEmail" :checked="settingsEmail">
-                <span class="txt-6C7293 tx-14-px checkbox-text-spacing">
-                  {{ $t('Emails - Personalised Brand') }}
-                </span>
-              </b-form-checkbox>
-              <div>
-                <small class="txt-6C7293 tx-12-px checkbox-text-spacing">
-                  {{ $t('Company logo and description will appear in emails sent.') }}
-                </small>
+              <div class="mt-3 mb-2">
+                <hr>
+                <div class="d-flex justify-content-between">
+                  <div></div>
+                  <ButtonLoading
+                    :title="$t('Update Details')"
+                    :title-loading="$t('Updating Details')"
+                    type="btn-md"
+                    @action="updateCompany"
+                  ></ButtonLoading>
+                </div>
               </div>
-            </div>
 
-            <div class="col-lg">
-              <b-form-checkbox v-model="settingsLabels" :checked="settingsLabels">
-                <span class="txt-6C7293 tx-14-px checkbox-text-spacing">
-                  {{ $t('Share Project Labels') }}
-                </span>
-              </b-form-checkbox>
-              <div>
-                <small class="txt-6C7293 tx-12-px checkbox-text-spacing">
-                  {{ $t('Project Labels can be used inside other projects.') }}
-                </small>
-              </div>
             </div>
-          </div>
-
-          <div class="mt-20-px">
-            <ButtonLoading
-              :loading="btnLoading"
-              :title="$t('Update Details')"
-              :title-loading="$t('Updating Details')"
-              type="btn-md"
-              @action="updateCompany"
-            ></ButtonLoading>
           </div>
         </div>
       </div>

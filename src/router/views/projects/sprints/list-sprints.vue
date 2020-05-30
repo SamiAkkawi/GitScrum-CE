@@ -22,16 +22,6 @@ export default {
       totalPages: 1,
       perPage: 15,
       currentPage: this.$route.query.page ? this.$route.query.page : 1,
-      gridConfig: {
-        style: [
-          'max-width: 45px; padding: 13px 10px 15px 20px;',
-          'max-width:543px; width:543px;',
-          'max-width:127px; width:127px;',
-          'max-width:120px; width:120px;',
-          'max-width:158px; width:158px;',
-          'max-width: 45px; padding-top:2px',
-        ],
-      },
       searchTerm: '',
 
       fields: [

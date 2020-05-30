@@ -105,23 +105,29 @@ export default {
 
 <template>
   <Layout>
-    <div slot="content" class="company-team">
+
+    <template slot="header-left">
+      <TitleLoading
+        :title="$t('Billing')"
+        :loading="loading"
+      ></TitleLoading>
+    </template>
+
+    <div slot="content" class="company-team pt-10px">
+
       <div class="row mb-30-px">
         <div class="col-md-3">
           <SideBar></SideBar>
         </div>
         <div class="col-md-9">
-          <div class="d-lg-flex">
-            <TitleLoading
-              :title="$t('Billing')"
-              :loading="loading"
-              addclass="text-dark font-weight-bold mb-0 mr-5"
-            ></TitleLoading>
+          
+          <div v-show="!totalRows">
+            <Ads type="large"></Ads>
           </div>
 
-          <div class="divTable mt-20-px">
-            <div class="divTableBody d-flex bd-highlight">
-              <div class="divTableRowBg p-2 flex-fill bd-highlight mr-15-px p-3">
+          <div class="card mt-2">
+            <div class="card-body d-flex">
+              <div class="p-2 flex-fill bd-highlight mr-15-px p-3">
                 <span class="d-block tx-18-px fw-600">{{ currentCompany.stats.plan.title }}</span>
                 <span v-if="currentCompany.stats.plan.users === 'Unlimited'" class="txt-12-px">
                   {{ $t('Unlimited users') }}
@@ -135,10 +141,6 @@ export default {
                 <span v-else>{{ $t('Subscription must be canceled at') }}<span class="d-block tx-12-px fw-600">{{ isCanceled }}</span></span>
               </div>
             </div>
-          </div>
-
-          <div v-show="!totalRows">
-            <Ads type="large"></Ads>
           </div>
 
           <Alert :message="$t('You do not have an invoice')" :status="!totalRows" class="mg-b-20"></Alert>
