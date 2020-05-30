@@ -218,10 +218,8 @@ export default {
 
               <div class="card-body">
 
-                <p class="tx-18-px txt-001737 fw-600 mb-5-px">
-                  {{ $t('STEP 1') }}
-                </p>
-                <p class="tx-12-px txt-68748F">
+                <h5>{{ $t('STEP 1') }}</h5>
+                <p>
                   {{ $t('Add a Domain / Subdomain ( Mandatory )') }}
                 </p>
 
@@ -260,9 +258,9 @@ export default {
                       </div>
                     </div>
 
-                    <p class="tx-10-px txt-68748F">
+                    <small>
                       * {{ $t('Domains and/or Subdomains that are allowed to use GitScrum White Label.') }}
-                    </p>
+                    </small>
                   </div>
                 </div>
 
@@ -289,14 +287,10 @@ export default {
                   </table>
                 </div>
 
-                <p class="tx-18-px txt-001737 fw-600 mb-5-px mt-30-px">
-                  {{ $t('STEP 2') }}
-                </p>
-                <p class="tx-12-px txt-68748F mb-20-px" for="settings_site_name">
-                  {{ $t("Add a CNAME record to your domain's DNS records") }}
-                </p>
+                <h5>{{ $t('STEP 2') }}</h5>
+                <p>{{ $t("Add a CNAME record to your domain's DNS records") }}</p>
 
-                <p class="tx-12-px txt-68748F fw-600 mb-20-px">
+                <p>
                   {{
                     $t(
                       'To add the CNAME record to your domain host, follow the steps below. See your domain host’s documentation for more specific instructions.'
@@ -304,42 +298,42 @@ export default {
                   }}
                 </p>
 
-                <p class="tx-12-px txt-68748F"> {{ $t('1. Go to your domain’s DNS records') }}. </p>
+                <p> {{ $t('1. Go to your domain’s DNS records') }}. </p>
 
-                <p class="tx-12-px txt-68748F">
+                <p>
                   {{ $t('2. Add a record to your DNS settings, selecting CNAME as the record type') }}.
                 </p>
 
-                <p class="tx-12-px txt-68748F">
+                <p>
                   {{ $t('3. Return to the first window or tab and copy the contents of the Label/Host field') }}.
                 </p>
 
-                <p class="tx-12-px txt-68748F">
+                <p>
                   {{ $t('4. Paste the copied contents into the Label or Host field with your DNS records') }}.
                 </p>
 
-                <p class="tx-12-px txt-68748F">
+                <p>
                   {{
                     $t('5. Return to the first window or tab and copy the contents of the Destination/Target field')
                   }}.
                 </p>
 
-                <p class="tx-12-px txt-68748F">
+                <p>
                   {{ $t('6. Paste the copied contents into the Destination or Target field with your DNS records') }}.
                 </p>
 
-                <div class="mt-20-px">
-                  <p class="tx-12-px txt-68748F fw-600">
+                <div class="mt-3">
+                  <p class="fw-600">
                     {{ $t('Your record should look similar to one of the tables below') }}:
                   </p>
 
-                  <p class="tx-12-px txt-68748F">
+                  <p>
                     {{ $t('GitScrum White Label - CNAME') }} :
-                    <span class="tx-12-px txt-68748F fw-600">wl.gitscrum.com</span>
+                    <span class="fw-600">wl.gitscrum.com</span>
                   </p>
                 </div>
 
-                <table class="table table-bordered mb-15-px mt-20-px">
+                <table class="table table-bordered mt-2 mb-2">
                   <thead>
                     <tr>
                       <th>{{ $t('Record type') }}</th>
@@ -350,18 +344,16 @@ export default {
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="tx-11-px txt-6C7293">{{ $t('CNAME') }}</td>
-                      <td class="tx-11-px txt-6C7293">XXXXXXXXXXXX</td>
-                      <td class="tx-11-px txt-6C7293">{{ $t('3600 or leave the default') }}</td>
-                      <td class="tx-11-px txt-6C7293">wl.gitscrum.com</td>
+                      <td class="txt-6C7293">{{ $t('CNAME') }}</td>
+                      <td class="txt-6C7293">XXXXXXXXXXXX</td>
+                      <td class="txt-6C7293">{{ $t('3600 or leave the default') }}</td>
+                      <td class="txt-6C7293">wl.gitscrum.com</td>
                     </tr>
                   </tbody>
                 </table>
 
-                <p class="tx-12-px txt-68748F">{{ $t('7. Save your record') }}.</p>
-                <p class="tx-12-px txt-68748F">
-                  {{ $t('CNAME_Text1') }}
-                </p>
+                <p>{{ $t('7. Save your record') }}.</p>
+                <p>{{ $t('CNAME_Text1') }}</p>
 
               </div>
 
