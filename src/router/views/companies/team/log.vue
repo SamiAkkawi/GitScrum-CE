@@ -203,9 +203,9 @@ export default {
           </div>
           <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
             <b-pagination
+              v-model="currentPage"
               hide-goto-end-buttons
               class="paginator"
-              v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="getTeammates"

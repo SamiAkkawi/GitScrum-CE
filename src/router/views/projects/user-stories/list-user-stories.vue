@@ -22,17 +22,18 @@ export default {
       perPage: 15,
       currentPage: this.$route.query.page ? this.$route.query.page : 1,
       seachByProjectName: '',
-      gridConfig: {
-        style: [
-          'max-width: 45px; padding: 13px 10px 15px 20px;',
-          'max-width:440px; width:440px;',
-          'max-width:127px; width:127px;',
-          'max-width:176px; width:176px;',
-          'max-width:120px; width:1200px;',
-          'max-width: 45px; padding-top:2px',
-        ],
-      },
-      searchTerm: ''
+      searchTerm: '',
+
+      fields: [
+        {
+          key: 'priority',
+          label: 'Priority',
+        },
+        {
+          key: 'title',
+          label: 'User Story',
+        },
+      ],
     }
   },
   mounted() {
@@ -95,14 +96,15 @@ export default {
         :title="$tc('Explore User Stories', totalRows)"
         :title-alternative="$t('User Stories')"
         :subtitle="$t('User stories are short and simple descriptions of capabilities')"
+        :loading="loading"
       ></TitleLoading>
     </template>
 
-    <div slot="content" class="user-story pt-70px">
+    <div slot="content" class="user-story pt-10px">
       
       <div class="container">
         
-        <div class="d-flex justify-content-between mb-30-px">
+        <div class="d-flex justify-content-between mb-3">
           
           <div class="d-flex justify-content-end">
             <div class="form-group m-0">
@@ -114,9 +116,8 @@ export default {
                   class="form-control"
                   autocomplete="off"
                   :placeholder="$t('Search user story')"
-                  @keydown.enter.prevent="search"
                   style="height: 32px"
-                />
+                  @keydown.enter.prevent="search" />
                 <div class="input-group-append">
                   <ButtonLoading
                     type="btn-sm"
@@ -124,12 +125,11 @@ export default {
                     :loading="searchLoading"
                     :fa-icon="'far'"
                     :icon="'search'"
-                    @action="search"
-                  ></ButtonLoading>
+                    @action="search"></ButtonLoading>
                 </div>
               </div>
             </div>
-            <div class="ml-20-px" v-if="authorize('userStories', 'create')">
+            <div v-if="authorize('userStories', 'create')" class="ml-20-px">
               <button slot="button" type="button" class="btn btn-primary btn-sm" @click="modal('userstoryCreate')">
                 {{ $t('Create an User Story') }}
               </button>
@@ -137,110 +137,55 @@ export default {
           </div>
         </div>
 
-        <div class="divTable">
-          <div class="divTableHead">
-            <div class="divTableRow">
-              <div class="divTableCell text-center" :style="gridConfig.style[5]">
-                <font-awesome-icon :icon="['far', 'columns']" style="font-size: 16px;" />
-              </div>
-              <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                {{ $tc('User Story', 1) }}
-              </div>
-              <div class="divTableCell text-right" :style="gridConfig.style[2]">
-                {{ $tc('Priority', 1) }}
-              </div>
-              <div class="divTableCell text-right" :style="gridConfig.style[3]">
-                {{ $t('Status') }}
-              </div>
-              <div class="divTableCell text-right" style="width:inherit">
-                {{ $tc('Team', 1) }}
-              </div>
-              <div class="divTableCell" :style="gridConfig.style[4]">&nbsp;</div>
+        <b-table class="table-discussions" striped hover="" :items="userStories" :fields="fields" >
+          <template v-slot:cell(priority)="data" >
+            <span
+              v-if="data.item.priority"
+              class="badge badge-primary"
+              :style="
+                'color: ' + invertColor(data.item.priority.color, true) + 
+                ';background:' + data.item.priority.color">
+              {{ data.item.priority.title }}
+            </span>
+          </template>
+          <template v-slot:cell(title)="data" >
+            <div>
+              <router-link
+                :to="{
+                  name: 'projects.user-stories.show',
+                  params: {
+                    companySlug: data.item.company.slug,
+                    projectSlug: data.item.project.slug,
+                    userStorySlug: data.item.slug,
+                  },
+                }" class="txt-primary-title txt-link">
+                {{ data.item.code }} - {{ data.item.title }}
+              </router-link>
+              <p class="mb-0">
+                <span>{{ $tc('Task', 2) }}: {{ data.item.stats.tasks }}</span>
+                -
+                <span>
+                  {{ $tc('Story Point', 2) }}:
+                  {{ data.item.stats.story_points }}
+                </span>
+                -
+                <span>
+                  {{ $t('Hours Worked') }}:
+                  {{ data.item.stats.worked_hours }}
+                </span>
+              </p>
             </div>
-          </div>
-
-          <div class="divTableBody">
-            <div v-for="(userStory, index) in userStories" :key="index" class="divTableRowBg">
-              <div class="divTableRow">
-                <div class="divTableCell text-center" :style="gridConfig.style[0]">
-                  <ListUsers :user="userStory.user" :link="true"></ListUsers>
-                </div>
-                <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                  <div>
-                    <router-link
-                      :to="{
-                        name: 'projects.user-stories.show',
-                        params: {
-                          companySlug: userStory.company.slug,
-                          projectSlug: userStory.project.slug,
-                          userStorySlug: userStory.slug,
-                        },
-                      }"
-                      class="txt-primary-title txt-link"
-                    >
-                      {{ userStory.code }} -
-                      {{ userStory.title }}
-                    </router-link>
-                    <p class="mb-0">
-                      <span>{{ $tc('Task', 2) }}: {{ userStory.stats.tasks }}</span>
-                      /
-                      <span>
-                        {{ $tc('Story Point', 2) }}:
-                        {{ userStory.stats.story_points }}
-                      </span>
-                      /
-                      <span>
-                        {{ $t('Worked hours') }}:
-                        {{ userStory.stats.worked_hours }}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[2]">
-                  <span
-                    v-if="userStory.priority"
-                    class="badge badge-primary"
-                    :style="
-                      'color: ' + invertColor(userStory.priority.color, true) + ';background:' + userStory.priority.color
-                    "
-                  >
-                    {{ userStory.priority.title }}
-                  </span>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[3]">
-                  <span class="info">{{ userStory.stats.completed }}%</span>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-center">
-                  <ListUsers :users="userStory.users" :link="true"></ListUsers>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[4]">
-                  <span v-if="authorize('userStories', 'update')">
-                    <router-link
-                      :to="{
-                        name: 'projects.user-stories.assign-tasks',
-                        params: {
-                          companySlug: userStory.company.slug,
-                          projectSlug: userStory.project.slug,
-                          userStorySlug: userStory.slug,
-                        },
-                      }"
-                      class=""
-                    >
-                      {{ $tc('Assign Tasks', 2) }}
-                    </router-link>
-                  </span>
-                </div>
-              </div>
+            <div class="mt-1 d-flex align-items-center justify-content-start">
+              <ListUsers :users="data.item.users" :link="true" :limit="30" :wrap="true" :size="22"></ListUsers>
             </div>
-          </div>
-        </div>
-        <!-- DivTable -->
+          </template>
+        </b-table>
 
         <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
           <b-pagination
+            v-model="currentPage"
             hide-goto-end-buttons
             class="paginator"
-            v-model="currentPage"
             :total-rows="totalRows"
             :per-page="perPage"
             @change="getUserStories"

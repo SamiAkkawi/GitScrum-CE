@@ -137,11 +137,11 @@ export default {
             </a>
           </li>
           <li>
-            <b-button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })"><span>{{ $tc('Project', 2) }}</span></b-button>
-          </li>
-          <li>
             <b-button v-shortkey="['ctrl', 'n']" class="btn btn-secondary" @shortkey="openSidebar"  @click="openSidebar"><span>{{ $t('My Next Tasks') }}</span></b-button>
           </li>
+          <li>
+            <b-button v-shortkey="['ctrl', 'p']" class="btn btn-secondary" @shortkey="goto({ name: 'workspaces.projects' })" @click="goto({ name: 'workspaces.projects' })"><span>{{ $tc('Workspaces', 2) }}</span></b-button>
+          </li>          
           <li v-if="!isMobile">
             <b-button v-shortkey="['ctrl', 'm']" class="btn btn-secondary" @shortkey="goto({ name: 'marketplace.templates' })" @click="goto({ name: 'marketplace.templates' })"><span>{{ $t('Marketplace') }}</span></b-button>
           </li>

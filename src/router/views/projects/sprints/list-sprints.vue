@@ -32,7 +32,18 @@ export default {
           'max-width: 45px; padding-top:2px',
         ],
       },
-      searchTerm: ''
+      searchTerm: '',
+
+      fields: [
+        {
+          key: 'status',
+          label: 'Status',
+        },
+        {
+          key: 'title',
+          label: 'Sprint',
+        },
+      ],
     }
   },
   mounted() {
@@ -98,11 +109,11 @@ export default {
       ></TitleLoading>
     </template>
 
-    <div slot="content" class="sprint pt-70px">
+    <div slot="content" class="sprint pt-10px">
       
       <div class="container">
 
-        <div class="d-flex justify-content-between mb-30-px">
+        <div class="d-flex justify-content-between mb-3">
           
           <div class="d-flex justify-content-end">
             <div class="form-group m-0">
@@ -136,84 +147,47 @@ export default {
             </div>
           </div>
         </div>
-        <div class="divTable">
-          <div class="divTableHead">
-            <div class="divTableRow">
-              <div class="divTableCell text-center" :style="gridConfig.style[5]">
-                <font-awesome-icon :icon="['far', 'columns']" style="font-size: 16px;" />
-              </div>
-              <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                {{ $t('Sprints List') }}
-              </div>
-              <div class="divTableCell text-right" :style="gridConfig.style[2]">{{ $t('Status') }}</div>
-              <div class="divTableCell text-right" :style="gridConfig.style[3]">{{ $t('Completed') }}</div>
-              <div class="divTableCell text-right" :style="gridConfig.style[4]">{{ $tc('Team', 1) }}</div>
-            </div>
-          </div>
 
-          <div class="divTableBody">
-            <div v-for="(sprint, index) in sprints" :key="index" class="divTableRowBg">
-              <div class="divTableRow">
-                <div class="divTableCell text-center" :style="gridConfig.style[0]">
-                  <ListUsers :user="sprint.user" :link="true"></ListUsers>
-                </div>
-                <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                  <router-link
-                    :to="{
-                      name: 'projects.sprints.show',
-                      params: {
-                        companySlug: $route.params.companySlug,
-                        projectSlug: $route.params.projectSlug,
-                        sprintSlug: sprint.slug,
-                      },
-                    }"
-                    class="txt-primary-title txt-link"
-                  >
-                    {{ sprint.code }} - {{ sprint.title }}
-                  </router-link>
-                  <p class="mb-0">
-                    <span>{{ $t('Timebox') }}: {{ sprint.timebox }}</span>
-                    /
-                    <span> {{ $t('Duration') }}: {{ sprint.duration }} </span>
-                  </p>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end pr-1" :style="gridConfig.style[2]">
-                  <span class="badge badge-light" style="text-transform:uppercase;">
-                    {{ sprint.status.title }}
-                  </span>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[3]">
-                  <span class="info">{{ sprint.stats.completed }}%</span>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end" :style="gridConfig.style[4]">
-                  <ListUsers :users="sprint.users" :link="true"></ListUsers>
-                </div>
-                <div class="divTableCell d-flex align-items-center justify-content-end">
-                  <span v-if="authorize('sprints', 'update')">
-                    <router-link
-                      :to="{
-                        name: 'projects.sprints.assign-tasks',
-                        params: {
-                          companySlug: sprint.company.slug,
-                          projectSlug: sprint.project.slug,
-                          sprintSlug: sprint.slug,
-                        },
-                      }"
-                    >
-                      {{ $tc('Assign Tasks', 2) }}
-                    </router-link>
-                  </span>
-                </div>
-              </div>
+        <b-table class="table-sprints" striped hover="" :items="sprints" :fields="fields" >
+          <template v-slot:cell(status)="data" >
+            <span class="badge badge-light" style="text-transform:uppercase;">
+              {{ data.item.status.title }}
+            </span>
+          </template>
+          <template v-slot:cell(title)="data" >
+            <div>
+              <router-link
+                :to="{
+                  name: 'projects.sprints.show',
+                  params: {
+                    companySlug: $route.params.companySlug,
+                    projectSlug: $route.params.projectSlug,
+                    sprintSlug: data.item.slug,
+                  },
+                }"
+                class="txt-primary-title txt-link"
+              >
+                {{ data.item.code }} - {{ data.item.title }}
+              </router-link>
+              <p class="mb-0">
+                <span>{{ $t('Completed') }}: {{ parseFloat(data.item.stats.completed) | percent(0)  }}</span>
+                -
+                <span>{{ $t('Timebox') }}: {{ data.item.timebox }}</span>
+                -
+                <span> {{ $t('Duration') }}: {{ data.item.duration }} </span>
+              </p>
             </div>
-          </div>
-        </div>
+            <div class="mt-1 d-flex align-items-center justify-content-start">
+              <ListUsers :users="data.item.users" :link="true" :limit="20" :wrap="true" :size="22"></ListUsers>
+            </div>
+          </template>
+        </b-table>
 
         <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
           <b-pagination
+            v-model="currentPage"
             hide-goto-end-buttons
             class="paginator"
-            v-model="currentPage"
             :total-rows="totalRows"
             :per-page="perPage"
             @change="getSprints"

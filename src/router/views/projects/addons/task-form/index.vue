@@ -1,7 +1,6 @@
 <script>
 import Layout from '@layouts/tpl-main-project'
 import Axios from '@utils/axios'
-import Sidebar from '@components/projects/addons/sidebar-task-form'
 import TaskFormEnable from '@components/projects/addons/task-form-enable'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
@@ -12,19 +11,13 @@ export default {
     title: 'Form2Task',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, ButtonLoading, Sidebar, TaskFormEnable },
+  components: { Layout, TitleLoading, ButtonLoading, TaskFormEnable },
   data() {
     return {
       dates: '',
       loading: true,
       btnConvertLoading: false,
       answers: [],
-      gridConfig: [
-        'max-width:600px; width:600px;',
-        '',
-        'max-width:35px; width:35px;',
-        'max-width:450px; width:450px;',
-      ],
       totalRows: 0,
       totalPages: 1,
       perPage: 15,
@@ -32,7 +25,18 @@ export default {
 
       workflow: [],
       workflows: [],
-      configFormAnswer: null
+      configFormAnswer: null,
+
+      fields: [
+        {
+          key: 'title',
+          label: 'Answer',
+        },
+        {
+          key: 'convert',
+          label: 'Convert to Task',
+        }
+      ],
     }
   },
   created() {
@@ -179,110 +183,84 @@ export default {
     </template>
 
     <div slot="content" class="form2task pt-10px">
-      
-      <div class="container">
-        <div class="row mb-30-px">
-          <div class="col-md-3">
-            <Sidebar></Sidebar>
-          </div>
-          <div class="col-md-9">
-            
-            <div>
-
-              <TaskFormEnable v-if="configFormAnswer" :config="configFormAnswer" @enableShareableLink="configFormAnswerConfig"></TaskFormEnable>
-              
-              <div class="mt-15-px">
-                <div class="divTable">
-                  <div class="divTableHead">
-                    <div class="divTableRow">
-                      <div class="divTableCell d-flex justify-content-start align-items-center" :style="gridConfig[0]">
-                        {{ $t('Answer') }}
-                      </div>
-                      <div class="d-flex justify-content-end align-items-center" :style="gridConfig[3]">
-                        <div>{{ $t('Convert to workflow stage') }}</div>
-                        <div class="ml-10-px wd-150-px">
-                          <b-form-select v-model="workflow" :options="workflows" value-field="id" text-field="title" size="sm" @change="updateWorkflow"></b-form-select>
-                        </div>
-                      </div>
+      <b-container>
+        <b-row>
+          <b-col>
+            <TaskFormEnable v-if="configFormAnswer" :config="configFormAnswer" @enableShareableLink="configFormAnswerConfig"></TaskFormEnable>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <div>{{ $t('Convert to workflow stage') }}</div>
+                    <div class="ml-10-px wd-150-px">
+                      <b-form-select v-model="workflow" :options="workflows" value-field="id" text-field="title" size="sm" @change="updateWorkflow"></b-form-select>
                     </div>
                   </div>
-
-                  <div class="divTableBody">
-                    <div v-for="(item, index) in answers" :key="index" class="divTableRowBg">
-                      <div class="divTableRow d-flex">
-                        <div class="divTableCell text-left" :style="item.task ? '' : gridConfig[0]">
-                          <span v-show="item.status.id === 1" class="txt-primary-title txt-link" @click="modalTask('task', item.task)">{{ item.title}}</span>
-                          <span v-show="!item.status.id" class="txt-primary-title txt-link" @click="modalAnswer('answer', item)">{{ item.title}}</span>
-                          <p class="mb-0">
-                            <span class="d-block">{{ item.description | truncate(160) }}</span>
-                            <span class="d-block mt-10-px">
-                              <span class="badge badge-light">{{ item.status.name}}</span> <span>{{ $t('Created at') }} {{ item.created_at.date_for_humans}}</span>
-                            </span>
-                          </p>
-                        </div>
-                        <div v-if="!item.status.id" class="divTableCell text-center" :style="gridConfig[1]">
-                          <span class="btn-medium-small">
-                            <ButtonLoading
-                              :loading="btnConvertLoading"
-                              :title="$t('Convert to Task')"
-                              :title-loading="$t('Converting')"
-                              type="btn-md"
-                              mode="button"
-                              @action="convertToTask(item, index)"
-                            ></ButtonLoading>
-                          </span>
-                          <span>
-
-                          </span>
-                        </div>
-                        <div v-if="!item.status.id" class="divTableCell d-flex align-items-top" :style="gridConfig[2]">
-                          
-                          <div class="dropdown header-dropdown">
-                            <div class="dropdown-toggle" data-toggle="dropdown">
-                              <div class="dropdown-ellipsis">
-                                <font-awesome-icon :icon="['far', 'ellipsis-v']" />
-                              </div>
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-right" style="padding:6px 10px 6px">
-                              <a
-                                class="header-dropdown-item"
-                                style="margin-top:10px"
-                                href="javascript:;"
-                                @click="remove(item, index)"
-                              >
-                                <span class="icon-size"><font-awesome-icon :icon="['fal', 'minus-square']"/></span>
-                                <span class="ml-2">{{ $t('Remove Answer') }}</span>
-                              </a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
+                  <div>
+                    <router-link :to="{ name: 'projects.addons.task-form.settings' }" class="fw-700">
+                      {{ $t('Go to Settings') }}
+                    </router-link>
                   </div>
                 </div>
               </div>
-              <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-                <b-pagination
-                  hide-goto-end-buttons
-                  class="paginator"
-                  v-model="currentPage"
-                  :total-rows="totalRows"
-                  :per-page="perPage"
-                  @change="getAnswers"
-                >
-                  <template slot="prev-text">
-                    <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-                  </template>
-                  <template slot="next-text">
-                    <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-                  </template>
-                </b-pagination>
-              </div>
-            </div>        
-          </div>
-        </div>
-      </div>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-table class="table-time-tracking" striped hover :items="answers" :fields="fields" >
+              <template v-slot:cell(title)="data" >
+                <div class="d-flex align-items-center">
+                  <span v-if="data.item.status.id === 0" class="badge badge-warning">{{ data.item.status.name}}</span>
+                  <span v-if="data.item.status.id === 1" class="badge badge-light">{{ data.item.status.name}}</span>
+                  <div v-if="data.item.task && data.item.status.id === 1" >
+                    <b-link v-if="data.item.task.code" href="#" class="txt-primary-title txt-link" @click="modalTask('task', data.item.task)">{{ data.item.task.code }} - {{ data.item.task.title }}</b-link >
+                    <b-link v-if="!data.item.task.code" href="#" class="txt-primary-title txt-link" @click="modalTask('task', data.item.task)">{{ data.item.task.title }}</b-link>
+                  </div>
+                  <span v-show="data.item.status.id === 0" class="txt-primary-title" @click="modalAnswer('answer', data.item)">{{ data.item.title}}</span>
+                </div>
+                <span class="d-block">{{ data.item.description | truncate(240) }}</span>
+                <span class="date-time">{{ $t('Created at') }} {{ data.item.created_at.date_for_humans}}</span>
+              </template>
+              <template v-slot:cell(convert)="data" >
+                <div v-if="data.item.status.id === 0">
+                  <ButtonLoading
+                    :title="$t('Convert')"
+                    type="btn-md"
+                    mode="button"
+                    @action="convertToTask(data.item, data.index)"></ButtonLoading>
+
+                  <a style="margin-top:5px"
+                    href="javascript:;"
+                    @click="remove(data.item, data.index)">
+                    {{ $t('Remove Answer') }}</a>
+                </div>
+              </template>
+            </b-table>
+            <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
+              <b-pagination
+                v-model="currentPage"
+                hide-goto-end-buttons
+                class="paginator"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                @change="getAnswers"
+              >
+                <template slot="prev-text">
+                  <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
+                </template>
+                <template slot="next-text">
+                  <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
+                </template>
+              </b-pagination>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </Layout>
 </template>

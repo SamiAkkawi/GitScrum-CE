@@ -29,15 +29,6 @@ export default {
       createDiscussionOpen: false,
       filter: null,
       seachByProjectName: '',
-      gridConfig: {
-        style: [
-          'max-width: 45px; padding: 13px 10px 15px 20px;',
-          '',
-          'max-width:290px; width:290px;',
-          'max-width:155px; width:155px;',
-          'max-width: 45px; padding-top:2px',
-        ],
-      },
       searchTerm: '',
       fields: [
         {
@@ -221,9 +212,9 @@ export default {
 
             <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
               <b-pagination
+                v-model="currentPage"
                 hide-goto-end-buttons
                 class="paginator"
-                v-model="currentPage"
                 :total-rows="totalRows"
                 :per-page="perPage"
                 @change="getDiscussions"

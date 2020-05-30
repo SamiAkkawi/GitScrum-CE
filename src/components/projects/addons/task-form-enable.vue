@@ -41,25 +41,6 @@ export default {
         })
     },
 
-    copyLink() {
-      this.linkCopied = false
-      let taElement = document.getElementById('shareableLink')
-
-      const el = document.createElement('textarea')
-      el.value = this.shareableLink || ''
-      el.setAttribute('readonly', '')
-      el.style.position = 'absolute'
-      el.style.left = '-9999px'
-      document.body.appendChild(el)
-      el.select()
-      document.execCommand('copy')
-      document.body.removeChild(el)
-
-      taElement.focus()
-      taElement.select()
-      this.linkCopied = true
-    },
-
     updateShareableLink(){
       this.enableShareableLinkLoading = true
       this.linkCopied = false
@@ -82,84 +63,61 @@ export default {
         .catch((e) => {
           this.enableShareableLinkLoading = false
         })
-    }
+    },
+
+    onCopy() {
+
+      this.$copyText(this.tokenShareableBoard)
+      this.linkCopied = false
+      
+    },
   }
 }
 </script>
 
 <template>
-  <div class="d-flex bd-highlight">
-    
-    <div v-if="false" class="hero-card-row mr-10-px" style="width: 200px;">
-      <div class="hero-card hero-unique card-md" style="height: 116px;">
-        <span class="number mt-5-px mb-4-px">
-          <span>12/500</span>
-        </span>
-        <span class="text pb-10-px">
-          {{ $t('Total Answers') }}
-        </span>
-      </div>
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <b-form-checkbox
+        v-model="enableShareableLink"
+        @change="enableToggle">
+          {{ $t('Enable Form2Task for this project') }}
+      </b-form-checkbox>
+
+      <router-link
+        v-show="enableShareableLink"
+        :to="{
+        name: 'projects.addons.task-form.public',
+        params: {
+            token: config.token,
+        },
+        }" target="_blank">
+          {{ $t('See my Form2Task') }}
+      </router-link>
     </div>
-    <div class="flex-grow-1 bd-highlight">
-      <div class="d-flex justify-content-between">
-        <b-form-checkbox
-            v-model="enableShareableLink"
-            @change="enableToggle"
-        >
-            {{ $t('Enable Form2Task for this project') }}
-        </b-form-checkbox>
 
-        <router-link
-            v-show="enableShareableLink"
-            :to="{
-            name: 'projects.addons.task-form.public',
-            params: {
-                token: config.token,
-            },
-            }"
-            target="_blank"
-        >
-            {{ $t('See my Form2Task') }}
-        </router-link>
-      </div>
+    <b-input-group v-show="enableShareableLink" class="mt-2">
+      <b-input v-model="shareableLink" 
+        :readonly="true" 
+        autocomplete="off"></b-input>
+      <b-input-group-append>
+        <b-button 
+        v-clipboard:copy="shareableLink"
+        v-clipboard:success="onCopy"
+        variant="outline-secondary" >
+          <font-awesome-icon :icon="['far', 'copy']" />
+        </b-button>
+      </b-input-group-append>
+    </b-input-group>
 
-      <hr />
-
-      <div v-show="enableShareableLink">
-        <textarea
-          id="shareableLink"
-          v-model="shareableLink"
-          :disabled="enableShareableLinkLoading"
-          type="text"
-          class="form-control tx-12-px cursor-pointer"
-          style="word-break: break-all; line-height: 15px; padding: 10px 15px; background-color: #ffffff"
-          readonly
-          @click="
-          $event.target.focus()
-          $event.target.select()
-          copyLink()
-          "
-        />
-        <div class="d-flex justify-content-between mt-5-px">
-          <div class="text-center tx-10-px fw-500">
-            <span v-show="!linkCopied" class="txt-9EA9C1">
-                {{ $t('Click to copy') }}
-            </span>
-            <span v-show="linkCopied" class="txt-3D4F9F">
-                {{ $t('Copied to clipboard') }}
-            </span>
-          </div>
-          <a
-          v-show="enableShareableLink"
-          href="javascript:;"
-          class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase"
-          @click="updateShareableLink"
-          >
-          {{ $t('Update Link') }}
-          </a>
-        </div>
-      </div>
-    </div>
-    
+    <a
+    v-show="enableShareableLink"
+    href="javascript:;"
+    class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase"
+    @click="updateShareableLink">
+    {{ $t('Update Link') }}
+    </a>
   </div>
+</div>
 </template>

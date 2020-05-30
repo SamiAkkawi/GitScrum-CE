@@ -255,9 +255,9 @@ export default {
           </silentbox-group>
           <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
             <b-pagination
+              v-model="currentPage"
               hide-goto-end-buttons
               class="paginator"
-              v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="getAttachments"
