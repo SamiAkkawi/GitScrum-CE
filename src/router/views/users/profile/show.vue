@@ -652,12 +652,13 @@ export default {
                     <div class="col-md-6">
                       <div class="row mt-20-px">
                         <div class="col-lg">
-                          <UploadImage
-                            :button-text="$t('Upload a Profile Photo')"
-                            :options="avatarOptions"
-                            :profile-image-round="false"
-                            @get-image="updateAvatar"
-                          ></UploadImage>
+                          <UploadImage 
+                          :size="128"
+                          :options="avatarOptions" 
+                          :image="user.avatar" 
+                          :btn-title="$t('Upload Project Logo')"
+                          @action="updateAvatar"></UploadImage>
+                          
                         </div>
                       </div>
                     </div>

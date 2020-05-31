@@ -188,6 +188,8 @@ export default {
 
     updateLogo(logo) {
       if (this.logo !== logo && logo !== null) {
+        document.getElementById("companyLogo").src= logo;
+        this.$store.dispatch('whiteLabel/setWhiteLabel', null)
         this.logo = logo
       }
     },
@@ -384,28 +386,15 @@ export default {
               </p>
             </b-card-text>
             <b-card-text v-show="whiteLabel" class="mt-15-px">
-              <div class="d-flex justify-content-center align-items-center">
-                <img
-                  :src="logo !== null ? logo : 'https://gitscrum-static.s3.us-east-1.amazonaws.com/img/gitscrum.png'"
-                  style="width:122px !important; height:22px !important; "
-                />
-              </div>
-              <p v-show="logo !== null" class="mt-10-px text-center">
-                <a href="javascript:;" class="text-danger" @click="removeLogo">
-                  {{ $t('Remove your Company Logo') }}
-                </a>
-              </p>
-            </b-card-text>
-            <b-card-text v-show="whiteLabel" class="mt-15-px">
               <div v-show="logoOptions">
-                <UploadImage
-                  :button-text="$t('Upload your Company Logo')"
-                  button-class="btn btn-primary tx-12-px fw-500 wd-100"
-                  :options="logoOptions"
-                  @get-image="updateLogo"
-                  style="font-size:12px !important;"
-                >
-                </UploadImage>
+
+                <UploadImage 
+                  :size="128"
+                  :options="logoOptions" 
+                  :image="logo" 
+                  :btn-title="$t('Upload your Company Logo')"
+                  @action="updateLogo"></UploadImage>
+                  
               </div>
             </b-card-text>
           </b-card>

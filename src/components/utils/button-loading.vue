@@ -23,7 +23,8 @@ export default {
     },
     loading: {
       type: Boolean,
-      required: true,
+      required: false,
+      default:false
     },
     faIcon: {
       type: String,

@@ -303,23 +303,15 @@ export default {
               
               <div class="mb-0 tx-18-px lh-16 fw-500 txt-001737">{{ $t('Project Logo') }}</div>
 
-              <b-row class="mt-20-px">
-                <b-col cols="5">
-                  <b-img :src="project.logo" rounded class="mt-8-px" style="width:128px"></b-img>
-                </b-col>
-                <b-col cols="7">
-                  <p class="tx-12-px txt-A7AFB7">{{ $t('Project_Details_Text_2') }}</p>
-                </b-col>
-              </b-row>
-              <b-row align-v="center">
-                <b-col cols="5">
-                  <b-link href="javascript:;" class="d-block mt-10-px tx-12-px" @click="removeLogo">{{ $t('Remove Logo') }}</b-link>
-                </b-col>
-                <b-col cols="7">
-                  <UploadImage :button-text="$t('Upload your Logo')" :options="logoOptions" @get-image="updateLogo"></UploadImage>
-                </b-col>
-              </b-row>
-          
+              <UploadImage 
+                :size="128"
+                :options="logoOptions" 
+                :image="project.logo" 
+                :btn-title="$t('Upload Project Logo')"
+                @action="updateLogo"></UploadImage>
+
+              <p class="tx-12-px txt-A7AFB7">{{ $t('Project_Details_Text_2') }}</p>
+
               <hr>
 
               <div class="mb-15-px d-flex justify-content-between">

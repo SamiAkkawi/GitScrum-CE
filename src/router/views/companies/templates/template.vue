@@ -3,17 +3,17 @@ import Axios from '@utils/axios'
 import Layout from '@layouts/tpl-main'
 import SideBar from '@components/companies/side-bar'
 import TitleLoading from '@components/utils/title-loading'
-import TemplateTaskType from '@components/companies/templates/task-type'
+import TemplateSelected from '@components/companies/templates/selected'
 import CreateTemplate from '@components/companies/templates/create'
 import ListTemplate from '@components/companies/templates/list'
 import MessageTemplate from '@components/companies/templates/message'
 
 export default {
   page: {
-    title: 'Task Type Template',
-    meta: [{ name: 'description', content: 'Task Type' }],
+    title: 'Workflow Template',
+    meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TemplateTaskType, SideBar, TitleLoading, CreateTemplate, ListTemplate, MessageTemplate },
+  components: { Layout, TemplateSelected, SideBar, TitleLoading, CreateTemplate, ListTemplate, MessageTemplate },
   data() {
     return {
       loading: true,
@@ -30,14 +30,20 @@ export default {
     this.listTemplates()
   },
   methods: {
-
     listTemplates() {
       Axios()
-        .get('templates/type/?company_slug=' + this.currentCompany.slug)
+        .get('templates/' + 
+          this.templateType + 
+          '/?company_slug=' + 
+          this.currentCompany.slug)
         .then((response) => {
-          this.templates = response.data.data
-          this.templateSelected = this.templates[0]
+          
           this.loading = false
+          this.templates = response.data.data
+          if ( !this.templateSelected ){
+            this.templateSelected = this.templates[0]
+          }
+          
         })
         .catch((e) => {
           this.loadingCreate = false
@@ -49,8 +55,8 @@ export default {
       this.selected(template)
     },
 
-    selected(object) {
-      this.templateSelected = object
+    selected(template) {
+      this.templateSelected = template
     },
 
     remove(templateSelected){
@@ -58,7 +64,7 @@ export default {
       this.templateSelected = {}
     },
 
-    updateList() {
+    update() {
       this.listTemplates()
     },
   },
@@ -69,28 +75,29 @@ export default {
   <Layout>
     <template slot="header-left">
       <TitleLoading
-        :title="$t('Task Type Templates')"
+        :title="$t('Templates')"
         :loading="loading"
       ></TitleLoading>
     </template>
-    <div slot="content" class="template template-task-type pt-10px">
+    <div slot="content" class="template pt-10px">
       <b-row>
         <b-col cols="2">
           <SideBar></SideBar>
         </b-col>
         <b-col cols="9" offset-lg="1">
-          <MessageTemplate template="type"></MessageTemplate>
+          <MessageTemplate :template="templateType"></MessageTemplate>
           <b-row>
             <b-col cols="4">
-              <CreateTemplate template="type" @create="createTemplate"></CreateTemplate>
+              <CreateTemplate :template="templateType" @create="createTemplate"></CreateTemplate>
               <ListTemplate v-if="!loading" :templates="templates" @selected="selected"></ListTemplate>
             </b-col>
             <b-col cols="8">
-              <TemplateTaskType 
+              <TemplateSelected
                 v-if="!loading"
                 :template-selected="templateSelected" 
-                @update-list="updateList"
-                @delete="remove"></TemplateTaskType>
+                :component="templateType"
+                @update="update" 
+                @delete="remove"> </TemplateSelected>
             </b-col>
           </b-row>
         </b-col>

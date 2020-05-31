@@ -23,9 +23,9 @@ export default {
   data() {
     return {
       zoom: 1,
-      zoomMin: 0.1,
-      zoomMax: 4,
-      zoomStep: 0.01,
+      zoomMin: 1,
+      zoomMax: 2,
+      zoomStep: 0.1,
       ratio: this.size ? this.size.width / this.size.height : 1,
     }
   },
@@ -57,8 +57,9 @@ export default {
     },
 
     checkZoom(evt) {
-      this.$refs.clipper.setWH$.next(parseFloat(evt.target.value))
-      this.zoom = parseFloat(evt.target.value)
+      console.log(evt)
+      this.$refs.clipper.setWH$.next(parseFloat(this.zoom))
+      this.zoom = parseFloat(this.zoom)
     },
 
     controlZoom(zoom) {
@@ -79,29 +80,20 @@ export default {
   <div>
     <div class="flex justify-content-center">
       <clipperFixed ref="clipper" class="basic lg" :src="img64" :ratio="ratio" :round="round" :grid="false">
-        <div class="placeholder" slot="placeholder">No image</div>
+        <div slot="placeholder" class="placeholder">{{ $t('No image') }}</div>
       </clipperFixed>
     </div>
-    <div class="flex justify-content-center">
-      <input
-        type="range"
-        :min="zoomMin"
-        :max="zoomMax"
-        :step="zoomStep"
-        :value="zoom"
-        class="slider m-2"
-        id="myRange"
-        @change="checkZoom"
-      />
-    </div>
-    <div class="flex justify-content-center mt-2 mb-4">
-      <b-button variant="secondary" class="btn btn-secondary font-weight-bold" @click="onClickCancelClip">
-        {{ $t('Cancel') }}
-      </b-button>
-      <b-button variant="primary" class="btn btn-primary font-weight-bold ml-2" @click="onClickClipImage">
-        {{ $t('Crop Image') }}
-      </b-button>
-    </div>
+    <b-form-input 
+      v-model="zoom"
+      type="range"
+      :min="zoomMin"
+      :max="zoomMax"
+      :step="zoomStep"
+      @update="checkZoom"
+      ></b-form-input>
+    <b-button variant="primary" class="btn btn-primary btn-block" @click="onClickClipImage">
+      {{ $t('Crop Image') }}
+    </b-button>
   </div>
 </template>
 

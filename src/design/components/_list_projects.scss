@@ -168,6 +168,15 @@
     }
 }
 
+.swatches-input {
+    .vue-swatches__trigger {
+        width: 42px !important;
+        height: 31px !important;
+        border-radius: 4px !important;
+        margin-right: 5px !important;
+    }
+}
+
 .project-label-line {
     .vue-swatches__trigger {
         width: 42px !important;

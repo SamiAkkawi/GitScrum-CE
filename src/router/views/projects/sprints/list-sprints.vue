@@ -27,11 +27,11 @@ export default {
       fields: [
         {
           key: 'status',
-          label: 'Status',
+          label: this.$t('Status'),
         },
         {
           key: 'title',
-          label: 'Sprint',
+          label: this.$t('Sprint'),
         },
       ],
     }

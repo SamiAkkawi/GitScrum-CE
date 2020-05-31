@@ -214,60 +214,14 @@ export default [{
      */
 
     {
-        path: '/company/templates/workflow',
-        name: 'companies.template.workflow',
+        path: '/company/templates/:template',
+        name: 'companies.templates',
         meta: {
             authRequired: true,
         },
         component: () => lazyLoadView(
-            import ('@views/companies/templates/workflow')),
+            import ('@views/companies/templates/template')),
     },
-    {
-        path: '/company/templates/task-type',
-        name: 'companies.template.type',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/companies/templates/task-type')),
-    },
-    {
-        path: '/company/templates/task-effort',
-        name: 'companies.template.effort',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/companies/templates/task-effort')),
-    },
-    {
-        path: '/company/templates/user-story-priority',
-        name: 'companies.template.priority',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/companies/templates/user-story-priority')),
-    },
-    {
-        path: '/company/templates/task-checklist',
-        name: 'companies.template.checklist',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/companies/templates/task-checklist')),
-    },
-    {
-        path: '/company/templates/task-custom-field',
-        name: 'companies.template.field',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/companies/templates/task-custom-field')),
-    },
-
 
     // Company Profile
     {

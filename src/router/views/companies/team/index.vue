@@ -42,15 +42,15 @@ export default {
       fields: [
         {
           key: 'user',
-          label: 'Team Member',
+          label: this.$t('Team Member'),
         },
         {
           key: 'status',
-          label: 'Status',
+          label: this.$t('Status'),
         },
         {
           key: 'create_project',
-          label: 'Can create project',
+          label: this.$t('Can create project'),
         },
       ],
     }

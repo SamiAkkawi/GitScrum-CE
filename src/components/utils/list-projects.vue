@@ -151,11 +151,11 @@ export default {
       no-header-close="false"
       class="sidebar-project-labels"
     >
-      <template v-slot:default="{ hide }">
+      <template v-slot="{ hide }">
         <div>
           <div class="p-2">
           <h5 id="sidebar-no-header-title">{{ projectSelected.name }}</h5>
-          <p>Project Labels are used to help you organize projects.</p>
+          <p>{{ $t('Project Labels are used to help you organize projects.') }}</p>
           </div>
           <ManageLabels :project="projectSelected"></ManageLabels>
         </div>

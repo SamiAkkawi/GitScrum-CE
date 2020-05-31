@@ -249,25 +249,7 @@
     }
 }
 
-.information {
-    input {
-        height: 32px;
-    }
-    .sub-title {
-        letter-spacing: 0.03em;
-        text-transform: capitalize;
-    }
-    .informative-text {
-        display: flex;
-        letter-spacing: 0.03em;
-        text-align: justify;
-    }
-    .company-name {
-        letter-spacing: 0.03em;
-    }
-    .checkbox-text-spacing {
-        letter-spacing: 0.01em;
-    }
+.company-information {
     .logo {
         width: 128px;
         height: 128px;

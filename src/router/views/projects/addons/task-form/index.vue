@@ -30,11 +30,11 @@ export default {
       fields: [
         {
           key: 'title',
-          label: 'Answer',
+          label: this.$t('Answer'),
         },
         {
           key: 'convert',
-          label: 'Convert to Task',
+          label: this.$t('Convert to Task'),
         }
       ],
     }

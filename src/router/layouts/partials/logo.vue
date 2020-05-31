@@ -59,7 +59,7 @@ export default {
 <template>
   <b-navbar-brand tag="li">
     <span class="cursor-pointer" @click="gaClickLogo">
-      <img style="max-width: 122px; max-height: 22px; margin-left: 8px;" :src="data.logo_header" :alt="data.name" :title="data.name" />
+      <img id="companyLogo" style="max-width: 122px; max-height: 22px; margin-left: 8px;" :src="data.logo_header" :alt="data.name" :title="data.name" />
     </span>
     <div v-if="checkUpgrade()">
       <span class="badge badge-danger upgrade-account">

@@ -42,11 +42,11 @@ export default {
       fields: [
         {
           key: 'user.name',
-          label: 'Time Tracking',
+          label: this.$t('Time Tracking'),
         },
         {
           key: 'time.total',
-          label: 'Worked',
+          label: this.$t('Worked'),
         }
       ],
     }

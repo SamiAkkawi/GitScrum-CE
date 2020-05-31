@@ -33,7 +33,7 @@ export default {
       fields: [
         {
           key: 'comment',
-          label: 'Discussions',
+          label: this.$t('Discussions'),
         },
       ],
     }

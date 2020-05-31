@@ -27,11 +27,11 @@ export default {
       fields: [
         {
           key: 'priority',
-          label: 'Priority',
+          label: this.$t('Priority'),
         },
         {
           key: 'title',
-          label: 'User Story',
+          label: this.$t('User Story'),
         },
       ],
     }

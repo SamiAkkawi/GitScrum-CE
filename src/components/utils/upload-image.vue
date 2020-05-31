@@ -7,11 +7,17 @@ export default {
     CropImage,
   },
   props: {
-    buttonText: {
+    btnTitle: {
       type: String,
       required: false,
+      default: 'Upload'
     },
-    buttonClass: {
+    btnRemoveTitle: {
+      type: String,
+      required: false,
+      default: 'Remove'
+    },
+    btnClass: {
       type: String,
       required: false,
       default: '',
@@ -21,28 +27,23 @@ export default {
       required: false,
       default: false,
     },
-    hasImage: {
-      type: Boolean,
+    image: {
+      type: String,
       required: false,
-      default: true,
+    },
+    size: {
+      type: Number,
+      required: false,
+      default: 128
     },
     options: {
       type: Object,
       required: true,
-    },
-    profileImageRound: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    updatePhoto: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+    }
   },
   data() {
     return {
+      loading: false,
       imageCropped: null,
       cropSize: this.options.cropSize ? this.options.cropSize : null,
       alertMessage: '',
@@ -75,67 +76,65 @@ export default {
       
       this.closeModal(this.$refs['modal'])
       if (this.imageCropped !== null) {
-        if (this.updatePhoto) {
-          this.uploadImage()
-        } else {
-          this.$emit('get-image', this.imageCropped)
-        }
+        this.uploadImage()
+        this.$emit('action', this.imageCropped)
       }
     },
 
     deleteImage() {
+      this.loading = true
       this.imageCropped = ''
 
       let params = {}
       params[this.options.paramName] = this.imageCropped
 
-      this.httpDelete(params)
-    },
-
-    uploadImage() {
-      let params = {}
-      params[this.options.paramName] = this.imageCropped
-
-      if (this.options.http === 'POST') {
-        this.httpPost(params)
-      } else if (this.options.http === 'PUT') {
-        this.httpPut(params)
-      }
-    },
-
-    httpDelete(params) {
       Axios()
         .delete(this.options.url, params, {
           headers: this.options.headers,
         })
         .then((_) => {
-          this.$emit('get-image', this.imageCropped)
+          this.loading = false
+          this.$emit('action', this.imageCropped)
         })
         .catch((error) => {
           alert(error.response.data.message)
         })
     },
 
-    httpPost(params) {
+    uploadImage() {
+      this.loading = true
+      let params = {}
+      params[this.options.paramName] = this.imageCropped
+
+      if (this.options.http === 'POST') {
+        this.post(params)
+      } else if (this.options.http === 'PUT') {
+        this.put(params)
+      }
+    },
+
+    post(params) {
       Axios()
         .post(this.options.url, params, {
           headers: this.options.headers,
         })
         .then((_) => {
-          this.$emit('get-image', this.imageCropped)
+          this.loading = false
+          this.$emit('action', this.imageCropped)
         })
         .catch((error) => {
           alert(error.response.data.message)
         })
     },
 
-    httpPut(params) {
+    put(params) {
       Axios()
         .put(this.options.url, params, {
           headers: this.options.headers,
         })
         .then((_) => {
-          this.$emit('get-image', this.imageCropped)
+          this.loading = false
+          this.$emit('action', this.imageCropped)
         })
         .catch((error) => {
           alert(error.response.data.message)
@@ -146,35 +145,42 @@ export default {
 </script>
 
 <template>
-  <div>
-    <input type="file" ref="file" style="display: none" accept="image/*" @change="onFileChange" />
+  <b-overlay :show="loading" rounded="sm">
+      
+    <div class="mt-2" :style="'width:' + size + 'px !important'">
+      <img v-show="image !== 'null'" :src="image" :style="'width:' + size + 'px !important'" class="rounded mb-2" />
+    </div>
+
+    <input ref="file" type="file" style="display: none" accept="image/*" @change="onFileChange" />
+    
     <div v-if="!twoButtons">
       <button
-        :class="buttonClass === '' ? 'btn btn-primary p-2' : buttonClass"
-        style="font-weight:600 !important"
-        @click="$refs.file.click()"
-      >
-        {{ buttonText }}
+        class="mb-1"
+        :class="btnClass === '' ? 'btn btn-primary btn-sm' : btnClass"
+        @click="$refs.file.click()">
+        {{ btnTitle }}
       </button>
+      <b-link v-if="image" class="d-block" @click="deleteImage">{{ btnRemoveTitle }}</b-link>
     </div>
+    
     <div v-if="twoButtons">
       <button class="btn btn-primary mr-4-px p-0" @click="$refs.file.click()">
         <font-awesome-icon :icon="['fal', 'cloud-upload']" />
       </button>
-      <b-button v-show="hasImage" class="btn btn-primary ml-4-px p-0" @click="deleteImage()">
+      <b-button v-show="hasImage" class="btn btn-primary ml-4-px p-0" @click="deleteImage">
         <font-awesome-icon :icon="['far', 'times']" />
       </b-button>
     </div>
-
-    <b-modal ref="modal" lazy hideFooter :title="'Crop Image ' + cropDimensions" style="max-width: 600px !important;" @hide="resetFileInput">
-      <template v-slot:default="{ hide }">
+    
+    <b-modal ref="modal" size="sm" hide-footer hide-header style="max-width: 500px !important;" @hide="resetFileInput">
+      <template v-slot="{ hide }">
         <CropImage
           :img64="imageCropped"
-          :round="profileImageRound"
+          :round="false"
           :size="cropSize"
           @get-image-cropped="getImageCropped"
         ></CropImage>
       </template>
     </b-modal>
-  </div>
+  </b-overlay>
 </template>

@@ -195,7 +195,7 @@ export default {
                   type="text"
                   maxlength="25"
                   class="form-control"
-                  :placeholder="$t('Write template name')"
+                  :placeholder="$t('Template name')"
                 />
                 <div class="input-group-append">
                   <button

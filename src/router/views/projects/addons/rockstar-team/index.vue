@@ -33,23 +33,23 @@ export default {
       fields: [
         {
           key: 'user.avatar',
-          label: 'Position',
+          label: this.$t('Position'),
         },
         {
           key: 'user.name',
-          label: 'Team Member',
+          label: this.$t('Team Member'),
         },
         {
           key: 'total_efforts',
-          label: 'Effort',
+          label: this.$t('Effort'),
         },
         {
           key: 'closed_issues_count',
-          label: 'Tasks',
+          label: this.$t('Tasks'),
         },
         {
           key: 'duration_worked',
-          label: 'Worked',
+          label: this.$t('Worked'),
         }
       ],
     }

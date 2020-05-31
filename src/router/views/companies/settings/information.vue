@@ -166,16 +166,13 @@ export default {
                   
                   <label>{{ $t('Company Logo') }}</label>
 
-                  <div class="mt-3 logo">
-                    <img v-show="logo !== null" :src="logo" />
-                    <div class="buttons">
-                      <UploadImage 
-                        :two-buttons="true" 
-                        :options="logoOptions" 
-                        :has-image="true" 
-                        @get-image="updateLogo"></UploadImage>
-                    </div>
-                  </div>
+                  <UploadImage 
+                    :size="128"
+                    :options="logoOptions" 
+                    :image="logo" 
+                    :btn-title="$t('Upload Company Logo')"
+                    @action="updateLogo"></UploadImage>
+                    
                   <div class="mt-2">
                     <small>
                       {{
@@ -216,6 +213,7 @@ export default {
                   <ButtonLoading
                     :title="$t('Update Details')"
                     :title-loading="$t('Updating Details')"
+                    :loading="loading"
                     type="btn-md"
                     @action="updateCompany"
                   ></ButtonLoading>

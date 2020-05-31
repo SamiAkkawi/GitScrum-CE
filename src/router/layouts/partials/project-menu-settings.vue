@@ -1,5 +1,4 @@
 <script>
-import ProjectDetails from '@components/projects/modal/settings/project-details'
 import ProjectTaskTypes from '@components/projects/modal/settings/project-task-types'
 import ProjectTaskEfforts from '@components/projects/modal/settings/project-task-efforts'
 import ProjectUserStoryPriorities from '@components/projects/modal/settings/project-user-story-priorities'
@@ -9,7 +8,6 @@ import { modalManager } from '@state/helpers'
 
 export default {
   components: {
-    ProjectDetails,
     ProjectTaskTypes,
     ProjectTaskEfforts,
     ProjectUserStoryPriorities,
@@ -63,7 +61,6 @@ export default {
       </b-dropdown-item>
     </b-dropdown>
 
-    <ProjectDetails></ProjectDetails>
     <ProjectTaskTypes></ProjectTaskTypes>
     <ProjectTaskEfforts></ProjectTaskEfforts>
     <ProjectUserStoryPriorities></ProjectUserStoryPriorities>

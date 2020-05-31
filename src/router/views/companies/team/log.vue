@@ -16,8 +16,6 @@ export default {
   data() {
     return {
       teammates: [],
-      inviteNames: [],
-      inviteEmails: [],
       totalRows: 0,
       totalPages: 1,
       perPage: 15,
@@ -34,6 +32,20 @@ export default {
         ],
       },
       currentUserEmail: null,
+      fields: [
+        {
+          key: 'user',
+          label: this.$t('Invited'),
+        },
+        {
+          key: 'accepted',
+          label: this.$t('Accepted')
+        },
+        {
+          key: 'resend',
+          label: this.$t('Resend')
+        }
+      ],
     }
   },
   mounted() {
@@ -99,15 +111,16 @@ export default {
     },
 
     resendInvitation(row) {
+      this.loading = true
       Axios()
-        .get('team-members/invitations/resend?company_slug=' + this.currentCompany.slug + '&id=' + row.id)
-        .then((response) => {
-          this.alertStatus = true
-          this.alertMessage = response.data.data.message
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+      .get('team-members/invitations/resend?company_slug=' + 
+        this.currentCompany.slug + 
+        '&id=' + row.id)
+      .then((response) => {
+        this.alertStatus = true
+        this.alertMessage = response.data.data.message
+        this.loading = false
+      })
     },
   },
 }
@@ -115,92 +128,58 @@ export default {
 
 <template>
   <Layout>
-    <div slot="content" class="company-team">
+
+    <template slot="header-left">
+      <TitleLoading
+        :title="$t('Company Team Members')"
+        :subtitle="$t('See the people you have already invited')"
+        :loading="loading"></TitleLoading>
+    </template>
+
+    <div slot="content" class="company-team pt-10px">
       <div class="row mb-30-px">
         <div class="col-md-3">
           <SideBar></SideBar>
         </div>
         <div class="col-md-9">
-          <div class="d-flex justify-content-between align-items-center">
-            <TitleLoading
-              :title="$t('See the people you have already invited')"
-              :loading="loading"
-              addclass="text-dark font-weight-bold mb-0 mr-5"
-            >
-            </TitleLoading>
-            
+          
+          <div class="card">
+            <div class="card-body">
+              <router-link :to="{ 'name': 'companies.teams.index' }" class="small">
+                  <font-awesome-icon :icon="['far', 'angle-left']" class="mr-5-px" />
+                  {{ $t('Go Back Team Members')}}
+              </router-link>
+            </div>
           </div>
 
           <Alert :message="alertMessage" :status="alertStatus" class="mt-10-px"></Alert>
 
-          <div>
-            <router-link :to="{ 'name': 'companies.teams.index' }" class="txt-link txt-68748F">
-                <font-awesome-icon :icon="['far', 'angle-left']" class="mr-5-px" />
-                {{ $t('Go Back Team Members')}}
-            </router-link>
-          </div>
+           <b-table class="table-team-members-log" striped hover="" :items="teammates" :fields="fields" >
+            <template v-slot:cell(user)="data">
+              <p class="mb-0" v-text="data.item.name"></p>
+              <small class="small" v-text="data.item.email"></small>
+            </template>
+            <template v-slot:cell(accepted)="data">
+              <span 
+                v-if="data.item.accepted_at" 
+                class="badge badge-light" 
+                v-text="data.item.accepted_at"></span>
+            </template>
+            <template v-slot:cell(resend)="data">
+              <b-link
+                v-if="data.item.creator.email !== currentUserEmail && data.item.accepted_at === null"
+                @click="deleteInvitation(data.item)" >
+                <font-awesome-icon :icon="['fal', 'trash-alt']" class="mr-3" />
+              </b-link>
+              <b-button
+                v-if="data.item.creator.email !== currentUserEmail && data.item.accepted_at === null"
+                @click="resendInvitation(data.item)" class="btn btn-sm btn-secondary">
+                <font-awesome-icon :icon="['fal', 'paper-plane']" class="ml-5-px" />
+                  {{ $t('Resend Invite') }}
+              </b-button>
+            </template>
+          </b-table>
 
-          <div class="divTable mt-20-px">
-            <div class="divTableHead">
-              <div class="divTableRow">
-                <div class="divTableCell text-left" :style="gridConfig.style[0]">{{ $t('Name') }} </div>
-                <div class="divTableCell text-center" :style="gridConfig.style[1]">
-                  {{ $t('Accepted at') }}
-                </div>
-                <div class="divTableCell text-right" :style="gridConfig.style[2]">
-                  {{ $t('Resend') }}
-                </div>
-                <div class="divTableCell text-right" :style="gridConfig.style[2]">
-                  {{ $t('Delete') }}
-                </div>
-              </div>
-            </div>
-
-            <div class="divTableBody">
-              <div v-for="(item, index) in teammates" :key="index" class="divTableRowBg">
-                <div class="divTableRow">
-                  <div class="divTableCell text-left" :style="gridConfig.style[0]">
-                    <span v-text="item.name"></span>
-                    <div class="tx-12-px txt-68748F">
-                      <span v-text="item.email"></span>
-                    </div>
-                  </div>
-                  <div
-                    class="divTableCell text-left d-flex align-items-center"
-                    :style="gridConfig.style[1]" >
-                    
-                    <span v-if="item.accepted_at" class="txt-11-px" v-text="item.accepted_at"></span>
-                  
-                  </div>
-                  <div
-                    class="divTableCell text-right d-flex align-items-center"
-                    :style="gridConfig.style[2]" >
-                    <a
-                        v-if="item.creator.email !== currentUserEmail && item.accepted_at === null"
-                        href="javascript:;"
-                        alt="Resend"
-                        title="Resend"
-                        @click="resendInvitation(item)" >
-                        <font-awesome-icon :icon="['fal', 'paper-plane']" class="ml-5-px" />
-                    </a>
-                  </div>
-                  <div
-                    class="divTableCell text-right d-flex align-items-center"
-                    :style="gridConfig.style[2]"
-                  >
-                    <a
-                        v-if="item.creator.email !== currentUserEmail && item.accepted_at === null"
-                        href="javascript:;"
-                        alt="Delete"
-                        title="Delete"
-                        @click="deleteInvitation(item)" >
-                        <font-awesome-icon :icon="['fal', 'trash-alt']" class="ml-5-px" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
             <b-pagination
               v-model="currentPage"
