@@ -214,6 +214,17 @@ export default [{
      */
 
     {
+        path: '/company/templates',
+        name: 'companies.templates.workflow',
+        meta: {
+            authRequired: true,
+            beforeResolve(routeTo, routeFrom, next) {
+                location.href = '/company/templates/workflow'
+            },
+        }
+    },
+
+    {
         path: '/company/templates/:template',
         name: 'companies.templates',
         meta: {

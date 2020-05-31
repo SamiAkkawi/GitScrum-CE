@@ -1,10 +1,11 @@
 <script>
 import Axios from '@utils/axios'
 import Swatches from 'vue-swatches'
+import ButtonLoading from '@components/utils/button-loading'
 import 'vue-swatches/dist/vue-swatches.min.css'
 
 export default {
-  components: { Swatches },
+  components: { Swatches, ButtonLoading },
   props: {
     currentCompany: {
       type: Object,
@@ -22,8 +23,8 @@ export default {
   },
   data() {
     return {
-      newUserStoryPriority: this.defaultItem(),
-      btnLoading: false,
+      item: this.defaultItem(),
+      loading: false,
     }
   },
   methods: {
@@ -31,7 +32,7 @@ export default {
       return {
         id: null,
         title: '',
-        color: '#ac725e',
+        color: '#9900ff',
       }
     },
 
@@ -57,19 +58,19 @@ export default {
       return url
     },
 
-    addPriority() {
-      this.btnLoading = true
+    addItem() {
+      this.loading = true
       let url = this.getUrl()
       Axios()
         .post(url, {
-          title: this.newUserStoryPriority.title,
-          color: this.newUserStoryPriority.color,
+          title: this.item.title,
+          color: this.item.color,
           type: 'issues',
         })
         .then((response) => {
-          this.btnLoading = false
+          this.loading = false
           this.templateSelected.items.push(response.data.data)
-          this.newUserStoryPriority = this.defaultItem()
+          this.item = this.defaultItem()
         })
         .catch((e) => {
           console.error(e)
@@ -80,37 +81,25 @@ export default {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="create-template-item-div">
-        <h5 class="fw-500 tx-14-px txt-001737 title m-0">
-          {{ $t('Create an User Story Priority') }}
-        </h5>
-        <div class="item-input d-flex mt-10-px">
-          <Swatches v-model="newUserStoryPriority.color" colors="text-advanced" popover-to max-height="400"></Swatches>
-          <input
-            v-model="newUserStoryPriority.title"
-            type="text"
-            class="form-control no-border-radius"
-            placeholder="User Story Priority name"
-          />
-          <div class="input-group-append">
-            <button
-              v-if="!btnLoading"
-              class="btn btn-sm btn-primary"
-              type="button"
-              :disabled="!newUserStoryPriority.title"
-              @click="addPriority"
-            >
-              <font-awesome-icon :icon="['fa', 'check']" />
-            </button>
-
-            <button v-if="btnLoading" class="btn btn-sm btn-primary" type="button">
-              <b-spinner :label="$t('Loading')" small class="title-loading"></b-spinner>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-input-group>
+    <Swatches 
+      v-model="item.color" 
+      colors="text-advanced" 
+      class="swatches-input" 
+      popover-to max-height="400"></Swatches>
+    <b-input-group-append>
+      <b-form-input 
+      v-model="item.title" 
+      :placeholder="$t('User Story Priority name')"
+      type="text" 
+      maxlength="25"
+      size="sm"></b-form-input>
+      <ButtonLoading
+      :loading="loading"
+      type="btn-sm"
+      icon="plus"
+      @action="addItem"
+      ></ButtonLoading>
+    </b-input-group-append>
+  </b-input-group>
 </template>

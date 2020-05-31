@@ -26,7 +26,9 @@ export default {
     }
   },
   created() {
+    
     this.templateType = this.$route.params.template
+
     this.listTemplates()
   },
   methods: {

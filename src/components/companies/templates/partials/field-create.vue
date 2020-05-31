@@ -1,10 +1,9 @@
 <script>
 import Axios from '@utils/axios'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+import ButtonLoading from '@components/utils/button-loading'
 
 export default {
-  components: { vSelect },
+  components: { ButtonLoading },
   props: {
     templateSelected: {
       type: Object,
@@ -24,12 +23,12 @@ export default {
     return {
       btnLoading: false,
       newSelectableOptionName: '',
-      newTaskCustomField: this.defaultItem(),
+      item: this.defaultItem(),
       customFieldOptions : [
-        { label: 'Small text', code: 'text' },
-        { label: 'Long text', code: 'textarea' },
-        { label: 'Checkbox', code: 'checkbox' },
-        { label: 'Selectable options', code: 'select' },
+        { text: 'Small text', value: 'text' },
+        { text: 'Long text', value: 'textarea' },
+        { text: 'Checkbox', value: 'checkbox' },
+        { text: 'Selectable options', value: 'select' },
       ]
     }
   },
@@ -38,7 +37,7 @@ export default {
       return {
         id: null,
         title: '',
-        type: { label: 'Small text', code: 'text' },
+        type: 'text',
         optionCustomFieldSelectable: false,
         optionCustomFieldSelect: [],
         meta: '',
@@ -48,15 +47,15 @@ export default {
 
     buildMeta() {
       let meta = []
-      this.newTaskCustomField.optionCustomFieldSelect.forEach((opt) => {
+      this.item.optionCustomFieldSelect.forEach((opt) => {
         meta.push(opt.name)
       })
-      this.newTaskCustomField.meta = meta.join(',')
+      this.item.meta = meta.join(',')
     },
 
     prepareType(item) {
       for (let i = 0; i < this.customFieldOptions.length; i++) {
-        if (item.type === this.customFieldOptions[i].code) {
+        if (item.type === this.customFieldOptions[i].value) {
           item.type = this.customFieldOptions[i]
           break
         }
@@ -65,17 +64,17 @@ export default {
     },
 
     prepareTaskCustomFieldObject() {
-      if (this.newTaskCustomField.meta.length) {
+      if (this.item.meta.length) {
         return {
-          name: this.newTaskCustomField.title,
-          type: this.newTaskCustomField.type.code,
-          meta: this.newTaskCustomField.meta,
+          name: this.item.title,
+          type: this.item.type.code,
+          meta: this.item.meta,
         }
       }
 
       return {
-        name: this.newTaskCustomField.title,
-        type: this.newTaskCustomField.type.code,
+        name: this.item.title,
+        type: this.item.type.code,
       }
     },
 
@@ -103,8 +102,8 @@ export default {
 
     addTaskCustomField() {
       if (
-        this.newTaskCustomField.optionCustomFieldSelectable &&
-        this.newTaskCustomField.optionCustomFieldSelect.length
+        this.item.optionCustomFieldSelectable &&
+        this.item.optionCustomFieldSelect.length
       ) {
         this.buildMeta()
       }
@@ -119,7 +118,7 @@ export default {
           this.appendParam(item)
           this.templateSelected.items.push(this.prepareType(item))
 
-          this.newTaskCustomField = this.defaultItem()
+          this.item = this.defaultItem()
         })
         .catch((e) => {
           this.btnLoading = false
@@ -170,9 +169,9 @@ export default {
 
     checkSelected(evt) {
       if (evt.code === 'select') {
-        this.newTaskCustomField.optionCustomFieldSelectable = true
+        this.item.optionCustomFieldSelectable = true
       } else {
-        this.newTaskCustomField.optionCustomFieldSelectable = false
+        this.item.optionCustomFieldSelectable = false
       }
     },
 
@@ -183,7 +182,7 @@ export default {
           name: this.newSelectableOptionName,
         }
 
-        this.newTaskCustomField.optionCustomFieldSelect.push(option)
+        this.item.optionCustomFieldSelect.push(option)
         this.newSelectableOptionName = ''
       }
     },
@@ -194,8 +193,8 @@ export default {
       .then(value => {
         
         if(value){
-          this.newTaskCustomField.optionCustomFieldSelect.splice(
-            this.newTaskCustomField.optionCustomFieldSelect.indexOf(option),
+          this.item.optionCustomFieldSelect.splice(
+            this.item.optionCustomFieldSelect.indexOf(option),
             1
           )
         }
@@ -215,7 +214,7 @@ export default {
         </h5>
         <div class="item-input d-flex mt-10-px">
           <input
-            v-model="newTaskCustomField.title"
+            v-model="item.title"
             pattern=".{3,}"
             required
             type="text"
@@ -223,21 +222,15 @@ export default {
             :placeholder="$t('Custom Field item name')"
           />
           <div class="v-select-sm ml-5-px only-left-border-radius">
-            <v-select
-              v-model="newTaskCustomField.type"
-              style="min-width:240px"
-              :options="customFieldOptions"
-              :clearable="false"
-              :searchable="false"
-              @input="checkSelected"
-            ></v-select>
+            <b-form-select v-model="item.type" :options="customFieldOptions" @input="checkSelected"></b-form-select>
+            
           </div>
           <div class="input-group-append">
             <button
               v-if="!btnLoading"
               class="btn btn-sm btn-primary"
               type="button"
-              :disabled="!newTaskCustomField.title || !newTaskCustomField.type"
+              :disabled="!item.title || !item.type"
               @click="addTaskCustomField"
             >
               <font-awesome-icon :icon="['fa', 'plus']" />
@@ -248,7 +241,7 @@ export default {
             </button>
           </div>
         </div>
-        <div v-if="newTaskCustomField.optionCustomFieldSelectable">
+        <div v-if="item.optionCustomFieldSelectable">
           <div class="selectable-options mt-20-px">
             <div class="selectable-options-create">
               <div class="item-input d-flex">
@@ -267,12 +260,12 @@ export default {
               </div>
             </div>
             <div class="selectable-options-list">
-              <div v-if="newTaskCustomField.optionCustomFieldSelect.length">
+              <div v-if="item.optionCustomFieldSelect.length">
                 <span class="txt-68748F tx-12-px fw-500 sub-title">
                   {{ $t('Options List') }}
                 </span>
                 <hr class="m-0 mt-10-px" />
-                <div v-for="option in newTaskCustomField.optionCustomFieldSelect" :key="option.id">
+                <div v-for="option in item.optionCustomFieldSelect" :key="option.id">
                   <div class="item-input d-flex mt-10-px">
                     <input
                       v-model="option.name"

@@ -50,7 +50,7 @@ export default {
           title: this.$t('Templates'),
           subtitle: this.$t('Manage templates for company'),
           style: '',
-          route: 'companies.template.workflow',
+          route: 'companies.templates.workflow',
         },
         {
           title: this.$t('Billing'),
