@@ -36,23 +36,13 @@
             font-size: $font-size;
         }
     }
-    .collapse {
-        .card {
-            margin: 0;
-            padding: 0;
-            .card-body {
-                padding: 0;
-            }
-            .title {
-                font-weight: 500;
-                font-size: 9px;
-                letter-spacing: 0.4px;
-                text-transform: uppercase;
-                color: $grey-600;
-                border-bottom: 1px solid $grey-200;
-                ;
-            }
-        }
+    .title-7-d {
+        font-weight: 500;
+        font-size: 9px;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: $grey-600;
+        border-bottom: 1px solid $grey-200;
     }
     .dropdown-toggle {
         padding: 0;

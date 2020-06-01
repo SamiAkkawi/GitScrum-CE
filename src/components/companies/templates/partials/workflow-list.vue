@@ -39,7 +39,20 @@ export default {
   },
   data() {
     return {
-      stateOptions: this.setItemStateOptions(),
+      stateOptions: [
+        {
+          value: 0,
+          text: 'TODO',
+        },
+        {
+          value: 2,
+          text: 'In Progress',
+        },
+        {
+          value: 1,
+          text: 'Done',
+        },
+      ],
       emailExpression: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     }
   },
@@ -61,23 +74,6 @@ export default {
         name: s.name,
       }
       return item
-    },
-
-    setItemStateOptions() {
-      return [
-        {
-          value: 0,
-          name: 'TODO',
-        },
-        {
-          value: 2,
-          name: 'In Progress',
-        },
-        {
-          value: 1,
-          name: 'Done',
-        },
-      ]
     },
 
     updateItem(params, id) {
@@ -124,41 +120,25 @@ export default {
     },
 
     updateItemPosition(item) {
-      this.updateItem(
-        {
-          position: item.moved.newIndex + 1,
-        },
-        item.moved.element.id
-      )
+      this.updateItem( { position: item.moved.newIndex + 1 }, item.moved.element.id )
     },
 
     updateItemDefault(value, id) {
-      this.updateItem(
-        {
-          default: value,
-        },
-        id
-      )
+      this.updateItem( { default: value }, id )
     },
 
     updateItemColor(color, id) {
-      this.updateItem(
-        {
-          color: color,
-        },
-        id
-      )
+      this.updateItem( { color: color }, id )
     },
 
     updateItemTitle(title, id) {
       if (title.length) {
-        this.updateItem(
-          {
-            title: title,
-          },
-          id
-        )
+        this.updateItem( { title: title }, id )
       }
+    },
+
+    updateState(state, id) {
+      this.updateItem( { state: state }, id )
     },
 
     validateEmail: function(email) {
@@ -173,13 +153,9 @@ export default {
           emails.splice(emails.indexOf(email))
         }
       })
+
       if (!item.emailError.length) {
-        this.updateItem(
-          {
-            emails: emails.join(),
-          },
-          item.id
-        )
+        this.updateItem( {emails: emails.join(),} , item.id )
       }
     },
   },
@@ -187,100 +163,66 @@ export default {
 </script>
 
 <template>
-  <div class="list-template-items-div">
-    <div class="row" v-if="title">
-      <div class="col-md-12">
-        <h5 class="fw-500 tx-14-px txt-001737 title">
-          {{ $t('Workflow Stages created') }}
-        </h5>
-      </div>
-    </div>
-
-    <table class="table table-card" v-if="templateSelected.items.length">
-      <Draggable v-model="templateSelected.items" tag="tbody" ghost-class="ghost" @change="updateItemPosition($event)">
-        <tr v-for="item in templateSelected.items" :key="item.id">
-          <td style="width: 1530px !important;">
-            <div class="stage-workflow-title d-flex justify-content-between mb-10-px">
-              <div>
-                <b-form-radio
-                  v-model="item.default"
-                  class="txt-68748F"
-                  value="true"
-                  name="typeDefault"
-                  @change="updateItemDefault(1, item.id)"
-                >
-                  {{ $t('Default Stage') }}
-                </b-form-radio>
-              </div>
-              <div class="flex-grow-1 text-right">
-                <div class="d-inline-flex nav-item dropdown header-dropdown">
-                  <a class="nav-title dropdown-toggle txt-909CB8" href="javascript:;" data-toggle="dropdown">
-                    <font-awesome-icon :icon="['fa', 'ellipsis-h']" style="font-size:18px; color: #909CB8;" />
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown" style="width:100px">
-                    <div class="mt-10-px">
-                      <a href="javascript:;" class="header-dropdown-item" @click="deleteItem(item)">
-                        <span>{{ $t('Delete') }}</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group-swatches mb-10-px">
-              <div class="input-group col-xs-12">
-                <Swatches
-                  v-model="item.color"
-                  colors="text-advanced"
-                  popover-to
-                  max-height="400"
-                  @close="updateItemColor($event, item.id)"
-                ></Swatches>
-                <b-form-input
-                  class="only-right-border-radius"
-                  v-model="item.title"
-                  maxlength="25"
-                  @change="updateItemTitle($event, item.id)"
-                ></b-form-input>
-              </div>
-            </div>
-
-            <div class="v-select-sm mb-10-px">
-              <v-select
-                v-model="item.state"
-                class="d-flex"
-                label="name"
-                :options="stateOptions"
-                :clearable="false"
-                :searchable="false"
-              ></v-select>
-            </div>
-
-            <v-select v-model="item.emails" taggable multiple @input="updateItemEmails($event, item)">
-              <span slot="no-options">
-                Type the email and press <strong>ENTER</strong> to confirm.
-                <!-- {{ $t('Type the email and press <strong>ENTER</strong> to confirm.') }} -->
-              </span>
-            </v-select>
-            <small class="d-block mt-5-px mb-10-px">
-              {{ $t('Enter emails to receive notifications when the task is in this stage') }}
-            </small>
-            <!--
-                  <v-select v-model="item.emails" taggable multiple @input="updateItemEmails($event, item)">
-                    <span slot="no-options"> Type the email and press <strong>ENTER</strong> to confirm. </span>
-                  </v-select>
-
-                  <p v-if="item.emailError.length" class="alert alert-info">
-                    The email <b>{{ item.emailError }}</b> isn't well formed. For that reason it was removed by the
-                    list.
-                  </p>
-                  -->
-          </td>
-        </tr>
-      </Draggable>
-    </table>
-    <div v-else class="alert alert-info">
-      <span> {{ $t('List without Items') }} </span>
-    </div>
-  </div>
+  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="tbody" ghost-class="ghost" @change="updateItemPosition($event)">
+    <b-card v-for="item in templateSelected.items" :key="item.id">
+      <template v-slot:header>
+        <b-row class="cursor-grab">
+          <b-col cols="9">
+            <b-form-radio
+              v-model="item.default"
+              class="txt-68748F"
+              value="true"
+              name="typeDefault"
+              @change="updateItemDefault(1, item.id)">
+              {{ $t('Default Stage') }} 
+              <font-awesome-icon 
+                v-b-popover.hover.top="$t('Whenever you create a task without choosing a workflow stage. This will be the default stage.')" 
+                :icon="['fal', 'question-circle']" 
+                class="ml-2" />
+            </b-form-radio>
+          </b-col>
+          <b-col cols="3" class="text-right">
+            <a href="javascript:;" class="card-delete-hover" @click="deleteItem(item)">
+              <span>{{ $t('Delete') }}</span>
+            </a>
+          </b-col>
+        </b-row>
+      </template>
+      <b-card-text>
+        <b-input-group>
+          <Swatches 
+          v-model="item.color" 
+          colors="text-advanced" 
+          class="swatches-input" 
+          popover-to max-height="400"
+          @close="updateItemColor($event, item.id)"></Swatches>
+          <b-form-input 
+          v-model="item.title" 
+          :placeholder="$t('Stage name')"
+          type="text" 
+          maxlength="25"
+          size="sm"
+          style="border-radius:4px !important"
+          class="mr-1"
+          @change="updateItemTitle($event, item.id)"></b-form-input>
+          <b-form-select 
+          v-model="item.state.value" 
+          :options="stateOptions" 
+          size="sm" 
+          @change="updateState($event, item.id)"></b-form-select>
+        </b-input-group>
+        <label for="tags-separators">{{ $t('Enter emails to receive notifications when the task is in this stage') }}</label>
+        <b-form-tags
+          v-model="item.emails"
+          input-id="tags-separators"
+          separator=" ,;"
+          placeholder="Enter emails"
+          no-add-on-enter
+          class="mb-1 mt-1"
+          tag-variant="dark"
+          @input="updateItemEmails($event, item)"></b-form-tags>
+        <small>{{ $t('Enter tags separated by space, comma or semicolon') }}</small>
+      </b-card-text>
+    </b-card>
+  </Draggable>
 </template>

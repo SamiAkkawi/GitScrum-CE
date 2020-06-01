@@ -41,20 +41,20 @@ export default {
   <b-card>
     <b-card-title>{{ $t('Create a Template') }}</b-card-title>
     <b-card-text>
-        <b-input-group>
-        <b-input-group-append>
-          <b-form-input 
-          v-model="name" 
-          :placeholder="$t('Template name')"
-          type="text" size="sm"></b-form-input>
-          <ButtonLoading
-          :loading="loading"
-          type="btn-sm"
-          icon="plus"
-          @action="createTemplate"
-          ></ButtonLoading>
-        </b-input-group-append>
-        </b-input-group>
+      <b-input-group>
+      <b-input-group-append>
+        <b-form-input 
+        v-model="name" 
+        :placeholder="$t('Template name')"
+        type="text" size="sm"></b-form-input>
+        <ButtonLoading
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="createTemplate"
+        ></ButtonLoading>
+      </b-input-group-append>
+      </b-input-group>
     </b-card-text>
   </b-card>
 </template>

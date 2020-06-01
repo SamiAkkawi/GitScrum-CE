@@ -148,7 +148,6 @@ export default {
       backdrop
       shadow
       right
-      no-header-close="false"
       class="sidebar-project-labels"
     >
       <template v-slot="{ hide }">
@@ -245,7 +244,7 @@ export default {
 
               <b-collapse :id="'collapse' + project.slug">
                 <b-card>
-                  <div class="title mt-1">
+                  <div class="title-7-d mt-1">
                     {{ $t('Project Progress in Last 7 Days') }}
                   </div>
                   
