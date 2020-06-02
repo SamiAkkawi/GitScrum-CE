@@ -71,7 +71,7 @@ export default {
 </script>
 
 <template>
-  <b-card :title="$t('Create a new Effort')">
+  <b-card :title="$t('Create a new Effort')" class="card-body-create">
     <b-input-group>
       <b-input-group-append>
         <b-form-input 

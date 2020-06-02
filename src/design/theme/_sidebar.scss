@@ -7,11 +7,14 @@
         margin-bottom: 20px;
     }
     .sidebar-menu-title {
-        font-style: normal;
         font-weight: 600;
-        font-size: 18px;
-        color: #001737;
-        margin-bottom: 23px;
+        font-size: 12px;
+        line-height: 14px;
+        text-transform: uppercase;
+        color: $black-900;
+        margin-bottom: 5px;
+        padding: 0;
+        letter-spacing: 0.3px;
     }
     .submenu-wrapper {
         list-style: none;
@@ -20,13 +23,28 @@
     }
     .nav-item {
         display: block;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
+    }
+    .nav-active {
+        a {
+            display: inline;
+            border-radius: 4px !important;
+            padding: 2px 8px !important;
+            background: $grey-A700;
+            color: #fff;
+            font-weight: 600;
+            &:hover {
+                color: #fff;
+                text-decoration: none;
+                cursor: default;
+            }
+        }
     }
     .nav-link {
         display: inline;
         padding: 0;
         font-size: 14px;
-        color: $grey-900;
+        color: $grey-700;
         font-weight: normal;
         &:hover {
             color: $grey-A400;

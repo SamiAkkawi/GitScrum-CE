@@ -179,11 +179,18 @@ a.badge-secondary.focus {
 }
 
 .input-group-append {
+    /*width: 100%;*/
     .btn-small.btn-primary {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         height: 31px;
         padding-top: 4px;
+    }
+}
+
+.card-body-create {
+    .input-group-append {
+        width: 100%;
     }
 }
 
@@ -382,10 +389,33 @@ a.badge-secondary.focus {
 }
 
 .card-header {
-    padding: 0.35rem 1.25rem !important;
+    padding: 0.35rem 1.0rem !important;
     margin-bottom: 0;
     background-color: $grey-50 !important;
+    color: $black-300 !important;
+    font-weight: 600;
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    .card,
+    .card .card,
+    .card .card .card {
+        box-shadow: none !important;
+        border: 0 solid transparent !important;
+        .card-header {
+            border-bottom: 0 solid transparent !important;
+        }
+    }
+}
+
+.table {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.card-body-create {
+    background: $blue-A200 !important;
 }
 
 

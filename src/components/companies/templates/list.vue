@@ -27,17 +27,16 @@ export default {
 </script>
 
 <template>
-  <b-card>
-    <b-card-title>{{ $t('Templates available') }}</b-card-title>
-    <b-card-text>
+  <b-card :header="$t('Templates available')">
+    <b-card-text text-tag="div">
       <div
         v-for="template in templates"
         :key="template.id"
-        class="col-md-12 overflow-auto card-template cursor-pointer mb-10-px p-10-px"
+        class="col-md-12 card-template cursor-pointer p-2 mb-1"
         :class="templateSelected && templateSelected.slug === template.slug ? 'selected' : ''"
         @click="selected(template)">
-        <p class="fw-600 txt-12-px txt-3D4F9F lh-18-px mb-0" v-text="template.name"></p>
-        <p class="txt-909CB8 m-0"> <span v-text="template.items.length"></span> {{ $t('stages') }} </p>
+        <p class="fw-600 mb-0" v-text="template.name"></p>
+        <p class="mb-0 small"> <span v-text="template.items.length"></span> {{ $t('stages') }} </p>
       </div>
     </b-card-text>
   </b-card>

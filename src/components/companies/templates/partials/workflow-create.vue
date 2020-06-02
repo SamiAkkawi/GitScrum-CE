@@ -75,14 +75,14 @@ export default {
 </script>
 
 <template>
-  <b-card :title="$t('Create a new Workflow Stage')">
+  <b-card :title="$t('Create a new Workflow Stage')" class="card-body-create">
     <b-input-group>
-      <Swatches 
+      <b-input-group-append>
+        <Swatches 
         v-model="item.color" 
         colors="text-advanced" 
         class="swatches-input" 
         popover-to max-height="400"></Swatches>
-      <b-input-group-append>
         <b-form-input 
         v-model="item.title" 
         :placeholder="$t('Stage name')"

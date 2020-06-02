@@ -110,7 +110,7 @@ export default {
 </script>
 
 <template>
-  <b-card :title="getTitle(component)">
+  <b-card :header="getTitle(component)">
      <b-card-text>
       <b-row v-if="templateSelected.name">
         <b-col cols="10">
@@ -127,7 +127,7 @@ export default {
           </b-link>
         </b-col>
       </b-row>
-      <b-row v-if="templateSelected.name" class="pb-4">
+      <b-row v-if="templateSelected.name" class="pb-3">
         <b-col cols="12" class="mt-3">
           <b-form-checkbox
             v-model="templateSelected.is_default"
@@ -153,8 +153,7 @@ export default {
           <component 
           :is="getComponentName(component, 'create')" 
           :current-company="currentCompany"
-          :template-selected="templateSelected"></component>
-          <hr class="px-1">
+          :template-selected="templateSelected" class="mb-3"></component>
           <component 
             :is="getComponentName(component, 'list')" 
             :current-company="currentCompany"

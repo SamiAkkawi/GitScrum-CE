@@ -77,14 +77,14 @@ export default {
 </script>
 
 <template>
-  <b-card :title="$t('Create a new User Story Priority')">
+  <b-card :title="$t('Create a new User Story Priority')" class="card-body-create">
     <b-input-group>
-      <Swatches 
+      <b-input-group-append>
+        <Swatches 
         v-model="item.color" 
         colors="text-advanced" 
         class="swatches-input" 
         popover-to max-height="400"></Swatches>
-      <b-input-group-append>
         <b-form-input 
         v-model="item.title" 
         :placeholder="$t('Priority name')"

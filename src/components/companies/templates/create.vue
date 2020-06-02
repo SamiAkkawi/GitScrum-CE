@@ -38,8 +38,7 @@ export default {
 </script>
 
 <template>
-  <b-card>
-    <b-card-title>{{ $t('Create a Template') }}</b-card-title>
+  <b-card :header="$t('Create a Template')">
     <b-card-text>
       <b-input-group>
       <b-input-group-append>

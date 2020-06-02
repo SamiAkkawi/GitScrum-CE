@@ -76,14 +76,14 @@ export default {
 </script>
 
 <template>
-  <b-card :title="$t('Create a new Task Type')">
+  <b-card :title="$t('Create a new Task Type')" class="card-body-create">
     <b-input-group>
-      <Swatches 
+      <b-input-group-append>
+        <Swatches 
         v-model="item.color" 
         colors="text-advanced" 
         class="swatches-input" 
         popover-to max-height="400"></Swatches>
-      <b-input-group-append>
         <b-form-input 
         v-model="item.code" 
         :placeholder="$t('Task type code')"
