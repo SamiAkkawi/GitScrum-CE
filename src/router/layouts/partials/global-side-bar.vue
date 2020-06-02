@@ -1,6 +1,5 @@
 <script>
 import Axios from '@utils/axios'
-import ProjectMenuSettings from '@layouts/partials/project-menu-settings'
 import ProjectVisibility from '@components/projects/project-visibility'
 import ListUsers from '@components/utils/list-users'
 import ProjectBoardFilters from '@layouts/partials/header-board-filters'
@@ -11,7 +10,6 @@ import { SidebarMenu } from 'vue-sidebar-menu'
 
 export default {
   components: {
-    ProjectMenuSettings,
     ProjectVisibility,
     ShareableBoard,
     ListUsers,

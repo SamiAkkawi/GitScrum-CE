@@ -3,10 +3,9 @@ import Axios from '@utils/axios'
 import ButtonLoading from '@components/utils/button-loading'
 import TitleLoading from '@components/utils/title-loading'
 import { taskManager, modalManager } from '@state/helpers'
-import ProjectTaskTypes from '@components/projects/modal/settings/project-task-types'
 
 export default {
-  components: { ButtonLoading, TitleLoading, ProjectTaskTypes },
+  components: { ButtonLoading, TitleLoading },
   props: {
     task: {
       type: Object,
@@ -106,7 +105,7 @@ export default {
         <TitleLoading :loading="loading" :title="$t('Task Type')"></TitleLoading>
         
         <div class="dropdown-header-icons">
-          <div @click="modal('projectTaskTypes')">
+          <div>
             
             <font-awesome-icon :icon="['far', 'plus-square']" />
             <span>{{ $t('Create Task Type') }}</span>
@@ -144,7 +143,6 @@ export default {
       </div>
     </div>
   </b-dropdown>
-  <ProjectTaskTypes></ProjectTaskTypes>
 </div>
 
 </template>

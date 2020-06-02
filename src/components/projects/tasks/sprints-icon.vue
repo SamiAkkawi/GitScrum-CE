@@ -239,7 +239,6 @@ export default {
       ></b-spinner>
     </div>
   </b-dropdown>
-  <ProjectTaskTypes></ProjectTaskTypes>
 </div>
 
 

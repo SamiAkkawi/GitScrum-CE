@@ -1,6 +1,5 @@
 <script>
 import Axios from '@utils/axios'
-import ProjectMenuSettings from '@layouts/partials/project-menu-settings'
 import ProjectVisibility from '@components/projects/project-visibility'
 import ListUsers from '@components/utils/list-users'
 import ProjectBoardFilters from '@layouts/partials/header-board-filters'
@@ -11,7 +10,6 @@ import { SidebarMenu } from 'vue-sidebar-menu'
 
 export default {
   components: {
-    ProjectMenuSettings,
     ProjectVisibility,
     ListUsers,
     ProjectBoardFilters,
@@ -277,9 +275,6 @@ export default {
               <span class="vsm--title">{{ $t('Project Settings') }}</span>
             </router-link>
           </div>
-          <ProjectMenuSettings
-            v-if="authorize('settings', 'read')"
-            class="d-none d-sm-block" ></ProjectMenuSettings>
         </div>
       </div>
     </SidebarMenu>
