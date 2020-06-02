@@ -21,26 +21,8 @@ export default {
       currentCompany: JSON.parse(localStorage.getItem('CURRENT_COMPANY')),
     }
   },
-  watch:{
-
-    templateSelected(){
-      
-      //this.templateSelected.is_default = Boolean(this.templateSelected.is_default)
-      console.log(this.templateSelected.is_default)
-
-    }
-
-  },
-  mounted(){
-    //console.log(this.templateSelected)
-    //this.templateSelected.is_default = Boolean(this.templateSelected.is_default)
-    //console.log(this.templateSelected.is_default)
-  },
-  
   methods: {
-
     getTitle(type){
-
       switch (type) {
         case "workflow":
           return this.$t('Workflow')
@@ -57,7 +39,6 @@ export default {
         default:
           return this.$t('Workflow');
       }
-
     },
 
     getComponentName(type, sulfix){
@@ -177,14 +158,11 @@ export default {
       </b-row>
       <b-row>
         <b-col cols="12">
-           <component 
-            :is="getComponentName(component, 'create')" 
-            :current-company="currentCompany"
-            :template-selected="templateSelected"></component>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12">
+          <component 
+          :is="getComponentName(component, 'create')" 
+          :current-company="currentCompany"
+          :template-selected="templateSelected"></component>
+          <hr class="px-1">
           <component 
             :is="getComponentName(component, 'list')" 
             :current-company="currentCompany"

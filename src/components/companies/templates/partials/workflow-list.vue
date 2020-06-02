@@ -163,7 +163,7 @@ export default {
 </script>
 
 <template>
-  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="tbody" ghost-class="ghost" @change="updateItemPosition($event)">
+  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="div" ghost-class="ghost" @change="updateItemPosition($event)">
     <b-card v-for="item in templateSelected.items" :key="item.id">
       <template v-slot:header>
         <b-row class="cursor-grab">

@@ -381,6 +381,13 @@ a.badge-secondary.focus {
     margin-left: 10px;
 }
 
+.card-header {
+    padding: 0.40rem 1.25rem;
+    margin-bottom: 0;
+    background-color: $grey-50 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
 
 /*
 
@@ -388,14 +395,14 @@ Scrollbar
 
 */
 
-::-webkit-scrollbar {
+div::-webkit-scrollbar {
     width: 8px;
 }
 
 
 /* Track */
 
-::-webkit-scrollbar-track {
+div::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     -webkit-border-radius: 6px;
     border-radius: 6px;
@@ -404,14 +411,14 @@ Scrollbar
 
 /* Handle */
 
-::-webkit-scrollbar-thumb {
+div::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 6px;
     background: $grey-700;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-::-webkit-scrollbar-thumb:window-inactive {
+div::-webkit-scrollbar-thumb:window-inactive {
     background: $grey-300;
 }
 

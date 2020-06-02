@@ -90,7 +90,7 @@ export default {
     <b-input-group-append>
       <b-form-input 
       v-model="item.title" 
-      :placeholder="$t('User Story Priority name')"
+      :placeholder="$t('Priority name')"
       type="text" 
       maxlength="25"
       size="sm"></b-form-input>

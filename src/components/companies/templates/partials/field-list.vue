@@ -1,14 +1,10 @@
 <script>
 import Axios from '@utils/axios'
 import Draggable from 'vuedraggable'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+import ButtonLoading from '@components/utils/button-loading'
 
 export default {
-  components: {
-    Draggable,
-    vSelect,
-  },
+  components: { Draggable, ButtonLoading },
   props: {
     templateSelected: {
       type: Object,
@@ -31,24 +27,21 @@ export default {
   },
   data() {
     return {
-      ready: false,
+      loading: false,
       newSelectableOptionName: [],
       customFieldOptions : [
-        { label: 'Small text', code: 'text' },
-        { label: 'Long text', code: 'textarea' },
-        { label: 'Checkbox', code: 'checkbox' },
-        { label: 'Selectable options', code: 'select' },
+        { text: 'Small text', value: 'text' },
+        { text: 'Long text', value: 'textarea' },
+        { text: 'Checkbox', value: 'checkbox' },
+        { text: 'Selectable options', value: 'select' },
       ]
     }
   },
   mounted() {
+    
     this.templateSelected.items.forEach((item) => {
       this.appendParam(item)
-      if (typeof item.type === 'string') {
-        this.prepareType(item)
-      }
     })
-    this.ready = true
   },
   methods: {
     getUrl(id) {
@@ -90,7 +83,7 @@ export default {
 
     appendCompanyParam(item) {
       let optionArray = []
-      if (item.meta && item.meta !== null && item.meta.length) {
+      if (item.meta && item.meta.length) {
         optionArray = item.meta.split(',')
         optionArray.forEach((opt, key) => {
           optionArray[key] = {
@@ -117,24 +110,11 @@ export default {
       return optionArray
     },
 
-    prepareType(item) {
-      for (let i = 0; i < this.customFieldOptions.length; i++) {
-        if (item.type === this.customFieldOptions[i].code) {
-          item.type = this.customFieldOptions[i]
-          break
-        }
-      }
-      return item
-    },
-
     updateItem(params, id) {
       let url = this.getUrl(id)
       Axios()
         .put(url, params)
         .then((response) => {})
-        .catch((e) => {
-          console.error(e)
-        })
     },
 
     deleteItem(item) {
@@ -175,32 +155,20 @@ export default {
       )
     },
 
-    updateItemType(itemType, item) {
-      if (itemType.code === 'select') {
+    updateItemType(type, item) {
+      
+      if (type === 'select') {
         this.$set(item, 'optionCustomFieldSelect', [])
       }
 
-      this.updateItem(
-        {
-          type: itemType.code,
-        },
-        item.id
-      )
+      this.updateItem( { type: type }, item.id )
     },
 
     updateSelectableOption(item) {
-      let meta = null
-      if (!this.projectSlug) {
-        meta = this.buildCompanyMeta(item.optionCustomFieldSelect)
-      } else {
-        meta = this.buildProjectMeta(item.optionCustomFieldSelect)
-      }
-      this.updateItem(
-        {
-          meta: meta,
-        },
-        item.id
-      )
+      
+      let meta = this.buildMeta(item.optionCustomFieldSelect)
+      this.updateItem( { meta: meta }, item.id )
+
     },
 
     addSelectableOption(item) {
@@ -208,8 +176,13 @@ export default {
         id: null,
         name: this.newSelectableOptionName[item.id],
       }
-      item.optionCustomFieldSelect.push(option)
+
+      if ( !item.optionCustomFieldSelect ){
+        item.optionCustomFieldSelect = []
+      }
+
       this.newSelectableOptionName[item.id] = ''
+      item.optionCustomFieldSelect.push(option)
       this.updateSelectableOption(item)
     },
 
@@ -226,7 +199,7 @@ export default {
 
     },
 
-    buildCompanyMeta(selectableOptions) {
+    buildMeta(selectableOptions) {
       let meta = []
       selectableOptions.forEach((opt) => {
         meta.push(opt.name)
@@ -234,127 +207,83 @@ export default {
       return meta.join(',')
     },
 
-    buildProjectMeta(selectableOptions) {
-      
-      let meta = []
-
-      selectableOptions.forEach((opt) => {
-        meta.push(opt.name)
-      })
-
-      return meta.join(',')
-    },
+    getMeta(meta){
+      if (meta){ 
+        return meta.split(',')
+      }
+    }
   },
 }
 </script>
 
 <template>
-  <div class="list-template-items-div">
-    <div class="row" v-if="title">
-      <div class="col-md-12">
-        <h5 class="fw-500 tx-14-px txt-001737 title">
-          {{ $t('Task Custom Fields created') }}
-        </h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-card" v-show="templateSelected.items">
-          <Draggable
-            v-model="templateSelected.items"
-            tag="tbody"
-            ghost-class="ghost"
-            @change="updateItemPosition($event)"
-          >
-            <tr v-for="item in templateSelected.items" :key="item.id">
-              <td style="width: 1530px !important;">
-                <div class="custom-field d-flex justify-content-between mb-10-px">
-                  <div class="flex-grow-1 text-right">
-                    <div class="d-inline-flex nav-item dropdown header-dropdown no-border">
-                      <a class="nav-title dropdown-toggle txt-909CB8" href="javascript:;" data-toggle="dropdown">
-                        <font-awesome-icon :icon="['fa', 'ellipsis-h']" style="font-size:18px; color: #909CB8;" />
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right navbar-dropdown" style="width:100px">
-                        <div class="mt-10-px">
-                          <a href="javascript:;" class="header-dropdown-item" @click="deleteItem(item)">
-                            <span>{{ $t('Delete') }}</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group-swatches">
-                  <div class="input-group col-xs-12">
-                    <b-form-input v-model="item.name" @change="updateItemName($event, item.id)"></b-form-input>
-                    <div class="v-select-sm ml-5-px only-left-border-radius">
-                      <v-select
-                        v-model="item.type"
-                        style="min-width:240px"
-                        :options="customFieldOptions"
-                        :clearable="false"
-                        :searchable="false"
-                        @input="updateItemType($event, item)"
-                      ></v-select>
-                    </div>
-                  </div>
-                  <div v-if="item.type.code === 'select'">
-                    <div class="selectable-options mt-20-px">
-                      <div class="selectable-options-create">
-                        <div class="item-input d-flex">
-                          <input
-                            v-model="newSelectableOptionName[item.id]"
-                            class="form-control mr-15-px"
-                            :placeholder="$t('Option label name')"
-                            type="text"
-                          />
-                          <font-awesome-icon
-                            :icon="['far', 'plus-circle']"
-                            class="txt-464DEE"
-                            style="height: 32px; cursor: pointer;"
-                            @click="addSelectableOption(item)"
-                          />
-                        </div>
-                      </div>
-                      <div class="selectable-options-list">
-                        <div v-if="item.optionCustomFieldSelect && item.optionCustomFieldSelect.length">
-                          <span class="txt-68748F tx-12-px fw-500 sub-title">
-                            {{ $t('Options List') }}
-                          </span>
-                          <hr class="m-0 mt-10-px" />
-                          <div v-for="option in item.optionCustomFieldSelect" :key="option.id">
-                            <div class="item-input d-flex mt-10-px">
-                              <input
-                                v-model="option.name"
-                                class="form-control mr-15-px"
-                                :placeholder="$t('Option label name')"
-                                type="text"
-                                @change="updateSelectableOption(item)"
-                              />
-                              <font-awesome-icon
-                                @click="delSelectableOption(item, option)"
-                                :icon="['far', 'minus-circle']"
-                                class="txt-A2B3CA"
-                                style="height: 32px; cursor: pointer;"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div v-else class="alert alert-info m-0">
-                          {{ $t('List without options') }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </Draggable>
-        </table>
-        <div v-show="!templateSelected.items.length" class="alert alert-info">
-          <span> {{ $t('List without Items') }} </span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="div" ghost-class="ghost" @change="updateItemPosition($event)">
+    <b-card v-for="item in templateSelected.items" :key="item.id">
+      <template v-slot:header>
+        <b-row class="cursor-grab">
+          <b-col cols="9">
+            <strong>{{ $t('Custom Field') }}</strong>
+          </b-col>
+          <b-col cols="3" class="text-right">
+            <a href="javascript:;" class="card-delete-hover" @click="deleteItem(item)">
+              <span>{{ $t('Delete') }}</span>
+            </a>
+          </b-col>
+        </b-row>
+      </template>
+      <b-card-text>
+        <b-input-group>
+          <b-form-select 
+          v-model="item.type" 
+          :options="customFieldOptions" 
+          size="sm" 
+          class="mr-2" 
+          @change="updateItemType($event, item)"></b-form-select>
+          <b-form-input 
+          v-model="item.name" 
+          :placeholder="$t('Field name')"
+          type="text" 
+          maxlength="25"
+          size="sm"
+          style="border-radius:4px !important"
+          class="mr-1"
+          @change="updateItemName($event, item.id)"></b-form-input>
+        </b-input-group>
+        <b-input-group v-if="item.type === 'select'" class="mt-2">
+          <b-form-input 
+          v-model="newSelectableOptionName[item.id]" 
+          :placeholder="$t('Selectable name')"
+          type="text" 
+          maxlength="25"
+          size="sm"></b-form-input>
+          <ButtonLoading
+          :loading="loading"
+          type="btn-sm"
+          icon="plus"
+          @action="addSelectableOption(item)"></ButtonLoading>
+        </b-input-group>
+        <b-row v-if="item.optionCustomFieldSelect && item.type === 'select'" align-v="center" class="mt-2">
+          <b-col>
+              <div class="border-bottom mt-2 mb-2">
+                {{ $t('Selectable Options') }}
+              </div>
+              <b-input-group v-for="option in item.optionCustomFieldSelect" :key="option.id" class="mb-2">
+                <b-form-input 
+                v-model="option.name"
+                :placeholder="$t('Selectable name')"
+                type="text" 
+                maxlength="25"
+                size="sm"
+                style="border-radius:4px !important"
+                class="mr-2"
+                @change="updateSelectableOption(item)"></b-form-input>
+                <b-link @click="delSelectableOption(item, option)">
+                  <font-awesome-icon :icon="['far', 'trash-alt']" />
+                </b-link>
+              </b-input-group>
+          </b-col>
+        </b-row>
+      </b-card-text>
+    </b-card>
+  </Draggable>
 </template>

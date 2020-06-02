@@ -28,7 +28,7 @@ export default {
 
 <template>
   <b-card>
-    <b-card-title>{{ $t('Templates available in your company') }}</b-card-title>
+    <b-card-title>{{ $t('Available templates') }}</b-card-title>
     <b-card-text>
       <div
         v-for="template in templates"

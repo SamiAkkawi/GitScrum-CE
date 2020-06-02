@@ -61,9 +61,6 @@ export default {
       Axios()
         .put(url, params)
         .then((response) => {})
-        .catch((e) => {
-          console.error(e)
-        })
     },
 
     deleteItem(item) {
@@ -117,76 +114,50 @@ export default {
 </script>
 
 <template>
-  <div class="list-template-items-div">
-    <div class="row" v-if="title">
-      <div class="col-md-12">
-        <h5 class="fw-500 tx-14-px txt-001737 title">
-          {{ $t('User Story Priority created') }}
-        </h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-card" v-if="templateSelected.items.length">
-          <Draggable
-            v-model="templateSelected.items"
-            tag="tbody"
-            ghost-class="ghost"
-            @change="updateItemPosition($event)"
-          >
-            <tr v-for="item in templateSelected.items" :key="item.id">
-              <td style="width: 1530px !important;">
-                <div class="user-story-priority d-flex justify-content-between mb-10-px">
-                  <div>
-                    <b-form-radio
-                      v-model="item.default"
-                      class="txt-68748F"
-                      value="true"
-                      name="typeDefault"
-                      @change="updateItemDefault(1, item.id)"
-                    >
-                      {{ $t('Default User Story Priority') }}
-                    </b-form-radio>
-                  </div>
-                  <div class="flex-grow-1 text-right">
-                    <div class="d-inline-flex nav-item dropdown header-dropdown">
-                      <a class="nav-title dropdown-toggle txt-909CB8" href="javascript:;" data-toggle="dropdown">
-                        <font-awesome-icon :icon="['fa', 'ellipsis-h']" style="font-size:18px; color: #909CB8;" />
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right navbar-dropdown" style="width:100px">
-                        <div class="mt-10-px">
-                          <a href="javascript:;" class="header-dropdown-item" @click="deleteItem(item)">
-                            <span>{{ $t('Delete') }}</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group-swatches">
-                  <div class="input-group col-xs-12">
-                    <Swatches
-                      v-model="item.color"
-                      colors="text-advanced"
-                      popover-to
-                      max-height="400"
-                      @close="updateItemColor($event, item.id)"
-                    ></Swatches>
-                    <b-form-input
-                      class="only-right-border-radius"
-                      v-model="item.title"
-                      @change="updateItemTitle($event, item.id)"
-                    ></b-form-input>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </Draggable>
-        </table>
-        <div v-else class="alert alert-info">
-          <span> {{ $t('List without Items') }} </span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="div" ghost-class="ghost" @change="updateItemPosition($event)">
+    <b-card v-for="item in templateSelected.items" :key="item.id">
+      <template v-slot:header>
+        <b-row class="cursor-grab">
+          <b-col cols="9">
+            <b-form-radio
+              v-model="item.default"
+              class="txt-68748F"
+              value="true"
+              name="typeDefault"
+              @change="updateItemDefault(1, item.id)">
+              {{ $t('Default Priority') }} 
+              <font-awesome-icon 
+                v-b-popover.hover.top="$t('Whenever you create a task without choosing a user story priority. This will be the default user story priority.')" 
+                :icon="['fal', 'question-circle']" 
+                class="ml-2" />
+            </b-form-radio>
+          </b-col>
+          <b-col cols="3" class="text-right">
+            <a href="javascript:;" class="card-delete-hover" @click="deleteItem(item)">
+              <span>{{ $t('Delete') }}</span>
+            </a>
+          </b-col>
+        </b-row>
+      </template>
+      <b-card-text>
+        <b-input-group>
+          <Swatches 
+          v-model="item.color" 
+          colors="text-advanced" 
+          class="swatches-input" 
+          popover-to max-height="400"
+          @close="updateItemColor($event, item.id)"></Swatches>
+          <b-form-input 
+          v-model="item.title" 
+          :placeholder="$t('Priority name')"
+          type="text" 
+          maxlength="25"
+          size="sm"
+          style="border-radius:4px !important"
+          class="mr-1"
+          @change="updateItemTitle($event, item.id)"></b-form-input>
+        </b-input-group>
+      </b-card-text>
+    </b-card>
+  </Draggable>
 </template>

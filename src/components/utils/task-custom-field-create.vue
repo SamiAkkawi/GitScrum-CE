@@ -267,7 +267,7 @@ export default {
             <div class="selectable-options-list">
               <div v-if="newTaskCustomField.optionCustomFieldSelect.length">
                 <span class="txt-68748F tx-12-px fw-500 sub-title">
-                  {{ $t('Options List') }}
+                  {{ $t('Selectable Options') }}
                 </span>
                 <hr class="m-0 mt-10-px" />
                 <div v-for="option in newTaskCustomField.optionCustomFieldSelect" :key="option.id">

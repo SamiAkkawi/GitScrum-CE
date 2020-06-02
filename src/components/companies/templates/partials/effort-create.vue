@@ -1,11 +1,9 @@
 <script>
 import Axios from '@utils/axios'
-import Swatches from 'vue-swatches'
 import ButtonLoading from '@components/utils/button-loading'
-import 'vue-swatches/dist/vue-swatches.min.css'
 
 export default {
-  components: { Swatches, ButtonLoading },
+  components: { ButtonLoading },
   props: {
     currentCompany: {
       type: Object,

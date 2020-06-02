@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      btnLoading: false,
+      loading: false,
       newSelectableOptionName: '',
       item: this.defaultItem(),
       customFieldOptions : [
@@ -67,14 +67,14 @@ export default {
       if (this.item.meta.length) {
         return {
           name: this.item.title,
-          type: this.item.type.code,
+          type: this.item.type,
           meta: this.item.meta,
         }
       }
 
       return {
         name: this.item.title,
-        type: this.item.type.code,
+        type: this.item.type,
       }
     },
 
@@ -107,22 +107,20 @@ export default {
       ) {
         this.buildMeta()
       }
-      this.btnLoading = true
+      this.loading = true
       let url = this.getUrl()
+
+      console.log(this.prepareTaskCustomFieldObject())
 
       Axios()
         .post(url, this.prepareTaskCustomFieldObject())
         .then((response) => {
-          this.btnLoading = false
+          this.loading = false
           let item = response.data.data
           this.appendParam(item)
           this.templateSelected.items.push(this.prepareType(item))
 
           this.item = this.defaultItem()
-        })
-        .catch((e) => {
-          this.btnLoading = false
-          // console.error(e)
         })
     },
 
@@ -189,106 +187,87 @@ export default {
 
     delSelectableOption(option) {
 
-      this.$bvModal.msgBoxConfirm(this.$t('Do you really want to delete?'), this.msgBoxConfirmConfig() )
-      .then(value => {
-        
-        if(value){
-          this.item.optionCustomFieldSelect.splice(
-            this.item.optionCustomFieldSelect.indexOf(option),
-            1
-          )
-        }
+      this.item.optionCustomFieldSelect.splice(
+        this.item.optionCustomFieldSelect.indexOf(option),
+        1
+      )
 
-      })
     },
   },
 }
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="create-template-item-div">
-        <h5 class="fw-500 tx-14-px txt-001737 title m-0">
-          {{ $t('Create a Task Custom Field') }}
-        </h5>
-        <div class="item-input d-flex mt-10-px">
-          <input
-            v-model="item.title"
-            pattern=".{3,}"
-            required
-            type="text"
-            class="form-control mr-5-px"
-            :placeholder="$t('Custom Field item name')"
-          />
-          <div class="v-select-sm ml-5-px only-left-border-radius">
-            <b-form-select v-model="item.type" :options="customFieldOptions" @input="checkSelected"></b-form-select>
-            
-          </div>
-          <div class="input-group-append">
-            <button
-              v-if="!btnLoading"
-              class="btn btn-sm btn-primary"
-              type="button"
-              :disabled="!item.title || !item.type"
-              @click="addTaskCustomField"
-            >
-              <font-awesome-icon :icon="['fa', 'plus']" />
-            </button>
+  <div>
+    <b-input-group>
+      <b-input-group-append>
+        <b-form-select 
+        v-model="item.type" 
+        :options="customFieldOptions" 
+        size="sm" 
+        class="mr-2" 
+        @input="checkSelected" ></b-form-select>
+        <b-form-input 
+        v-model="item.title" 
+        :placeholder="$t('Custom Field item name')"
+        type="text" 
+        maxlength="25"
+        size="sm"></b-form-input>
+        <ButtonLoading
+        v-if="item.type !== 'select'"
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="addTaskCustomField"></ButtonLoading>
+      </b-input-group-append>
+    </b-input-group>
 
-            <button v-if="btnLoading" class="btn btn-sm btn-primary" type="button">
-              <b-spinner :label="$t('Loading')" small class="title-loading"></b-spinner>
-            </button>
-          </div>
-        </div>
-        <div v-if="item.optionCustomFieldSelectable">
-          <div class="selectable-options mt-20-px">
-            <div class="selectable-options-create">
-              <div class="item-input d-flex">
-                <input
-                  v-model="newSelectableOptionName"
-                  class="form-control mr-15-px"
-                  :placeholder="$t('Option label name')"
-                  type="text"
-                />
-                <font-awesome-icon
-                  :icon="['far', 'plus-circle']"
-                  class="txt-464DEE"
-                  style="height: 32px; cursor: pointer;"
-                  @click="addSelectableOption"
-                />
-              </div>
-            </div>
-            <div class="selectable-options-list">
-              <div v-if="item.optionCustomFieldSelect.length">
-                <span class="txt-68748F tx-12-px fw-500 sub-title">
-                  {{ $t('Options List') }}
-                </span>
-                <hr class="m-0 mt-10-px" />
-                <div v-for="option in item.optionCustomFieldSelect" :key="option.id">
-                  <div class="item-input d-flex mt-10-px">
-                    <input
-                      v-model="option.name"
-                      class="form-control mr-15-px"
-                      :placeholder="$t('Option label name')"
-                      type="text"
-                    />
-                    <font-awesome-icon
-                      @click="delSelectableOption(option)"
-                      :icon="['far', 'minus-circle']"
-                      class="txt-A2B3CA"
-                      style="height: 32px; cursor: pointer;"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div v-else class="alert alert-info m-0">
-                {{ $t('List without options') }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <b-row v-if="item.type === 'select'">
+      <b-col class="col-12 mt-2">
+        <span>{{ $t('Add items to selectable option') }}</span>
+        <b-input-group>
+          <b-input-group-append>
+            <b-form-input 
+            v-model="newSelectableOptionName" 
+            :placeholder="$t('Selectable option name')"
+            type="text" 
+            maxlength="25"
+            size="sm"></b-form-input>
+            <ButtonLoading
+            :loading="loading"
+            type="btn-sm"
+            icon="plus"
+            @action="addSelectableOption"
+            ></ButtonLoading>
+          </b-input-group-append>
+        </b-input-group>
+      </b-col>
+    </b-row>
+    <b-row v-if="item.type === 'select'">
+      <b-col class="col-12 mt-2">
+        <b-card v-if="item.optionCustomFieldSelect.length">
+          <b-input-group v-for="option in item.optionCustomFieldSelect" :key="option.id" class="mb-2">
+            <b-input-group-append>
+              <b-form-input 
+              v-model="option.name" 
+              :placeholder="$t('Selectable option name')"
+              type="text" 
+              maxlength="25"
+              size="sm"></b-form-input>
+              <ButtonLoading
+              :loading="loading"
+              type="btn-sm"
+              icon="minus"
+              @action="delSelectableOption(option)"></ButtonLoading>
+            </b-input-group-append>
+          </b-input-group>
+        </b-card>
+        <ButtonLoading
+          :loading="loading"
+          type="btn-md"
+          :title="$t('Add Custom Field')"
+          @action="addTaskCustomField"></ButtonLoading>
+      </b-col>
+    </b-row>
   </div>
 </template>

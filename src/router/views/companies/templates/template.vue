@@ -87,13 +87,13 @@ export default {
           <SideBar></SideBar>
         </b-col>
         <b-col cols="9" offset-lg="1">
-          <MessageTemplate :template="templateType"></MessageTemplate>
           <b-row>
             <b-col cols="4">
               <CreateTemplate :template="templateType" @create="createTemplate"></CreateTemplate>
               <ListTemplate v-if="!loading" :templates="templates" @selected="selected"></ListTemplate>
             </b-col>
             <b-col cols="8">
+              <MessageTemplate :template="templateType"></MessageTemplate>
               <TemplateSelected
                 v-if="!loading"
                 :template-selected="templateSelected" 
