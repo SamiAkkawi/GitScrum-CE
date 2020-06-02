@@ -2,7 +2,7 @@
 import Layout from '@layouts/tpl-main-project'
 import appConfig from '@src/app.config'
 import Axios from '@utils/axios'
-import Sidebar from '@components/projects/settings/side-bar'
+import SideBar from '@components/projects/settings/side-bar'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
 import vue2Dropzone from 'vue2-dropzone'
@@ -17,7 +17,7 @@ export default {
   },
   components: { 
     Layout, 
-    Sidebar,
+    SideBar,
     TitleLoading, 
     ButtonLoading, 
     vueDropzone: vue2Dropzone,

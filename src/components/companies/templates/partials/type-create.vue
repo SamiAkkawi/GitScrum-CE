@@ -37,31 +37,27 @@ export default {
       }
     },
 
-    getUrl() {
-      let url = ''
+    getEndpoint(){
 
-      if (this.projectSlug) {
-        url += 'project-'
-      }
+      let url = 'templates/type/' + 
+        this.templateSelected.id + 
+        '/items/?company_slug=' + 
+        this.currentCompany.slug
 
-      url += 'templates/type/'
-
-      if (!this.projectSlug) {
-        url += this.templateSelected.id + '/items/'
-      }
-
-      url += '?company_slug=' + this.currentCompany.slug
-
-      if (this.projectSlug) {
-        url += '&project_slug=' + this.projectSlug
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/type/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
       }
 
       return url
+
     },
 
     addItem() {
       this.loading = true
-      let url = this.getUrl()
+      let url = this.getEndpoint()
       Axios()
         .post(url, {
           code: this.item.code,
@@ -80,33 +76,35 @@ export default {
 </script>
 
 <template>
-  <b-input-group>
-    <Swatches 
-      v-model="item.color" 
-      colors="text-advanced" 
-      class="swatches-input" 
-      popover-to max-height="400"></Swatches>
-    <b-input-group-append>
-      <b-form-input 
-      v-model="item.code" 
-      :placeholder="$t('Task type code')"
-      type="text" 
-      style="width:150px;border-radius:4px !important;"
-      class="mr-2"
-      maxlength = "4"
-      size="sm"></b-form-input>
-      <b-form-input 
-      v-model="item.title" 
-      :placeholder="$t('Task type name')"
-      type="text" 
-      maxlength="25"
-      size="sm"></b-form-input>
-      <ButtonLoading
-      :loading="loading"
-      type="btn-sm"
-      icon="plus"
-      @action="addItem"
-      ></ButtonLoading>
-    </b-input-group-append>
-  </b-input-group>
+  <b-card :title="$t('Create a new Task Type')">
+    <b-input-group>
+      <Swatches 
+        v-model="item.color" 
+        colors="text-advanced" 
+        class="swatches-input" 
+        popover-to max-height="400"></Swatches>
+      <b-input-group-append>
+        <b-form-input 
+        v-model="item.code" 
+        :placeholder="$t('Task type code')"
+        type="text" 
+        style="width:150px;border-radius:4px !important;"
+        class="mr-2"
+        maxlength = "4"
+        size="sm"></b-form-input>
+        <b-form-input 
+        v-model="item.title" 
+        :placeholder="$t('Task type name')"
+        type="text" 
+        maxlength="25"
+        size="sm"></b-form-input>
+        <ButtonLoading
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="addItem"
+        ></ButtonLoading>
+      </b-input-group-append>
+    </b-input-group>
+  </b-card>
 </template>

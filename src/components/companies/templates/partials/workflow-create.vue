@@ -37,10 +37,29 @@ export default {
       }
     },
 
+    getEndpoint(){
+
+      let url = 'templates/workflow/' + 
+        this.templateSelected.id + 
+        '/items/?company_slug=' + 
+        this.currentCompany.slug
+
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/workflow/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
+      }
+
+      return url
+
+    },
+
     addItem() {
       this.loading = true
+      let url = this.getEndpoint()
       Axios()
-        .post('templates/workflow/' + this.templateSelected.id + '/items/?company_slug=' + this.currentCompany.slug, {
+        .post(url, {
           title: this.item.title,
           color: this.item.color,
           type: 'issues',
@@ -56,25 +75,27 @@ export default {
 </script>
 
 <template>
-  <b-input-group>
-    <Swatches 
-      v-model="item.color" 
-      colors="text-advanced" 
-      class="swatches-input" 
-      popover-to max-height="400"></Swatches>
-    <b-input-group-append>
-      <b-form-input 
-      v-model="item.title" 
-      :placeholder="$t('Stage name')"
-      type="text" 
-      maxlength="25"
-      size="sm"></b-form-input>
-      <ButtonLoading
-      :loading="loading"
-      type="btn-sm"
-      icon="plus"
-      @action="addItem"
-      ></ButtonLoading>
-    </b-input-group-append>
-  </b-input-group>
+  <b-card :title="$t('Create a new Workflow Stage')">
+    <b-input-group>
+      <Swatches 
+        v-model="item.color" 
+        colors="text-advanced" 
+        class="swatches-input" 
+        popover-to max-height="400"></Swatches>
+      <b-input-group-append>
+        <b-form-input 
+        v-model="item.title" 
+        :placeholder="$t('Stage name')"
+        type="text" 
+        maxlength="25"
+        size="sm"></b-form-input>
+        <ButtonLoading
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="addItem"
+        ></ButtonLoading>
+      </b-input-group-append>
+    </b-input-group>
+  </b-card>
 </template>

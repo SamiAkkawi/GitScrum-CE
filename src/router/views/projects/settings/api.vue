@@ -1,8 +1,8 @@
 <script>
 import Layout from '@layouts/tpl-main-project'
 import Axios from '@utils/axios'
+import SideBar from '@components/projects/settings/side-bar'
 import TitleLoading from '@components/utils/title-loading'
-import ButtonLoading from '@components/utils/button-loading'
 import { modalManager } from '@state/helpers'
 
 export default {
@@ -10,7 +10,7 @@ export default {
     title: 'API Management',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, ButtonLoading },
+  components: { Layout, TitleLoading, SideBar },
   data() {
     return {
       loading: true,
@@ -119,6 +119,8 @@ export default {
       <b-container>
         <b-row>
           <b-col cols="3">
+            <SideBar></SideBar>
+            <!--
             <b-card>
               <h4 class="h5">{{ $t('Stats') }}</h4>
               <div v-if="statsTotal" class="mt-20px">
@@ -133,6 +135,7 @@ export default {
                 {{ $t('No data available yet') }}
               </div>
             </b-card>
+            -->
           </b-col>
           <b-col cols="9">
             <b-card>

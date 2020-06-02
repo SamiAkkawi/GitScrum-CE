@@ -2,20 +2,17 @@
 import Axios from '@utils/axios'
 import Draggable from 'vuedraggable'
 import Swatches from 'vue-swatches'
-import vSelect from 'vue-select'
-
 import 'vue-swatches/dist/vue-swatches.min.css'
-import 'vue-select/dist/vue-select.css'
 
 export default {
-  components: { Draggable, Swatches, vSelect },
+  components: { Draggable, Swatches },
   props: {
     currentCompany: {
       type: Object,
       required: true,
     },
     templateSelected: {
-      type: Object,
+      type: Object || Array,
       required: true,
     },
     projectSlug: {
@@ -23,19 +20,6 @@ export default {
       required: false,
       default: null,
     },
-    title: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-  },
-  watch: {
-    templateSelected() {
-      this.convertItemOptions()
-    },
-  },
-  created() {
-    this.convertItemOptions()
   },
   data() {
     return {
@@ -56,7 +40,37 @@ export default {
       emailExpression: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     }
   },
+  watch: {
+    templateSelected() {
+      this.convertItemOptions()
+    },
+  },
+  created() {
+    if ( !this.templateSelected.items ){
+      this.templateSelected.items = this.templateSelected
+    }
+    this.convertItemOptions()
+  },
   methods: {
+
+    getEndpoint(id){
+
+      let url = 'templates/workflow/' + 
+        this.templateSelected.id + 
+        '/items/' + id + '/?company_slug=' + 
+        this.currentCompany.slug
+
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/workflow/' + id + '/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
+      }
+
+      return url
+
+    },
+
     convertItemOptions() {
       this.templateSelected.items.forEach((item) => {
         item = this.setItemState(item)
@@ -78,19 +92,8 @@ export default {
 
     updateItem(params, id) {
       Axios()
-        .put(
-          'templates/workflow/' +
-            this.templateSelected.id +
-            '/items/' +
-            id +
-            '/?company_slug=' +
-            this.currentCompany.slug,
-          params
-        )
+        .put( this.getEndpoint(id), params )
         .then((_) => {})
-        .catch((e) => {
-          console.error(e)
-        })
     },
 
     deleteItem(item) {
@@ -100,14 +103,7 @@ export default {
         
         if(value){
           Axios()
-          .delete(
-            'templates/workflow/' +
-              this.templateSelected.id +
-              '/items/' +
-              item.id +
-              '/?company_slug=' +
-              this.currentCompany.slug
-          )
+          .delete( this.getEndpoint(item.id) )
           .then((response) => {
             this.templateSelected.items.splice(this.templateSelected.items.indexOf(item), 1)
           })
@@ -163,12 +159,18 @@ export default {
 </script>
 
 <template>
-  <Draggable v-if="templateSelected.items.length" v-model="templateSelected.items" tag="div" ghost-class="ghost" @change="updateItemPosition($event)">
+  <Draggable 
+    v-if="templateSelected.items.length" 
+    v-model="templateSelected.items" 
+    :disabled="$route.params.projectSlug" 
+    tag="div" 
+    ghost-class="ghost" 
+    @change="updateItemPosition($event)">
     <b-card v-for="item in templateSelected.items" :key="item.id">
       <template v-slot:header>
-        <b-row class="cursor-grab">
+        <b-row :class="{ ' cursor-grab ' : !$route.params.projectSlug }">
           <b-col cols="9">
-            <b-form-radio
+            <b-form-radio 
               v-model="item.default"
               class="txt-68748F"
               value="true"
@@ -207,7 +209,7 @@ export default {
           @change="updateItemTitle($event, item.id)"></b-form-input>
           <b-form-select 
           v-model="item.state.value" 
-          :options="stateOptions" 
+          :options="stateOptions"
           size="sm" 
           @change="updateState($event, item.id)"></b-form-select>
         </b-input-group>

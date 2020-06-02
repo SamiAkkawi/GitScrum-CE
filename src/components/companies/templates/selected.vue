@@ -1,10 +1,7 @@
 <script>
 import Axios from '@utils/axios'
-//import TaskWorkflowCreate from '@components/utils/task-workflow-create'
-import TaskWorkflowList from '@components/utils/task-workflow-list'
 
 export default {
-  components: { TaskWorkflowList },
   props: {
     templateSelected: {
       type: Object,
@@ -22,6 +19,7 @@ export default {
     }
   },
   methods: {
+    
     getTitle(type){
       switch (type) {
         case "workflow":
@@ -112,10 +110,9 @@ export default {
 </script>
 
 <template>
-  <b-card>
-    <b-card-title>{{ getTitle(component) }}</b-card-title>
-    <b-card-text>
-      <b-row>
+  <b-card :title="getTitle(component)">
+     <b-card-text>
+      <b-row v-if="templateSelected.name">
         <b-col cols="10">
           <b-form-input 
             v-model="templateSelected.name" 
@@ -130,7 +127,7 @@ export default {
           </b-link>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="templateSelected.name" class="pb-4">
         <b-col cols="12" class="mt-3">
           <b-form-checkbox
             v-model="templateSelected.is_default"
@@ -149,11 +146,6 @@ export default {
             @change="updateIsPrivate">
             {{ $t('Share this Template on GitScrum Marketplace') }}
           </b-form-checkbox>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12">
-          <hr>
         </b-col>
       </b-row>
       <b-row>

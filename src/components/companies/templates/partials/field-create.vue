@@ -32,6 +32,11 @@ export default {
       ]
     }
   },
+  created() {
+    if ( !this.templateSelected.items ){
+      this.templateSelected.items = this.templateSelected
+    }
+  },
   methods: {
     defaultItem() {
       return {
@@ -78,26 +83,22 @@ export default {
       }
     },
 
-    getUrl() {
-      let url = ''
+    getEndpoint(){
 
-      if (this.projectSlug) {
-        url += 'project-'
-      }
+      let url = 'templates/field/' + 
+        this.templateSelected.id + 
+        '/items/?company_slug=' + 
+        this.currentCompany.slug
 
-      url += 'templates/field/'
-
-      if (!this.projectSlug) {
-        url += this.templateSelected.id + '/items/'
-      }
-
-      url += '?company_slug=' + this.currentCompany.slug
-
-      if (this.projectSlug) {
-        url += '&project_slug=' + this.projectSlug
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/field/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
       }
 
       return url
+
     },
 
     addTaskCustomField() {
@@ -108,9 +109,7 @@ export default {
         this.buildMeta()
       }
       this.loading = true
-      let url = this.getUrl()
-
-      console.log(this.prepareTaskCustomFieldObject())
+      let url = this.getEndpoint()
 
       Axios()
         .post(url, this.prepareTaskCustomFieldObject())

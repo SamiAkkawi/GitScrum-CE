@@ -36,31 +36,27 @@ export default {
       }
     },
 
-    getUrl() {
-      let url = ''
+    getEndpoint(){
 
-      if (this.projectSlug) {
-        url += 'project-'
-      }
+      let url = 'templates/priority/' + 
+        this.templateSelected.id + 
+        '/items/?company_slug=' + 
+        this.currentCompany.slug
 
-      url += 'templates/priority/'
-
-      if (!this.projectSlug) {
-        url += this.templateSelected.id + '/items/'
-      }
-
-      url += '?company_slug=' + this.currentCompany.slug
-
-      if (this.projectSlug) {
-        url += '&project_slug=' + this.projectSlug
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/priority/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
       }
 
       return url
+
     },
 
     addItem() {
       this.loading = true
-      let url = this.getUrl()
+      let url = this.getEndpoint()
       Axios()
         .post(url, {
           title: this.item.title,
@@ -81,25 +77,27 @@ export default {
 </script>
 
 <template>
-  <b-input-group>
-    <Swatches 
-      v-model="item.color" 
-      colors="text-advanced" 
-      class="swatches-input" 
-      popover-to max-height="400"></Swatches>
-    <b-input-group-append>
-      <b-form-input 
-      v-model="item.title" 
-      :placeholder="$t('Priority name')"
-      type="text" 
-      maxlength="25"
-      size="sm"></b-form-input>
-      <ButtonLoading
-      :loading="loading"
-      type="btn-sm"
-      icon="plus"
-      @action="addItem"
-      ></ButtonLoading>
-    </b-input-group-append>
-  </b-input-group>
+  <b-card :title="$t('Create a new User Story Priority')">
+    <b-input-group>
+      <Swatches 
+        v-model="item.color" 
+        colors="text-advanced" 
+        class="swatches-input" 
+        popover-to max-height="400"></Swatches>
+      <b-input-group-append>
+        <b-form-input 
+        v-model="item.title" 
+        :placeholder="$t('Priority name')"
+        type="text" 
+        maxlength="25"
+        size="sm"></b-form-input>
+        <ButtonLoading
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="addItem"
+        ></ButtonLoading>
+      </b-input-group-append>
+    </b-input-group>
+  </b-card>
 </template>

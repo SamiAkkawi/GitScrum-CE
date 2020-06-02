@@ -198,7 +198,7 @@ export default {
         <div class="header-dropdown-topitem">
           <div>
             <div class="mt-5-px pd-b-10">
-              <label>{{ $tc('Project', 1) }}</label>
+              <label>{{ $t('Project') }}</label>
               <v-select v-model="selectedProject" :options="projects" label="label" :clearable="false"></v-select>
             </div>
             <div class="mt-15-px pd-b-10">

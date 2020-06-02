@@ -475,6 +475,16 @@ export default [{
             import ('@views/projects/settings/details')),
     },
 
+    {
+        path: '/:companySlug/:projectSlug/settings/:template',
+        name: 'project.settings.templates',
+        meta: {
+            authRequired: true,
+        },
+        component: () => lazyLoadView(
+            import ('@views/projects/settings/template')),
+    },
+
     // Project Mind Mapping
     {
         path: '/:companySlug/:projectSlug/addons/mind-mapping',

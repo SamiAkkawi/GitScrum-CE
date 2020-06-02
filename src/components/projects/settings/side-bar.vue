@@ -4,23 +4,19 @@ export default {
     return {
       data: [
         {
-          title: this.$t('Company'),
+          title: this.$t('Project'),
         },
         {
-          label: this.$t('Company Details'),
-          route: 'companies.information',
+          label: this.$t('Details'),
+          route: 'project.settings.details',
         },
         {
-          label: this.$t('Team Members'),
-          route: 'companies.teams.index',
+          label: this.$t('API Management'),
+          route: 'project.settings.api-management',
         },
         {
-          label: this.$t('White Label Setup'),
-          route: 'companies.whitelabel.custom-domain',
-        },
-        {
-          label: this.$t('Billing'),
-          route: 'companies.billing',
+          label: this.$t('Integrations'),
+          route: 'projects.integrations',
         },
         {
           space: true,
@@ -29,33 +25,33 @@ export default {
           title: this.$t('Templates'),
         },
         {
-          label: this.$t('Workflows'),
-          route: 'companies.templates',
+          label: this.$t('Workflow'),
+          route: 'project.settings.templates',
           template: 'workflow'
         },
         {
-          label: this.$t('Task Types'),
-          route: 'companies.templates',
+          label: this.$t('Task Type'),
+          route: 'project.settings.templates',
           template: 'type'
         },
         {
-          label: this.$t('Task Efforts'),
-          route: 'companies.templates',
+          label: this.$t('Task Effort'),
+          route: 'project.settings.templates',
           template: 'effort'
         },
         {
-          label: this.$t('Task Custom Fields'),
-          route: 'companies.templates',
+          label: this.$t('Task Custom Field'),
+          route: 'project.settings.templates',
           template: 'field'
         },
         {
-          label: this.$t('Task Checklists'),
-          route: 'companies.templates',
+          label: this.$t('Task Checklist'),
+          route: 'project.settings.templates',
           template: 'checklist'
         },
         {
-          label: this.$t('User Story Priorities'),
-          route: 'companies.templates',
+          label: this.$t('User Story Priority'),
+          route: 'project.settings.templates',
           template: 'priority'
         },
       ],

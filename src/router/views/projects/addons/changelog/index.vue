@@ -166,7 +166,7 @@ export default {
             </div>
             <div class="media">
               <div class="media-body text-right">
-                <label class="tx-dark fw-500">{{ $tc('Project', 2) }}</label>
+                <label class="tx-dark fw-500">{{ $t('Projects') }}</label>
                 <p v-text="completedPercentage() + '% ' + $t('completed')"></p>
               </div>
             </div>

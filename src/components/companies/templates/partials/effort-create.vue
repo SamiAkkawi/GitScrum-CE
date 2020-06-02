@@ -34,31 +34,27 @@ export default {
       }
     },
 
-    getUrl() {
-      let url = ''
+    getEndpoint(){
 
-      if (this.projectSlug) {
-        url += 'project-'
-      }
+      let url = 'templates/effort/' + 
+        this.templateSelected.id + 
+        '/items/?company_slug=' + 
+        this.currentCompany.slug
 
-      url += 'templates/effort/'
-
-      if (!this.projectSlug) {
-        url += this.templateSelected.id + '/items/'
-      }
-
-      url += '?company_slug=' + this.currentCompany.slug
-
-      if (this.projectSlug) {
-        url += '&project_slug=' + this.projectSlug
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/effort/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
       }
 
       return url
+
     },
 
     addItem() {
       this.loading = true
-      let url = this.getUrl()
+      let url = this.getEndpoint()
       Axios()
         .post(url, {
           title: this.item.title,
@@ -75,28 +71,30 @@ export default {
 </script>
 
 <template>
-  <b-input-group>
-    <b-input-group-append>
-      <b-form-input 
-      v-model="item.effort" 
-      :placeholder="$t('Task effort points')"
-      type="number" 
-      style="width:160px;border-radius:4px !important;"
-      class="mr-2"
-      maxlength="6"
-      size="sm"></b-form-input>
-      <b-form-input 
-      v-model="item.title" 
-      :placeholder="$t('Task effort name')"
-      type="text" 
-      maxlength="25"
-      size="sm"></b-form-input>
-      <ButtonLoading
-      :loading="loading"
-      type="btn-sm"
-      icon="plus"
-      @action="addItem"
-      ></ButtonLoading>
-    </b-input-group-append>
-  </b-input-group>
+  <b-card :title="$t('Create a new Effort')">
+    <b-input-group>
+      <b-input-group-append>
+        <b-form-input 
+        v-model="item.effort" 
+        :placeholder="$t('Task effort points')"
+        type="number" 
+        style="width:160px;border-radius:4px !important;"
+        class="mr-2"
+        maxlength="6"
+        size="sm"></b-form-input>
+        <b-form-input 
+        v-model="item.title" 
+        :placeholder="$t('Task effort name')"
+        type="text" 
+        maxlength="25"
+        size="sm"></b-form-input>
+        <ButtonLoading
+        :loading="loading"
+        type="btn-sm"
+        icon="plus"
+        @action="addItem"
+        ></ButtonLoading>
+      </b-input-group-append>
+    </b-input-group>
+  </b-card>
 </template>

@@ -29,42 +29,39 @@ export default {
   data() {
     return {}
   },
+  created() {
+    if ( !this.templateSelected.items ){
+      this.templateSelected.items = this.templateSelected
+    }
+  },
   methods: {
-    getUrl(id) {
-      let url = ''
+    getEndpoint(id){
 
-      if (this.projectSlug) {
-        url += 'project-'
-      }
+      let url = 'templates/priority/' + 
+        this.templateSelected.id + 
+        '/items/' + id + '/?company_slug=' + 
+        this.currentCompany.slug
 
-      url += 'templates/priority/'
-
-      if (!this.projectSlug) {
-        url += this.templateSelected.id + '/items/'
-      }
-
-      if (id) {
-        url += id + '/'
-      }
-
-      url += '?company_slug=' + this.currentCompany.slug
-
-      if (this.projectSlug) {
-        url += '&project_slug=' + this.projectSlug
+      if ( this.$route.params.projectSlug ) {
+        url = 'project-templates/priority/' + id + '/?company_slug=' +
+            this.$route.params.companySlug +
+            '&project_slug=' +
+            this.$route.params.projectSlug
       }
 
       return url
+
     },
 
     updateItem(params, id) {
-      let url = this.getUrl(id)
+      let url = this.getEndpoint(id)
       Axios()
         .put(url, params)
         .then((response) => {})
     },
 
     deleteItem(item) {
-      let url = this.getUrl(item.id)
+      let url = this.getEndpoint(item.id)
       Axios()
         .delete(url)
         .then((response) => {

@@ -1,11 +1,9 @@
 <script>
 import Axios from '@utils/axios'
-import Layout from '@layouts/tpl-main'
-import SideBar from '@components/companies/side-bar'
+import Layout from '@layouts/tpl-main-project'
+import SideBar from '@components/projects/settings/side-bar'
 import TitleLoading from '@components/utils/title-loading'
 import TemplateSelected from '@components/companies/templates/selected'
-import CreateTemplate from '@components/companies/templates/create'
-import ListTemplate from '@components/companies/templates/list'
 import MessageTemplate from '@components/companies/templates/message'
 
 export default {
@@ -13,7 +11,7 @@ export default {
     title: 'Workflow Template',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TemplateSelected, SideBar, TitleLoading, CreateTemplate, ListTemplate, MessageTemplate },
+  components: { Layout, TemplateSelected, SideBar, TitleLoading, MessageTemplate },
   data() {
     return {
       loading: true,
@@ -34,17 +32,19 @@ export default {
   methods: {
     listTemplates() {
       Axios()
-        .get('templates/' + 
+        .get('project-templates/' + 
           this.templateType + 
           '/?company_slug=' + 
-          this.currentCompany.slug)
+          this.currentCompany.slug +
+          '&project_slug=' +
+          this.$route.params.projectSlug)
         .then((response) => {
           
           this.loading = false
           this.templates = response.data.data
-          if ( !this.templateSelected ){
-            this.templateSelected = this.templates[0]
-          }
+
+          console.log(this.templates)
+          this.templateSelected = this.templates
           
         })
     },
@@ -79,28 +79,26 @@ export default {
       ></TitleLoading>
     </template>
     <div slot="content" class="template pt-10px">
-      <b-row>
-        <b-col cols="2">
-          <SideBar></SideBar>
-        </b-col>
-        <b-col cols="9" offset-lg="1">
-          <b-row>
-            <b-col cols="4">
-              <CreateTemplate :template="templateType" @create="createTemplate"></CreateTemplate>
-              <ListTemplate v-if="!loading" :templates="templates" @selected="selected"></ListTemplate>
-            </b-col>
-            <b-col cols="8">
-              <MessageTemplate :template="templateType"></MessageTemplate>
-              <TemplateSelected
-                v-if="!loading"
-                :template-selected="templateSelected" 
-                :component="templateType"
-                @update="update" 
-                @delete="remove"> </TemplateSelected>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
+      <b-container>
+        <b-row>
+          <b-col cols="2">
+            <SideBar></SideBar>
+          </b-col>
+          <b-col cols="9" offset-lg="1">
+            <b-row>
+              <b-col cols="12">
+                <MessageTemplate :template="templateType"></MessageTemplate>
+                <TemplateSelected
+                  v-if="!loading"
+                  :template-selected="templateSelected"
+                  :component="templateType"
+                  @update="update" 
+                  @delete="remove"></TemplateSelected>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </Layout>
 </template>
