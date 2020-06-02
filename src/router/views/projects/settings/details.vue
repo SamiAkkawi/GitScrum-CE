@@ -1,12 +1,10 @@
 <script>
 import Layout from '@layouts/tpl-main-project'
+import appConfig from '@src/app.config'
 import Axios from '@utils/axios'
+import Sidebar from '@components/projects/settings/side-bar'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
-
-import appConfig from '@src/app.config'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import Mentions from '@components/utils/mentions'
@@ -19,9 +17,9 @@ export default {
   },
   components: { 
     Layout, 
+    Sidebar,
     TitleLoading, 
     ButtonLoading, 
-    vSelect,
     vueDropzone: vue2Dropzone,
     Mentions,
     UploadImage 
@@ -35,7 +33,7 @@ export default {
       projectsParents: [],
       projectsStatus: [],
       projectsStatusSelect: 0,
-      projectsParentSelect: [],
+      projectsParentSelect: 0,
       companyName: '',
       projectCode: '',
       projectName: '',
@@ -108,7 +106,7 @@ export default {
         this.projectSprints = this.project.settings.has_sprints
         this.projectsStatusSelect = this.project.status.code
         if (this.project.parent) {
-          this.projectsParentSelect = this.project.parent.name
+          this.projectsParentSelect = this.project.parent.id
         }
     },
 
@@ -127,60 +125,51 @@ export default {
       }
 
       Axios()
-        .get('projects/' + 
-          this.$route.params.projectSlug + 
-          '/?company_slug=' + 
-          this.$route.params.companySlug)
-        .then((response) => {
-          this.loading = false
-          this.project = response.data.data
-          this.$store.dispatch('project/setProject', this.project)
+      .get('projects/' + 
+        this.$route.params.projectSlug + 
+        '/?company_slug=' + 
+        this.$route.params.companySlug)
+      .then((response) => {
+        this.loading = false
+        this.project = response.data.data
+        this.$store.dispatch('project/setProject', this.project)
 
-          this.setVModel()
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+        this.setVModel()
+      })
     },
 
 
     getProjectParent() {
       Axios()
-        .get(
-          'projects/parents/?company_slug=' +
-            this.$route.params.companySlug +
-            '&project_slug=' +
-            this.$route.params.projectSlug
-        )
-        .then((response) => {
-          this.projectsParents = response.data.data
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+      .get(
+        'projects/parents/?company_slug=' +
+          this.$route.params.companySlug +
+          '&project_slug=' +
+          this.$route.params.projectSlug
+      )
+      .then((response) => {
+        this.projectsParents = response.data.data
+      })
     },
 
     getProjectStatus() {
       Axios()
-        .get(
-          'projects/statuses/?company_slug=' +
-            this.$route.params.companySlug +
-            '&project_slug=' +
-            this.$route.params.projectSlug
-        )
-        .then((response) => {
-          this.projectsStatus = response.data.data
-          this.projectsStatusSelect = this.projectsStatus[this.project.status.code]
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+      .get(
+        'projects/statuses/?company_slug=' +
+          this.$route.params.companySlug +
+          '&project_slug=' +
+          this.$route.params.projectSlug
+      )
+      .then((response) => {
+        this.projectsStatus = response.data.data
+        this.projectsStatusSelect = this.project.status.code
+      })
     },
 
     updateProject() {
       this.btnLoading = true
 
-      let parentId = this.projectsParentSelect ? this.projectsParentSelect.id : null
+      let parentId = this.projectsParentSelect ? this.projectsParentSelect : null
 
       Axios()
         .put('projects/' + 
@@ -219,9 +208,6 @@ export default {
           })
 
         })
-        .catch((e) => {
-          console.error(e)
-        })
     },
 
     deleteProject() {
@@ -236,9 +222,6 @@ export default {
             this.$router.push({
               name: 'workspaces.projects',
             })
-          })
-          .catch((e) => {
-            console.error(e)
           })
         }
       })
@@ -265,22 +248,22 @@ export default {
 
     removeLogo(){
       Axios()
-        .delete('projects/' + this.$route.params.projectSlug + 
-          '/logo/?company_slug=' + 
-          this.$route.params.companySlug)
-        .then((response) => {
-          window.location.reload();
-        })
+      .delete('projects/' + this.$route.params.projectSlug + 
+        '/logo/?company_slug=' + 
+        this.$route.params.companySlug)
+      .then((response) => {
+        window.location.reload();
+      })
     },
 
     removeBackground(){
       Axios()
-        .delete('projects/' + this.$route.params.projectSlug + 
-          '/background/?company_slug=' + 
-          this.$route.params.companySlug)
-        .then((response) => {
-          window.location.reload();
-        })
+      .delete('projects/' + this.$route.params.projectSlug + 
+        '/background/?company_slug=' + 
+        this.$route.params.companySlug)
+      .then((response) => {
+        window.location.reload();
+      })
     }
     
   },
@@ -290,194 +273,199 @@ export default {
 <template>
   <Layout>
     <template slot="header-left">
-      <TitleLoading
-        :title="$t('Project Details')" :loading="loading"></TitleLoading>
+      <TitleLoading :title="$t('Project Details')" :loading="loading"></TitleLoading>
     </template>
 
-    <div slot="content" class="project-details pt-70px">
-      <div class="container">
-
-        <b-container class="project-api-management">
-          <b-row>
-            <b-col cols="4">
-              
-              <div class="mb-0 tx-18-px lh-16 fw-500 txt-001737">{{ $t('Project Logo') }}</div>
-
-              <UploadImage 
-                :size="128"
-                :options="logoOptions" 
-                :image="project.logo" 
-                :btn-title="$t('Upload Project Logo')"
-                @action="updateLogo"></UploadImage>
-
-              <p class="tx-12-px txt-A7AFB7">{{ $t('Project_Details_Text_2') }}</p>
-
-              <hr>
-
-              <div class="mb-15-px d-flex justify-content-between">
-                <div class="tx-18-px lh-16 fw-500 txt-001737">{{ $t('Board Background') }}</div>
-                <b-link href="javascript:;" class="d-block tx-12-px" @click="removeBackground">{{ $t('Remove Background') }}</b-link>
-              </div>
-
-              <vue-dropzone
-                id="updateBackgroundDropzone"
-                ref="updateBackgroundDropzone"
-                class="mt-15-px"
-                :options="dropzoneOptionsBackground"
-                :use-custom-slot="true"
-                @vdropzone-complete="afterCompleteBackground"
-              >
-                <div class="dropzone-custom-content">
-                  <h3 class="dropzone-custom-title">{{ $t('Drag and drop to upload') }}</h3>
-                  <div class="subtitle">...{{ $t('or click to select a file from your computer') }}</div>
-                </div>
-              </vue-dropzone>
-
-              <b-img :src="project.background" class="mt-20-px" style="width:100%"></b-img>
-              
-
-            </b-col>
-            <b-col cols="7" offset-md="1">
-
+    <div slot="content" class="project-details pt-10px">
+      <b-container>
+        <b-row>
+          <b-col cols="2">
+            <SideBar></SideBar>
+          </b-col>
+          <b-col cols="9" offset-lg="1">
+            <b-card>
               <b-row>
-                
-                <TitleLoading :title="$t('Project Details')" :loading="loading"></TitleLoading>
+                <b-col cols="6">
+                  
+                  <div class="mb-0 tx-18-px lh-16 fw-500 txt-001737">{{ $t('Project Logo') }}</div>
 
-                <div class="mt-20-px mb-30-px">    
-                    <b-alert v-model="showSuccessAlert" variant="success" class="mg-b-15" dismissible fade>
-                      {{ alertMessage }}
-                    </b-alert>
-                    <div class="form-row">
-                      <div class="form-group col-md-12">
-                        <b-form-checkbox v-model="projectIsPrivate" :checked="projectIsPrivate">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Public Project') }}</span>
-                        </b-form-checkbox>
-                        <p class="txt-6C7293 tx-12-px">{{ $t('Project_Details_Text') }}</p>
-                      </div>
+                  <UploadImage 
+                    :size="128"
+                    :options="logoOptions" 
+                    :image="project.logo" 
+                    :btn-title="$t('Upload Project Logo')"
+                    @action="updateLogo"></UploadImage>
+
+                  <p class="tx-12-px txt-A7AFB7">{{ $t('Project_Details_Text_2') }}</p>
+
+                </b-col>
+                <b-col cols="6">
+
+                  <div class="mb-15-px d-flex justify-content-between">
+                    <div class="tx-18-px lh-16 fw-500 txt-001737">{{ $t('Board Background') }}</div>
+                    <b-link href="javascript:;" class="d-block tx-12-px" @click="removeBackground">{{ $t('Remove Background') }}</b-link>
+                  </div>
+
+                  <vue-dropzone
+                    id="updateBackgroundDropzone"
+                    ref="updateBackgroundDropzone"
+                    class="mt-15-px"
+                    :options="dropzoneOptionsBackground"
+                    :use-custom-slot="true"
+                    @vdropzone-complete="afterCompleteBackground"
+                  >
+                    <div class="dropzone-custom-content">
+                      <h3 class="dropzone-custom-title">{{ $t('Drag and drop to upload') }}</h3>
+                      <div class="subtitle">...{{ $t('or click to select a file from your computer') }}</div>
                     </div>
+                  </vue-dropzone>
 
-                    <hr>
+                  <b-img :src="project.background" class="mt-20-px" style="width:100%"></b-img>
 
-                    <div class="form-row mg-t-15">
-                      <div class="form-group col-md-8">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Company Owner') }}</label>
-                        <input v-model="companyName" type="text" class="form-control" disabled />
-                      </div>
-                      <div class="form-group col-md-4">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Optional Code (e.g. PROJ01)') }}</label>
-                        <input v-model="projectCode" type="text" maxlength="6" class="form-control" />
-                      </div>
-                    </div>
-                    <div class="form-row mg-t-15">
-                      <div class="form-group col-md-8">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Project Name') }}</label>
-                        <input v-model="projectName" type="text" maxlength="60" class="form-control" />
-                      </div>
-                      <div class="form-group col-md-4">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Project Status') }}</label>
-                        <v-select v-model="projectsStatusSelect" :options="projectsStatus" label="label"> </v-select>
-                      </div>
-                    </div>
-                    <div class="form-row mg-t-15">
-                      <div class="form-group col-md-12">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Project Parent') }}</label>
-                        <v-select v-model="projectsParentSelect" :options="projectsParents" label="name"></v-select>
-                      </div>
-                    </div>
-                    <div class="form-row mg-t-15 pd-b-15 bd-b">
-                      <div class="form-group col-md-12">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Project Goals') }}</label>
-                        <Mentions
-                          ref="mentions"
-                          element-type="textarea"
-                          :mention-users="true"
-                          :content-text="projectDescription"
-                          :company-slug="$route.params.companySlug"
-                          :project-slug="$route.params.projectSlug"
-                          :element-rows="5"
-                          @update-text="updateDescriptionText"
-                        ></Mentions>
-                      </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="tx-18-px lh-16 fw-500 txt-001737 mb-10-px">{{ $t('Project Messaging') }}</div>
-                    
-                    <div class="form-row mg-t-15">
-                      <div class="form-group col-md-12">
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Slack Webhook') }}</label>
-                        <input v-model="projectSlackWebhook" type="text" class="form-control mb-10-px" />
-                      
-                        <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Discord Webhook') }}</label>
-                        <input v-model="projectDiscordWebhook" type="text" class="form-control" />
-                      </div>
-                    </div>
-
-                    <hr>
-
-                    <p class="tx-12-px txt-9EA9C1">{{ $t('No information will be deleted') }}</p>
-                    <div class="form-row mb-20-px">
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectTaskShowNumber" :checked="checked(projectTaskShowNumber)">
-                          <span class="txt-6C7293 tx-14-px"> {{ $t('Enable Task Show Number') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectUserTimer" :checked="checked(projectUserTimer)">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Enable Task Timer') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectTaskType" :checked="checked(projectTaskType)">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Enable Task Type') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectTaskEffort" :checked="checked(projectTaskEffort)">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Enable Task Effort') }} </span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectUserStories" :checked="checked(projectUserStories)">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Enable User Stories') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="form-group col-md-4 mb-10-px">
-                        <b-form-checkbox v-model="projectSprints" :checked="checked(projectSprints)">
-                          <span class="txt-6C7293 tx-14-px">{{ $t('Enable Sprints') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <a href="javascript:;" class="txt-EF5958" @click="deleteProject">
-                          <span>{{ $t('Delete') }}</span>
-                        </a>
-                      </div>
-                      <div class="d-flex justify-content-end">
-
-                        <ButtonLoading
-                          :loading="btnLoading"
-                          :title="$t('Update Project')"
-                          :title-loading="$t('Updating Project')"
-                          type="btn-md"
-                          mode="button"
-                          @action="updateProject"
-                        ></ButtonLoading>
-
-                      </div>
-                    </div>
-                </div> 
+                </b-col>
               </b-row>
+            </b-card>
+            
+            <b-card>
+              <b-alert v-model="showSuccessAlert" variant="success" class="mg-b-15" dismissible fade>
+                {{ alertMessage }}
+              </b-alert>
+              <b-form-checkbox v-model="projectIsPrivate" :checked="projectIsPrivate">
+                {{ $t('Public Project') }}
+              </b-form-checkbox>
+              <p class="small">{{ $t('Project_Details_Text') }}</p>
+              <b-row class="mt-3">
+                <b-col cols="8">
+                  <b-row>
+                    <b-col cols="8">
+                      <b-form-group
+                        :label="$t('Company Name')"
+                        label-for="company-name">
+                        <b-form-input v-model="companyName" type="text" disabled trim></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="4">
+                      <b-form-group
+                        :label="$t('Code - e.g. PROJ01')"
+                        label-for="project-code">
+                        <b-form-input v-model="projectCode" type="text" maxlength="6" trim></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols="8">
+                      <b-form-group
+                        :label="$t('Project Name')"
+                        label-for="project-name">
+                        <b-form-input v-model="projectName" type="text" trim></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="4">
+                      <b-form-group
+                        :label="$t('Project Status')"
+                        label-for="project-status">
+                        <b-form-select
+                          v-model="projectsStatusSelect"
+                          :options="projectsStatus"
+                          value-field="id"
+                          text-field="label"></b-form-select>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                      :label="$t('Project Parent')"
+                      label-for="project-parent">
+                      <b-form-select
+                        v-model="projectsParentSelect"
+                        :options="projectsParents"
+                        value-field="id"
+                        text-field="pure_name">
+                        <template v-slot:first>
+                          <b-form-select-option :value="null"> -- null -- </b-form-select-option>
+                        </template>
+                        </b-form-select>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                        :label="$t('Project Goals')"
+                        label-for="project-goals">
+                        <Mentions
+                        ref="mentions"
+                        element-type="textarea"
+                        :mention-users="true"
+                        :content-text="projectDescription"
+                        :company-slug="$route.params.companySlug"
+                        :project-slug="$route.params.projectSlug"
+                        :element-rows="5"
+                        @update-text="updateDescriptionText"></Mentions>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-col>
+                <b-col cols="4" class="border-left">
+                  <b-form-group
+                    :label="$t('Project Settings')">
+                    <b-form-checkbox v-model="projectTaskShowNumber" :checked="checked(projectTaskShowNumber)" class="mt-2 mb-2">
+                      {{ $t('Enable Task Show Number') }}
+                    </b-form-checkbox>
+                    <b-form-checkbox v-model="projectUserTimer" :checked="checked(projectUserTimer)" class="mb-2">
+                      {{ $t('Enable Task Timer') }}
+                    </b-form-checkbox>
+                    <b-form-checkbox v-model="projectTaskType" :checked="checked(projectTaskType)" class="mb-2">
+                      {{ $t('Enable Task Type') }}
+                    </b-form-checkbox>
+                    <b-form-checkbox v-model="projectTaskEffort" :checked="checked(projectTaskEffort)" class="mb-2">
+                      {{ $t('Enable Task Effort') }}
+                    </b-form-checkbox>
+                    <b-form-checkbox v-model="projectUserStories" :checked="checked(projectUserStories)" class="mb-2">
+                      {{ $t('Enable User Stories') }}
+                    </b-form-checkbox>
+                    <b-form-checkbox v-model="projectSprints" :checked="checked(projectSprints)">
+                      {{ $t('Enable Sprints') }}
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <hr>
+              <b-row>
+                <b-col cols="6">
+                  <b-link @click="deleteProject">{{ $t('Delete') }}</b-link>
+                </b-col>
+                <b-col cols="6" class="text-right">
+                  <ButtonLoading
+                    :loading="btnLoading"
+                    :title="$t('Update Project')"
+                    :title-loading="$t('Updating Project')"
+                    type="btn-md"
+                    mode="button"
+                    @action="updateProject"></ButtonLoading>
+                </b-col>
+              </b-row>
+            </b-card>
 
-            </b-col>
-          </b-row>
-        </b-container>
-      </div>
+            <!--
+            <b-card>  
+              <div class="tx-18-px lh-16 fw-500 txt-001737 mb-10-px">{{ $t('Project Messaging') }}</div>
+              <div class="form-row mg-t-15">
+                <div class="form-group col-md-12">
+                  <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Slack Webhook') }}</label>
+                  <input v-model="projectSlackWebhook" type="text" class="form-control mb-10-px" />
+                  <label class="tx-12-px txt-68748F mb-5-px">{{ $t('Discord Webhook') }}</label>
+                  <input v-model="projectDiscordWebhook" type="text" class="form-control" />
+                </div>
+              </div>
+            </b-card>
+            -->
+
+          </b-col>
+        </b-row>
+      </b-container>
+    
     </div>
   </Layout>
 </template>

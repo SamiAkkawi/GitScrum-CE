@@ -52,7 +52,7 @@ export default {
         url: appConfig.APIBaseURL + 'whitelabel/logo/?company_slug=' + this.currentCompany.slug,
         http: 'POST',
         thumbnailWidth: 122,
-        maxFilesize: 100,
+        maxFilesize: 5000,
         headers: { Authorization: localStorage.getItem('ACCESS_TOKEN') },
         paramName: 'logo_file',
         cropSize: {

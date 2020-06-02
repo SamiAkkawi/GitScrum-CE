@@ -395,6 +395,7 @@ Scrollbar
 
 */
 
+ul::-webkit-scrollbar,
 div::-webkit-scrollbar {
     width: 8px;
 }
@@ -402,6 +403,7 @@ div::-webkit-scrollbar {
 
 /* Track */
 
+ul::-webkit-scrollbar-track,
 div::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     -webkit-border-radius: 6px;
@@ -411,6 +413,7 @@ div::-webkit-scrollbar-track {
 
 /* Handle */
 
+ul::-webkit-scrollbar-thumb,
 div::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 6px;
@@ -418,6 +421,7 @@ div::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
+ul::-webkit-scrollbar-thumb:window-inactive,
 div::-webkit-scrollbar-thumb:window-inactive {
     background: $grey-300;
 }

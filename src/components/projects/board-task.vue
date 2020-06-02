@@ -572,7 +572,7 @@ export default {
                     </span>
                   </div>
 
-                  <div class="task-icons">
+                  <div class="d-flex task-icons">
                     <small v-if="isBug(task.settings.is_bug)" v-b-tooltip.hover :title="$t('Bug')">
                       <font-awesome-icon :icon="['far', 'bug']" />
                     </small>

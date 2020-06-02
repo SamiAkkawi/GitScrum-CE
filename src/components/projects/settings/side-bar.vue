@@ -65,7 +65,7 @@ export default {
 </script>
 
 <template>
-  <nav v-not-visible="'tablet'" class="sidebar sidebar-offcanvas">
+  <nav  v-not-visible="'tablet'" class="sidebar sidebar-offcanvas">
     <ul class="nav">
       <li class="nav-item">
         <ul class="nav submenu-wrapper">
