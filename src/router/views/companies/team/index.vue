@@ -110,9 +110,6 @@ export default {
         .then((_) => {
           this.getTeammates(this.currentPage)
         })
-      // .catch((e) => {
-      //   console.error(e)
-      // })
     },
 
     remove(username, index) {
@@ -293,14 +290,11 @@ item.status.can_create_projects = true;
                 <span v-if="currentCompany.stats.plan.users == 'Unlimited'">
                   {{ $t('Unlimited users') }}
                 </span>
-                <span v-else>
-                  {{ $t('up to users', { users: currentCompany.stats.plan.users }) }}
-                </span>
-                <span v-if="!activeUsers.invitation && !loading" class="d-block tx-12-px font-weight-bold txt-EF5958">
+                <span v-else>{{ $t('up to users', { users: currentCompany.stats.plan.users }) }}</span>
+                <div v-if="!activeUsers.invitation && !loading" class="font-weight-bold txt-EF5958">
                   {{ $t('You need to upgrade your account') }}
-                </span>
+                </div>
               </div>
-
               <div v-not-visible="'tablet'">
                 <a v-if="activeUsers.invitation" class="small fw-600" href="javascript:;" @click="toggleShowInvite">
                   {{ $t('Invite Members') }}
@@ -334,12 +328,11 @@ item.status.can_create_projects = true;
                 </TitleLoading>
               </b-form-checkbox>
 
-              <a v-show="enableShareableLink"
-                href="javascript:;"
+              <b-link v-show="enableShareableLink"
                 class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase mt-5-px"
                 @click="updateInvitationLink" >
                 {{ $t('Update Link') }}
-              </a>
+              </b-link>
             </div>
 
             <b-input-group v-show="enableShareableLink" class="mt-2">
@@ -356,54 +349,43 @@ item.status.can_create_projects = true;
               </b-input-group-append>
             </b-input-group>
               
-            <div class="d-flex justify-content-between mt-3 mb-2">
-              <TitleLoading
-                :title="$t('Invite your Team')"
-                :subtitle="$t('Bring teammates to your company. After accepting the invitation, you must add teammates to the projects.')"
-                :loading="sendInvitesLoading"
-              >
-              </TitleLoading>
-            </div>
+            <TitleLoading
+              :title="$t('Invite your Team')"
+              :subtitle="$t('Bring teammates to your company. After accepting the invitation, you must add teammates to the projects.')"
+              :loading="sendInvitesLoading"
+              class="mt-3 mb-2">
+            </TitleLoading>
 
-            <div class="invite-form invite-form-company">
-              <div v-for="invite in totalInvites" :key="invite" class="form-row">
-                <div class="col-md-6 form-group">
-                  <div role="group">
-                    <label for="input-live">{{ $t('Full Name') }}</label>
-                    <b-form-input
-                      v-model="inviteNames[invite]"
-                      type="text"
-                      :placeholder="$t('Full Name')"
-                      trim
-                    ></b-form-input>
-                  </div>
-                </div>
-                <div class="col-md-6 form-group">
-                  <div role="group">
-                    <label for="input-live">{{ $t('Email') }}</label>
-                    <b-form-input
-                      v-model="inviteEmails[invite]"
-                      type="email"
-                      :placeholder="$t('Email')"
-                      trim
-                    ></b-form-input>
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-3 mb-2">
-                <hr>
-                <div class="d-flex justify-content-between">
-                  <div></div>
-                  <ButtonLoading
-                  :loading="loading"
-                  :title="$t('Send Invite')"
-                  :title-loading="$t('Sending')"
-                  type="btn-md"
-                  @action="sendInvites"></ButtonLoading>
-                </div>
-              </div>
+            <b-row v-for="invite in totalInvites" :key="invite">
+              <b-col cols="6">
+                <b-form-group
+                  :label="$t('Full Name')">
+                  <b-form-input
+                  v-model="inviteNames[invite]"
+                  type="text"
+                  :placeholder="$t('Full Name')"
+                  trim ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                <b-form-group
+                  :label="$t('Email')">
+                  <b-form-input
+                  v-model="inviteEmails[invite]"
+                  type="email"
+                  :placeholder="$t('Email')"
+                  trim></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <hr>
+            <div class="d-flex justify-content-end">
+              <ButtonLoading
+              :loading="loading"
+              :title="$t('Send Invite')"
+              :title-loading="$t('Sending')"
+              type="btn-md"
+              @action="sendInvites"></ButtonLoading>
             </div>
           </b-card>
           

@@ -5,6 +5,7 @@ import ProjectVisibility from '@components/projects/project-visibility'
 import ListLabels from '@components/utils/list-labels'
 import Draggable from 'vuedraggable'
 import ManageLabels from '@components/projects/modal/manage-label'
+import moment from 'moment'
 
 export default {
   components: {
@@ -211,13 +212,11 @@ export default {
                     :visibility="project.visibility"
                   ></ProjectVisibility>
                   
-                  <b-dropdown v-if="canProjectChangeStatus(project)" variant="link" class="styled-dropdown">
+                  <b-dropdown v-if="canProjectChangeStatus(project)" variant="link" class="styled-dropdown badge badge-light">
                     <template v-slot:button-content>
-                      <b-badge variant="light">
                         {{ project.status.title }}
                         &nbsp;<b>{{ parseFloat(project.percent) | percent(0) }}</b>
                         <font-awesome-icon :icon="['far', 'angle-down']" class="ml-2" />
-                      </b-badge>
                     </template>
                     <b-dropdown-item v-if="project.status.code !== 0" @click="projectChangeStatus(project, 0)">{{ $t('In Progress') }}</b-dropdown-item>
                     <b-dropdown-item v-if="project.status.code !== 1" @click="projectChangeStatus(project, 1)">{{ $t('Completed') }}</b-dropdown-item>

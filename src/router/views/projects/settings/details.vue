@@ -279,54 +279,11 @@ export default {
     <div slot="content" class="project-details pt-10px">
       <b-container>
         <b-row>
-          <b-col cols="2">
+          <b-col cols="3">
             <SideBar></SideBar>
           </b-col>
-          <b-col cols="9" offset-lg="1">
-            <b-card>
-              <b-row>
-                <b-col cols="6">
-                  
-                  <div class="mb-0 tx-18-px lh-16 fw-500 txt-001737">{{ $t('Project Logo') }}</div>
-
-                  <UploadImage 
-                    :size="128"
-                    :options="logoOptions" 
-                    :image="project.logo" 
-                    :btn-title="$t('Upload Project Logo')"
-                    @action="updateLogo"></UploadImage>
-
-                  <p class="tx-12-px txt-A7AFB7">{{ $t('Project_Details_Text_2') }}</p>
-
-                </b-col>
-                <b-col cols="6">
-
-                  <div class="mb-15-px d-flex justify-content-between">
-                    <div class="tx-18-px lh-16 fw-500 txt-001737">{{ $t('Board Background') }}</div>
-                    <b-link href="javascript:;" class="d-block tx-12-px" @click="removeBackground">{{ $t('Remove Background') }}</b-link>
-                  </div>
-
-                  <vue-dropzone
-                    id="updateBackgroundDropzone"
-                    ref="updateBackgroundDropzone"
-                    class="mt-15-px"
-                    :options="dropzoneOptionsBackground"
-                    :use-custom-slot="true"
-                    @vdropzone-complete="afterCompleteBackground"
-                  >
-                    <div class="dropzone-custom-content">
-                      <h3 class="dropzone-custom-title">{{ $t('Drag and drop to upload') }}</h3>
-                      <div class="subtitle">...{{ $t('or click to select a file from your computer') }}</div>
-                    </div>
-                  </vue-dropzone>
-
-                  <b-img :src="project.background" class="mt-20-px" style="width:100%"></b-img>
-
-                </b-col>
-              </b-row>
-            </b-card>
-            
-            <b-card>
+          <b-col cols="5">
+            <b-card :header="$t('Project Information')">
               <b-alert v-model="showSuccessAlert" variant="success" class="mg-b-15" dismissible fade>
                 {{ alertMessage }}
               </b-alert>
@@ -335,7 +292,7 @@ export default {
               </b-form-checkbox>
               <p class="small">{{ $t('Project_Details_Text') }}</p>
               <b-row class="mt-3">
-                <b-col cols="8">
+                <b-col cols="12">
                   <b-row>
                     <b-col cols="8">
                       <b-form-group
@@ -406,29 +363,31 @@ export default {
                       </b-form-group>
                     </b-col>
                   </b-row>
-                </b-col>
-                <b-col cols="4" class="border-left">
-                  <b-form-group
-                    :label="$t('Project Settings')">
-                    <b-form-checkbox v-model="projectTaskShowNumber" :checked="checked(projectTaskShowNumber)" class="mt-2 mb-2">
-                      {{ $t('Enable Task Show Number') }}
-                    </b-form-checkbox>
-                    <b-form-checkbox v-model="projectUserTimer" :checked="checked(projectUserTimer)" class="mb-2">
-                      {{ $t('Enable Task Timer') }}
-                    </b-form-checkbox>
-                    <b-form-checkbox v-model="projectTaskType" :checked="checked(projectTaskType)" class="mb-2">
-                      {{ $t('Enable Task Type') }}
-                    </b-form-checkbox>
-                    <b-form-checkbox v-model="projectTaskEffort" :checked="checked(projectTaskEffort)" class="mb-2">
-                      {{ $t('Enable Task Effort') }}
-                    </b-form-checkbox>
-                    <b-form-checkbox v-model="projectUserStories" :checked="checked(projectUserStories)" class="mb-2">
-                      {{ $t('Enable User Stories') }}
-                    </b-form-checkbox>
-                    <b-form-checkbox v-model="projectSprints" :checked="checked(projectSprints)">
-                      {{ $t('Enable Sprints') }}
-                    </b-form-checkbox>
-                  </b-form-group>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                      :label="$t('Project Settings')">
+                      <b-form-checkbox v-model="projectTaskShowNumber" :checked="checked(projectTaskShowNumber)" class="mt-2 mb-2">
+                        {{ $t('Enable Task Show Number') }}
+                      </b-form-checkbox>
+                      <b-form-checkbox v-model="projectUserTimer" :checked="checked(projectUserTimer)" class="mb-2">
+                        {{ $t('Enable Task Timer') }}
+                      </b-form-checkbox>
+                      <b-form-checkbox v-model="projectTaskType" :checked="checked(projectTaskType)" class="mb-2">
+                        {{ $t('Enable Task Type') }}
+                      </b-form-checkbox>
+                      <b-form-checkbox v-model="projectTaskEffort" :checked="checked(projectTaskEffort)" class="mb-2">
+                        {{ $t('Enable Task Effort') }}
+                      </b-form-checkbox>
+                      <b-form-checkbox v-model="projectUserStories" :checked="checked(projectUserStories)" class="mb-2">
+                        {{ $t('Enable User Stories') }}
+                      </b-form-checkbox>
+                      <b-form-checkbox v-model="projectSprints" :checked="checked(projectSprints)">
+                        {{ $t('Enable Sprints') }}
+                      </b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
                 </b-col>
               </b-row>
               <hr>
@@ -462,6 +421,31 @@ export default {
             </b-card>
             -->
 
+          </b-col>
+          <b-col cols="4">
+            <b-card :header="$t('Project Logo')">
+              <UploadImage 
+              :size="128"
+              :options="logoOptions" 
+              :image="project.logo" 
+              :btn-title="$t('Upload Project Logo')"
+              @action="updateLogo"></UploadImage>
+              <small>{{ $t('Project_Details_Text_2') }}</small>
+            </b-card>
+
+            <b-card :header="$t('Board Background')">
+              <vue-dropzone
+              id="updateBackgroundDropzone"
+              ref="updateBackgroundDropzone"
+              :options="dropzoneOptionsBackground"
+              :use-custom-slot="true"
+              @vdropzone-complete="afterCompleteBackground">
+                  <h3 class="h6 font-weight-bold">{{ $t('Drag and drop to upload') }}</h3>
+                  <h6v class="small">...{{ $t('or click to select a file from your computer') }}</h6v>
+              </vue-dropzone>
+              <b-img v-if="project.background" :src="project.background" class="mt-2" style="width:100%"></b-img>
+              <b-link v-if="project.background" @click="removeBackground">{{ $t('Remove Background') }}</b-link>
+            </b-card>
           </b-col>
         </b-row>
       </b-container>

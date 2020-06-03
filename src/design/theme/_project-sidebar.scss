@@ -120,15 +120,10 @@
 .v-sidebar-menu .vsm--link {
     font-size: 14px;
     font-weight: 400;
-    padding: 3px 10px;
-    line-height: auto;
+    padding: 3px 0;
     text-decoration: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     z-index: 20;
-    -webkit-transition: 0.3s all ease;
     transition: 0.3s all ease;
     color: $black-900;
     line-height: 24px;
@@ -157,12 +152,13 @@
 .header-project-logo {
     display: flex !important;
     justify-content: flex-start !important;
+    padding: 3px 0 0 0;
     img {
         text-align: left;
-        margin: 0 6px 0 0;
+        margin: 2px 6px 0 0;
         width: 65px;
         height: 65px;
-        border: 1px solid #eaeaea;
+        border: 1px solid $grey-100;
         border-radius: 4px;
     }
     div {
@@ -188,7 +184,7 @@
     text-align: left;
     border-radius: 4px;
     p {
-        margin: 0 0 0;
+        margin: 4px 0 0;
         padding: 0;
         font-size: 10px;
         font-weight: 600;
@@ -206,12 +202,12 @@
 }
 
 .header-project-team-members {
-    padding: 10px 0 5px;
+    padding: 20px 0 5px;
     min-height: 65px;
     margin: 0;
     h3 {
         font-size: 11px;
-        color: 001737;
+        color: $black-800;
         text-transform: uppercase;
         font-weight: 600;
     }
@@ -275,7 +271,7 @@
 }
 
 .v-sidebar-menu .vsm--header {
-    padding: 0 0 15px;
+    padding: 0 0 5px;
     font-size: 11px;
     color: #001737;
     font-weight: 600;
@@ -331,14 +327,15 @@
 }
 
 .v-sidebar-menu.vsm_expanded .vsm--link.vsm--link_active {
-    background-color: $black-50;
-    border-radius: 8px;
+    background-color: $blue-50;
+    padding-left: 6px;
+    margin-left: -6px;
+    border-radius: 6px;
     color: $black-700;
 }
 
 .v-sidebar-menu .vsm--link_level-1.vsm--link_exact-active,
 .v-sidebar-menu .vsm--link_level-1.vsm--link_active {
-    -webkit-box-shadow: none !important;
     box-shadow: none !important;
     outline: 0;
 }
@@ -346,4 +343,10 @@
 .v-sidebar-menu .vsm--dropdown .vsm--icon,
 .v-sidebar-menu .vsm--dropdown .vsm--link {
     color: #42526E !important;
+}
+
+.v-sidebar-menu .vsm--toggle-btn {
+    opacity: 0;
+    height: 12px !important;
+    padding: 0;
 }

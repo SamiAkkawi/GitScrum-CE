@@ -391,7 +391,7 @@ export default {
       }
     },
     backgroundColor(hexColor) {
-      return hexToRgba(hexColor, '0.06')
+      return hexToRgba(hexColor, '0.4')
     },
   },
 
@@ -429,8 +429,7 @@ export default {
               :placeholder="$t('Write task title')"
               rows="3"
               max-rows="6"
-              style="padding: 8px 10px;"
-            ></b-form-textarea>
+              style="padding: 8px 10px;"></b-form-textarea>
             <!--
             <Mentions
               ref="mentions"

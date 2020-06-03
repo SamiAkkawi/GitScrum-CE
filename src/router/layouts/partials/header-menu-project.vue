@@ -255,8 +255,8 @@ export default {
                 class="d-none d-sm-block"></ListUsers>
             </div>
             <div class="header-project-collaboration">
-              <b-progress class="project-list-progress" :value="project.my_contribution" :max="100"></b-progress>
               <p>{{ $t('My contribution') }}: {{ parseFloat(project.my_contribution) | percent(0) }}</p>
+              <b-progress class="project-list-progress" :value="project.my_contribution" :max="100"></b-progress>
             </div>
           </div>
         </div>

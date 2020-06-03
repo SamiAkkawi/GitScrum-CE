@@ -251,19 +251,6 @@
 }
 */
 
-.card-template.selected,
-.card-template:hover {
-    padding: 10px 10px 10px 13px;
-    background: $blue-800;
-    border: 1px solid $blue-800;
-    box-sizing: border-box;
-    border-radius: 4px;
-    color: $blue-50;
-    p {
-        color: $blue-50 !important;
-    }
-}
-
 .company-information {
     .logo {
         width: 128px;

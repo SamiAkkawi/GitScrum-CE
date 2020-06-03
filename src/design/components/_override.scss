@@ -397,7 +397,8 @@ a.badge-secondary.focus {
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.card {
+.card,
+.jumbotron {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     .card,
     .card .card,
@@ -416,6 +417,77 @@ a.badge-secondary.focus {
 
 .card-body-create {
     background: $blue-A200 !important;
+}
+
+.form-group {
+    font-size: 13px;
+    margin-bottom: 6px;
+    .col-form-label {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+.jumbotron {
+    margin-bottom: 10px !important;
+    background-color: #fff !important;
+    border-radius: 4px !important;
+}
+
+.sprint-jumbotron-yellow,
+.sprint-jumbotron-lime,
+.sprint-jumbotron-blue {
+    padding: 20px 0 0 !important;
+    text-align: center;
+    p {
+        font-size: 16px;
+        font-weight: 700;
+    }
+    p.lead {
+        line-height: 36px;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+    }
+}
+
+.sprint-jumbotron-lime {
+    background-color: $lime-50 !important;
+    border: 3px solid $lime-100;
+    p {
+        color: $lime-500;
+    }
+    p.lead {
+        color: $lime-900;
+    }
+}
+
+.sprint-jumbotron-blue {
+    background-color: $blue-50 !important;
+    border: 3px solid $blue-100;
+    p {
+        color: $blue-500;
+    }
+    p.lead {
+        color: $blue-900;
+    }
+}
+
+.sprint-jumbotron-yellow {
+    background-color: $yellow-50 !important;
+    border: 3px solid $yellow-100;
+    p {
+        color: $yellow-500;
+    }
+    p.lead {
+        color: $yellow-900;
+    }
+}
+
+.list-users-left .justify-content-end {
+    -webkit-box-pack: start !important;
+    -ms-flex-pack: start !important;
+    justify-content: flex-start !important;
 }
 
 

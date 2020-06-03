@@ -11,8 +11,8 @@ import Ads from '@components/utils/ads'
 
 export default {
   page: {
-    title: 'CustomDomain',
-    meta: [{ name: 'description', content: 'Checklists' }],
+    title: 'White Label Setup',
+    meta: [{ name: 'description', content: 'White Label' }],
   },
   components: { Layout, TitleLoading, UploadImage, SideBar, Alert, Ads, ButtonLoading },
   data: function() {
@@ -23,7 +23,7 @@ export default {
       currentCompany: JSON.parse(localStorage.getItem('CURRENT_COMPANY')),
       whiteLabel: null,
       logoOptions: null,
-      email_footer: null,
+      emailFooter: null,
       domains: [],
       newDomain: '',
       logo: null,
@@ -65,7 +65,7 @@ export default {
       Axios()
         .get('whitelabel/email/?company_slug=' + this.currentCompany.slug)
         .then((response) => {
-          this.email_footer = response.data.data.email
+          this.emailFooter = response.data.data.email
           this.loadingEmail = false
         })
         .catch((e) => {
@@ -78,7 +78,7 @@ export default {
       Axios()
         .put('whitelabel/email/', {
           company_slug: this.currentCompany.slug,
-          email_footer: this.email_footer,
+          emailFooter: this.emailFooter,
         })
         .then((_) => {
           this.loadingEmail = false
@@ -207,219 +207,112 @@ export default {
     </template>
 
     <div slot="content" class="white-label pt-10px">
-      <div class="row mb-30-px">
-        <div class="col-md-2">
-          <SideBar></SideBar>
-        </div>
-
-        <div class="col-md-5 offset-md-1">
-          
-          <div class="flex-column-reverse flex-md-row">
-            
-            <div class="card">
-
-              <div class="card-body">
-
-                <h5>{{ $t('STEP 1') }}</h5>
-                <p>
-                  {{ $t('Add a Domain / Subdomain ( Mandatory )') }}
-                </p>
-
-                <Alert :message="alertMessage" :status="alertStatus"></Alert>
-
-                <div v-show="!whiteLabel" class="txt-EF5958 fw-600">
-                  {{ $t('You must update your account to set up White Label') }}
-                </div>
-
-                <div v-show="whiteLabel" class="row">
-                  <div class="col-12">
-                    <div class="form-group mb-5-px">
-                      <div class="input-group">
-                        <input
-                          v-model="newDomain"
-                          type="text"
-                          class="form-control"
-                          autocomplete="off"
-                          placeholder="e.g.: my-domain.com / project.my-domain.com"
-                        />
-                        <div class="input-group-append">
-                          <button
-                            v-show="!loadingAddDomain"
-                            class="btn btn-sm btn-primary"
-                            type="button"
-                            :disabled="newDomain === null || newDomain === ''"
-                            @click="addDomain"
-                          >
-                            <i class="fa fa-check"></i>
-                          </button>
-
-                          <button v-show="loadingAddDomain" class="btn btn-sm btn-primary" type="button">
-                            <b-spinner :label="$t('Loading')" small class="title-loading"></b-spinner>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <small>
-                      * {{ $t('Domains and/or Subdomains that are allowed to use GitScrum White Label.') }}
-                    </small>
-                  </div>
-                </div>
-
-                <div v-show="domains">
-                  
-                  <h6 v-if="domains.length > 0" class="mt-15-px">
-                    {{ $t('Domains / Subdomains List') }}
-                  </h6>
-
-                  <table class="table">
-                    <tbody>
-                      <tr v-for="domain in domains" :key="domain.id">
-                        <td>
-                          <b-link :href="'http://' + domain.domain" target="_blank">{{ domain.domain }}</b-link>
-                        </td>
-                        <td class="text-right">
-                          <b-link @click="deleteDomain(domain.domain)">
-                            <font-awesome-icon 
-                              :icon="['far', 'trash-alt']" />
-                          </b-link>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h5>{{ $t('STEP 2') }}</h5>
-                <p>{{ $t("Add a CNAME record to your domain's DNS records") }}</p>
-
-                <p>
-                  {{
-                    $t(
-                      'To add the CNAME record to your domain host, follow the steps below. See your domain host’s documentation for more specific instructions.'
-                    )
-                  }}
-                </p>
-
-                <p> {{ $t('1. Go to your domain’s DNS records') }}. </p>
-
-                <p>
-                  {{ $t('2. Add a record to your DNS settings, selecting CNAME as the record type') }}.
-                </p>
-
-                <p>
-                  {{ $t('3. Return to the first window or tab and copy the contents of the Label/Host field') }}.
-                </p>
-
-                <p>
-                  {{ $t('4. Paste the copied contents into the Label or Host field with your DNS records') }}.
-                </p>
-
-                <p>
-                  {{
-                    $t('5. Return to the first window or tab and copy the contents of the Destination/Target field')
-                  }}.
-                </p>
-
-                <p>
-                  {{ $t('6. Paste the copied contents into the Destination or Target field with your DNS records') }}.
-                </p>
-
-                <div class="mt-3">
-                  <p class="fw-600">
-                    {{ $t('Your record should look similar to one of the tables below') }}:
-                  </p>
-
-                  <p>
-                    {{ $t('GitScrum White Label - CNAME') }} :
-                    <span class="fw-600">wl.gitscrum.com</span>
-                  </p>
-                </div>
-
-                <table class="table table-bordered mt-2 mb-2">
-                  <thead>
-                    <tr>
-                      <th>{{ $t('Record type') }}</th>
-                      <th>{{ $t('Label/Host field') }}</th>
-                      <th>{{ $t('Time To Live (TTL)') }}</th>
-                      <th>{{ $t('Destination/Target field') }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="txt-6C7293">{{ $t('CNAME') }}</td>
-                      <td class="txt-6C7293">XXXXXXXXXXXX</td>
-                      <td class="txt-6C7293">{{ $t('3600 or leave the default') }}</td>
-                      <td class="txt-6C7293">wl.gitscrum.com</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <p>{{ $t('7. Save your record') }}.</p>
-                <p>{{ $t('CNAME_Text1') }}</p>
-
-              </div>
-
+      <b-row>
+        <b-col cols="3"><SideBar></SideBar></b-col>
+        <b-col cols="5">
+          <b-card :header="$t('STEP 1')">
+            <p>{{ $t('Add a Domain / Subdomain ( Mandatory )') }}</p>
+            <Alert :message="alertMessage" :status="alertStatus"></Alert>
+            <small v-show="!whiteLabel">{{ $t('You must update your account to set up White Label') }}</small>
+            <b-input-group v-show="whiteLabel" class="mb-1">
+              <b-input-group-append>
+                <b-form-input 
+                v-model="newDomain" 
+                :placeholder="$t('e.g.: my-domain.com / project.my-domain.com')"
+                type="text" 
+                autocomplete="off"
+                size="sm"></b-form-input>
+                <ButtonLoading
+                :loading="loading"
+                type="btn-sm"
+                icon="plus"
+                @action="addDomain"
+                ></ButtonLoading>
+              </b-input-group-append>
+            </b-input-group>
+            <small>* {{ $t('Domains and/or Subdomains that are allowed to use GitScrum White Label.') }}</small>   
+            <div v-show="domains">
+              <h6 v-if="domains.length > 0" class="mt-15-px">{{ $t('Domains / Subdomains List') }}</h6>
+              <table class="table">
+                <tbody>
+                  <tr v-for="domain in domains" :key="domain.id">
+                    <td>
+                      <b-link :href="'http://' + domain.domain" target="_blank">{{ domain.domain }}</b-link>
+                    </td>
+                    <td class="text-right">
+                      <b-link @click="deleteDomain(domain.domain)">
+                        <font-awesome-icon :icon="['far', 'trash-alt']" />
+                      </b-link>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          
+          </b-card>
+          <b-card :header="$t('STEP 2')">
+            <p>{{ $t("Add a CNAME record to your domain's DNS records") }}</p>
+            <p>{{$t('To add the CNAME record to your domain host, follow the steps below. See your domain host’s documentation for more specific instructions.') }}
+            </p>
+            <p> {{ $t('1. Go to your domain’s DNS records') }}. </p>
+            <p>{{ $t('2. Add a record to your DNS settings, selecting CNAME as the record type') }}.</p>
+            <p>{{ $t('3. Return to the first window or tab and copy the contents of the Label/Host field') }}.</p>
+            <p>{{ $t('4. Paste the copied contents into the Label or Host field with your DNS records') }}.</p>
+            <p>{{$t('5. Return to the first window or tab and copy the contents of the Destination/Target field')}}.</p>
+            <p>{{ $t('6. Paste the copied contents into the Destination or Target field with your DNS records') }}.</p>
+            <div class="mt-3">
+              <p class="fw-600">{{ $t('Your record should look similar to one of the tables below') }}:</p>
+              <p>{{ $t('GitScrum White Label - CNAME') }} : <span class="fw-600">wl.gitscrum.com</span></p>
+            </div>
+            <div class="mt-2 mb-2 ml-3">
+              <p><strong>{{ $t('Record type') }}</strong>: {{ $t('CNAME') }}
+              <br><strong>{{ $t('Label/Host field') }}</strong>: XXXXXXXXXXXX
+              <br><strong>{{ $t('Time To Live (TTL)') }}</strong>: {{ $t('3600 or leave the default') }}
+              <br><strong>{{ $t('Destination/Target field') }}</strong>: wl.gitscrum.com</p>
+            </div>
+            <p>{{ $t('7. Save your record') }}.</p>
+            <p>{{ $t('CNAME_Text1') }}</p>
+          </b-card>
+        </b-col>
+        <b-col cols="4">
           <Ads v-show="!whiteLabel" type="square"></Ads>
-
-          <b-card no-body class="p-20-px">
+          <b-card :header="$t('Company Logo')">
             <b-card-text>
-              <p class="tx-14-px fw-500 txt-001737 mb-10-px"> {{ $t('Company Logo') }} </p>
-              <p class="tx-11-px txt-68748F">
-                {{
-                  $t(
-                    'You can upload a logo to replace the GitScrum Logo in Header of your company. This is a great way to promote your brand.'
-                  )
-                }}
-              </p>
-
-              <p class="tx-11-px txt-68748F m-0">
-                {{
-                  $t(
-                    'We recommend using image files: of less than 500 KB and 122 (width) x 22 (height) pixels for best results.'
-                  )
-                }}
-              </p>
+              <p>{{ $t('You can upload a logo to replace the GitScrum Logo in Header of your company. This is a great way to promote your brand.') }}</p>
+              <p>{{ $t('We recommend using image files: of less than 500 KB and 122 (width) x 22 (height) pixels for best results.') }}</p>
             </b-card-text>
             <b-card-text v-show="whiteLabel" class="mt-15-px">
               <div v-show="logoOptions">
-
                 <UploadImage 
                   :size="128"
                   :options="logoOptions" 
                   :image="logo" 
                   :btn-title="$t('Upload your Company Logo')"
                   @action="updateLogo"></UploadImage>
-                  
               </div>
             </b-card-text>
           </b-card>
-
-          <b-card v-show="whiteLabel" no-body class="p-20-px mt-20-px">
+          <b-card v-show="whiteLabel" :header="$t('Email Footer')">
             <b-card-text>
-              <p class="tx-14-px fw-500 txt-001737 mb-10-px"> {{ $t('Email Footer') }} </p>
-              <div class="form-group m-0">
-                <div class="input-group">
-                  <input
-                    v-model="email_footer"
-                    type="text"
-                    class="form-control"
-                    autocomplete="off"
-                    :placeholder="$t('Write a new email footer')"
-                  />
-                  <div class="input-group-append">
-                    <ButtonLoading :loading="loadingEmail" type="btn-sm" @action="addEmail"></ButtonLoading>
-                  </div>
-                </div>
-              </div>
+              <b-input-group v-show="whiteLabel" class="mb-1">
+                <b-input-group-append>
+                  <b-form-input 
+                  v-model="emailFooter"
+                  :placeholder="$t('Write a new email footer')"
+                  type="text" 
+                  autocomplete="off"
+                  size="sm"></b-form-input>
+                  <ButtonLoading
+                  :loading="loading"
+                  type="btn-sm"
+                  icon="plus"
+                  @action="addEmail"
+                  ></ButtonLoading>
+                </b-input-group-append>
+              </b-input-group>
             </b-card-text>
           </b-card>
-        </div>
-      </div>
+        </b-col>
+      </b-row>
     </div>
   </Layout>
 </template>

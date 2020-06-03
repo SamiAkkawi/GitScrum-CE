@@ -130,7 +130,7 @@ export default {
                 </div>
               </div>
             </div>
-            <div class="ml-20-px" v-if="authorize('sprints', 'create')">
+            <div v-if="authorize('sprints', 'create')" class="ml-20-px">
               <button slot="button" type="button" class="btn btn-primary btn-sm" @click="modal('sprintCreate')">
                 {{ $t('Create a Sprint') }}
               </button>
@@ -138,25 +138,20 @@ export default {
           </div>
         </div>
 
-        <b-table class="table-sprints" striped hover="" :items="sprints" :fields="fields" >
+        <b-table class="table-sprints" hover :items="sprints" :fields="fields" >
           <template v-slot:cell(status)="data" >
-            <span class="badge badge-light" style="text-transform:uppercase;">
+            <span class="badge badge-light text-uppercase">
               {{ data.item.status.title }}
             </span>
           </template>
           <template v-slot:cell(title)="data" >
             <div>
               <router-link
-                :to="{
-                  name: 'projects.sprints.show',
-                  params: {
-                    companySlug: $route.params.companySlug,
-                    projectSlug: $route.params.projectSlug,
-                    sprintSlug: data.item.slug,
-                  },
-                }"
-                class="txt-primary-title txt-link"
-              >
+                :to="{ name: 'projects.sprints.show',
+                params: {
+                  companySlug: $route.params.companySlug,
+                  projectSlug: $route.params.projectSlug,
+                  sprintSlug: data.item.slug } }" class="txt-primary-title txt-link">
                 {{ data.item.code }} - {{ data.item.title }}
               </router-link>
               <p class="mb-0">

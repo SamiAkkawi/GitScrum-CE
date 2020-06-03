@@ -61,6 +61,28 @@ export default {
       ],
     }
   },
+  methods:{
+    getAtive(item){
+      
+      let current, params
+
+      if ( item.route ){
+        if (item.template){ 
+          params = { name: item.route, params: { template: item.template } }
+        } else {
+          params = { name: item.route }
+        }
+
+        current = this.$router.resolve( params ).href
+
+        if ( current === window.location.pathname){
+          return true
+        }
+      }
+      return false
+
+    }
+  }
 }
 </script>
 
@@ -69,11 +91,9 @@ export default {
     <ul class="nav">
       <li class="nav-item">
         <ul class="nav submenu-wrapper">
-          <li v-for="item in data" :key="item.route" class="nav-item">
+          <li v-for="item in data" :key="item.route" class="nav-item" :class="{ ' nav-active ': getAtive(item) }">
             <div v-if="item.space" class="mt-2"> </div>
-            <div v-if="item.title" class="sidebar-menu-title mb-0">
-              <span>{{ item.title }}</span>
-            </div>
+            <div v-if="item.title" class="sidebar-menu-title mb-0">{{ item.title }}</div>
             <router-link v-if="item.template === 'undefined'" :to="{ name: item.route }" class="nav-link">
               <span class="menu-title">{{ item.label }}</span>
             </router-link>

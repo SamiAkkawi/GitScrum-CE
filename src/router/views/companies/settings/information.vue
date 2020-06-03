@@ -120,38 +120,22 @@ export default {
     <template slot="header-left">
       <TitleLoading
         :title="$t('Company Details')"
-        :loading="loading"
-      ></TitleLoading>
+        :loading="loading"></TitleLoading>
     </template>
 
     <div slot="content" class="company-information pt-10px">
-      <div class="row mb-30-px">
-        <div class="col-md-2">
-          <SideBar></SideBar>
-        </div>
-        <div class="col-md-9 offset-md-1">
-
-          <div class="card">
-            <div class="card-body">
-                <span class="tx-12-px txt-68748F">{{ $t('Active license for the company') }}</span>
-                <h5>{{ currentCompany.stats.plan.title }}</h5>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-body">
-
-              <b-form-group
+      <b-row>
+        <b-col cols="3"><SideBar></SideBar></b-col>
+        <b-col cols="5">
+          <b-card :header="$t('Company Details')">
+            <b-form-group
                 :label="$t('Company Name')"
-                label-for="company-name"
-              >
+                label-for="company-name">
                 <b-form-input id="company-name" v-model="companyName" trim></b-form-input>
               </b-form-group>
-
               <b-form-group
                 :label="$t('Company Description')"
-                label-for="company-name"
-              >
+                label-for="company-name">
                 <b-form-textarea
                   id="textarea"
                   v-model="companyDescription"
@@ -160,52 +144,14 @@ export default {
                   max-rows="6"
                 ></b-form-textarea>
               </b-form-group>
-
-              <div class="row mt-2">
-                <div class="col-lg">
-                  
-                  <label>{{ $t('Company Logo') }}</label>
-
-                  <UploadImage 
-                    :size="128"
-                    :options="logoOptions" 
-                    :image="logo" 
-                    :btn-title="$t('Upload Company Logo')"
-                    @action="updateLogo"></UploadImage>
-                    
-                  <div class="mt-2">
-                    <small>
-                      {{
-                        $t(
-                          'You can upload a logo image to appear in your projects and email notifications. Must be at least 128x128 pixels.'
-                        )
-                      }}
-                    </small>
-                  </div>
-
-                </div>
-
-                <div class="col-lg">
-                  <b-form-checkbox v-model="settingsEmail" :checked="settingsEmail">
-                    <span>
-                      {{ $t('Emails - Personalised Brand') }}
-                    </span>
-                  </b-form-checkbox>
-                  <small >
-                    {{ $t('Company logo and description will appear in emails sent.') }}
-                  </small>
-
-                  <b-form-checkbox v-model="settingsLabels" :checked="settingsLabels" class="mt-2">
-                    <span>
-                      {{ $t('Share Project Labels') }}
-                    </span>
-                  </b-form-checkbox>
-                  <small>
-                    {{ $t('Project Labels can be used inside other projects.') }}
-                  </small>
-                </div>
-              </div>
-
+              <b-form-checkbox v-model="settingsEmail" :checked="settingsEmail">
+                <span> {{ $t('Emails - Personalised Brand') }}</span>
+              </b-form-checkbox>
+              <small>{{ $t('Company logo and description will appear in emails sent.') }}</small>
+              <b-form-checkbox v-model="settingsLabels" :checked="settingsLabels" class="mt-2">
+                <span> {{ $t('Share Project Labels') }}</span>
+              </b-form-checkbox>
+              <small>{{ $t('Project Labels can be used inside other projects.') }}</small>
               <div class="mt-3 mb-2">
                 <hr>
                 <div class="d-flex justify-content-between">
@@ -219,11 +165,24 @@ export default {
                   ></ButtonLoading>
                 </div>
               </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
+          </b-card>
+        </b-col>
+        <b-col cols="4">
+          <b-card :header="$t('Company Subscription')">
+            <span class="small">{{ $t('Active license for the company') }}</span>
+            <h5 class="h6 font-weight-bold">{{ currentCompany.stats.plan.title }}</h5>
+          </b-card>
+          <b-card :header="$t('Company Logo')">
+            <UploadImage 
+              :size="128"
+              :options="logoOptions" 
+              :image="logo" 
+              :btn-title="$t('Upload Company Logo')"
+              @action="updateLogo"></UploadImage>
+              <small> {{$t('You can upload a logo image to appear in your projects and email notifications. Must be at least 128x128 pixels.')}}</small>
+          </b-card>
+        </b-col>
+      </b-row>
     </div>
   </Layout>
 </template>

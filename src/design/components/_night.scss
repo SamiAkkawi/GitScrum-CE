@@ -1,0 +1,301 @@
+.GitScrum-Night {
+    background: $black-400 !important;
+    color: $grey-100;
+     ::placeholder {
+        color: $grey-900 !important;
+    }
+    small {
+        color: $grey-300 !important;
+    }
+    a {
+        color: $grey-A100 !important;
+        text-decoration: none;
+        background-color: transparent;
+    }
+    .subheader {
+        background: $grey-900;
+    }
+    #sidebar-left {
+        .badge.badge-light {
+            background: transparent !important;
+            color: $grey-A100 !important;
+            .fa-lock-alt {
+                color: $grey-A100 !important;
+            }
+        }
+        .header-project-title {
+            span {
+                color: $grey-A100;
+            }
+        }
+    }
+    .header-project-team-members {
+        h3 {
+            color: $grey-300;
+        }
+    }
+    .project-members .box {
+        background: $grey-700;
+        .avatar {
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1), 0 0 0 8px $grey-900;
+        }
+        .headline {
+            color: $grey-300;
+        }
+        .header-project-collaboration p {
+            color: $grey-200;
+        }
+    }
+    .v-sidebar-menu .vsm--header {
+        color: $grey-300;
+    }
+    .v-sidebar-menu .vsm--link,
+    .v-sidebar-menu .vsm--link_level-1 .vsm--icon,
+    .v-sidebar-menu .vsm--icon {
+        color: $grey-A200 !important;
+        &:hover {
+            color: $grey-50 !important;
+        }
+    }
+    .v-sidebar-menu .vsm--dropdown .vsm--list {
+        background-color: transparent;
+        padding: 5px 0 !important;
+    }
+    .v-sidebar-menu.vsm_expanded .vsm--link.vsm--link_active {
+        background-color: $blue-900;
+        color: $blue-100 !important;
+    }
+    .b-sidebar {
+        background: $black-600 !important;
+        .my-next-tasks-header {
+            background: $black-300 !important;
+            .titleLoading h1 {
+                color: $black-50;
+            }
+        }
+    }
+    .bunny-project-card {
+        border: 2px solid $grey-900 !important;
+        .card {
+            background: $black-700 !important;
+        }
+        &:hover {
+            border: 2px solid $grey-600 !important;
+        }
+        .btn-secondary {
+            color: $grey-200;
+            background-color: $grey-900;
+            border-color: $grey-900;
+        }
+        .badge-light {
+            color: $grey-200 !important;
+            background-color: $grey-900 !important;
+            border-color: $grey-900 !important;
+            .btn {
+                color: $grey-200 !important;
+            }
+        }
+        .project-list-progress.progress .progress-bar {
+            background: $pink-500 !important;
+        }
+    }
+    .project-progress.progress .progress-bar {
+        border-radius: 0;
+        background-color: $pink-500 !important;
+    }
+    .styled-dropdown {
+        .dropdown-menu {
+            background-color: $grey-400 !important;
+            .dropdown-item {
+                color: $grey-50 !important;
+                &:hover {
+                    background-color: $grey-700 !important;
+                    border-radius: 4px;
+                    color: $grey-200 !important;
+                    border-color: transparent;
+                }
+            }
+        }
+        .btn:focus,
+        .btn:active {
+            background: $grey-900 !important;
+            border: 1px solid transparent !important;
+        }
+    }
+    .bunny-project-card button:focus,
+    .bunny-project-card button:active {
+        background-color: $grey-500 !important;
+        border: 1px solid $grey-700 !important;
+        outline: none !important;
+    }
+    .sidebar-menu-title {
+        color: $grey-100 !important;
+    }
+    .card {
+        background: $grey-800 !important;
+        .card-title {
+            color: $grey-100 !important;
+        }
+        .card-text {
+            color: $grey-300 !important;
+            label {
+                color: $grey-100 !important;
+            }
+            small,
+            .small {
+                color: $grey-300 !important;
+            }
+        }
+        .card-header {
+            background-color: $grey-900 !important;
+            color: $grey-400 !important;
+        }
+    }
+    .sprint-burndown {
+        background: $grey-100 !important;
+    }
+    .card-body-create {
+        background: $grey-500 !important;
+    }
+    .swatches-input .vue-swatches__trigger {
+        border: 2px solid $grey-900 !important;
+    }
+    .btn-primary {
+        color: $blue-50 !important;
+    }
+    .v-sidebar-menu {
+        background: $black-500 !important;
+    }
+    .v-sidebar-menu a {
+        color: $blue-200 !important;
+        &:hover {
+            color: $grey-A100;
+        }
+    }
+    .header-project-logo {
+        img {
+            border: 2px solid $grey-700;
+        }
+    }
+    .custom-select,
+    .form-control,
+    .mx-input {
+        background-color: $grey-300 !important;
+        border: 2px solid $grey-900 !important;
+        color: $grey-900 !important;
+    }
+    .mx-datepicker-popup {
+        border: 1px solid $grey-400 !important;
+        background-color: $grey-200 !important;
+    }
+    .mx-calendar {
+        color: $black-800 !important;
+        a {
+            color: $blue-800 !important;
+        }
+    }
+    .mx-datepicker-btn {
+        background-color: $grey-50 !important;
+    }
+    .mx-panel-date td.last-month,
+    .mx-panel-date td.next-month {
+        color: $grey-400 !important;
+    }
+    .task-total {
+        color: $black-50;
+        background: $grey-700 !important;
+        border: 1px solid rgba(0, 0, 0, 0.3) !important;
+    }
+    .board-workflow {
+        background-color: $black-700;
+        .add-card {
+            background: $grey-900;
+        }
+        .task-title {
+            color: $grey-50;
+        }
+    }
+    .header-project-collaboration .progress-bar {
+        background-color: $lime-900;
+    }
+    .table {
+        background: $black-800 !important;
+        color: $grey-200 !important;
+        .badge-light {
+            background: $grey-800 !important;
+            border: 1px solid $grey-700;
+            padding-bottom: 2px;
+            color: $grey-300 !important;
+        }
+        thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid $black-A700;
+        }
+        .date-time {
+            font-size: 12px;
+            color: $grey-400;
+        }
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background: $black-300 !important;
+    }
+    .table th {
+        border-top: 1px solid transparent !important;
+    }
+    .table td {
+        border-top: 1px solid $black-300 !important;
+    }
+    .table-hover tbody tr:hover {
+        background-color: $black-500 !important;
+        color: $grey-50 !important;
+    }
+    .sprint .progress,
+    .user-story .progress {
+        background: $black-300 !important;
+    }
+    .sprint .progress .progress-bar,
+    .user-story .progress .progress-bar {
+        background-color: $lime-800 !important;
+    }
+    hr {
+        border-top: 1px solid $grey-500;
+    }
+    .titleLoading {
+        h1 {
+            color: $grey-50;
+        }
+        p {
+            color: $grey-300;
+        }
+    }
+    .card-template {
+        background: $grey-50;
+        border: 2px solid $blue-50 !important;
+    }
+    .card-template.selected,
+    .card-template:hover {
+        background: $blue-900 !important;
+        border: 2px solid $blue-A700 !important;
+        color: $blue-50;
+    }
+    .dropzone {
+        background: $grey-300 !important;
+        color: $blue-50 !important;
+    }
+    .btn-outline-secondary {
+        background: $grey-600 !important;
+        color: $grey-50 !important;
+        border-color: $grey-400 !important;
+    }
+    .b-form-tags-input {
+        border-color: $grey-100 !important;
+    }
+    .tabs-burndown {
+        .nav-tabs .nav-link.active,
+        .nav-tabs .nav-item.show .nav-link {
+            color: $grey-100 !important;
+            background-color: $grey-600 !important;
+            border-color: $grey-300 !important;
+        }
+    }
+}

@@ -94,21 +94,17 @@ export default {
 <template>
   <Layout>
     <template slot="header-left">
-      <TitleLoading
-        :title="$t('Rockstar Team')" :loading="loading"></TitleLoading>
+      <TitleLoading :title="$t('Rockstar Team')" :loading="loading"></TitleLoading>
     </template>
 
     <div slot="content" class="rockstar-team pt-10px">
       <div class="container">
-
         <div class="row mb-30-px">
-          <div class="col-md-12 pr-0">
-            
+          <div class="col-md-12">
             <div class="mb-3">
               <DatePicker v-model="dates" range lang="en" type="date" confirm @change="changeDate"></DatePicker>
             </div>
-
-            <b-table class="table-rockstar-team" striped hover :items="items" :fields="fields" >
+            <b-table class="table-rockstar-team" hover :items="items" :fields="fields" >
               <template v-slot:cell(user.avatar)="data">
                 <div class="d-flex align-items-center">
                   <span class="ranking-number">
@@ -123,17 +119,13 @@ export default {
                 <div class="box-useravatar">
                   <ListUsers :user="data.item.user" :link="true" size="22"></ListUsers>
                   <router-link
-                  :to="{
-                    name: 'profile.user',
-                    params: { username: data.item.user.username },
-                  }"
-                  >
+                  :to="{ name: 'profile.user',
+                    params: { username: data.item.user.username } }">
                     {{data.item.user.name}}
                   </router-link>
                 </div>
               </template>
             </b-table>
-
           </div>
         </div>
       </div>

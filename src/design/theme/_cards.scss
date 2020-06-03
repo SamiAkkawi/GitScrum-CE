@@ -1,86 +1,4 @@
-.hero-card-row {
-    .hero-one,
-    .hero-two {
-        width: 48%;
-        text-align: center;
-    }
-    .hero-unique {
-        text-align: center;
-        width: 100%;
-        padding-top: 25px;
-        margin-bottom: 10px;
-        .number {
-            color: #FFA700;
-        }
-    }
-    .hero-one {
-        color: #7E84FF;
-    }
-    .hero-two {
-        color: #0CC777;
-    }
-}
-
-.hero-card {
-    padding: 20px 15px 10px;
-    text-align: center;
-    background: #fff;
-    box-shadow: 0px 4px 4px rgba(108, 114, 147, 0.15);
-    border-radius: 4px;
-    span {
-        display: flex;
-        justify-content: center;
-    }
-    .icon {
-        span {
-            display: inline;
-            padding: 10px 10px;
-            border-radius: 100%;
-            &.closed {
-                background: #dfe8fd;
-            }
-            &.completed {
-                background: #e3f4e6;
-            }
-            &.hours {
-                background: #fdf6da;
-            }
-        }
-        svg {
-            font-size: 16px;
-            position: relative;
-            top: 2px;
-        }
-        .fa-tasks {
-            color: #3d4f9f;
-        }
-    }
-    .number {
-        font-style: normal;
-        font-weight: bold;
-        font-size: 26px;
-        line-height: 32px;
-        letter-spacing: 0.03em;
-    }
-    .text {
-        color: #68748F;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 11px;
-        line-height: 16px;
-        letter-spacing: 0.03em;
-    }
-}
-
-.team-card {
-    .avatar-sm {
-        width: 30px;
-        height: 30px;
-    }
-}
-
-.card-md {}
-
+/*
 .project-members {
     .box {
         top: 40px;
@@ -164,3 +82,4 @@
         bottom: 35px;
     }
 }
+*/

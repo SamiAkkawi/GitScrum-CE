@@ -186,33 +186,33 @@ export default {
       <b-container>
         <b-row>
           <b-col>
-            <TaskFormEnable v-if="configFormAnswer" :config="configFormAnswer" @enableShareableLink="configFormAnswerConfig"></TaskFormEnable>
+            <TaskFormEnable 
+              v-if="configFormAnswer" 
+              goto="settings"
+              :config="configFormAnswer" 
+              @enableShareableLink="configFormAnswerConfig"></TaskFormEnable>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="d-flex align-items-center">
-                    <div>{{ $t('Convert to workflow stage') }}</div>
-                    <div class="ml-10-px wd-150-px">
-                      <b-form-select v-model="workflow" :options="workflows" value-field="id" text-field="title" size="sm" @change="updateWorkflow"></b-form-select>
-                    </div>
-                  </div>
-                  <div>
-                    <router-link :to="{ name: 'projects.addons.task-form.settings' }" class="fw-700">
-                      {{ $t('Go to Settings') }}
-                    </router-link>
-                  </div>
+            <b-card>
+              <div class="d-flex align-items-center">
+                <div>{{ $t('Convert to workflow stage') }}</div>
+                <div class="ml-10-px wd-150-px">
+                  <b-form-select v-model="workflow" 
+                  :options="workflows" 
+                  value-field="id" 
+                  text-field="title" 
+                  ize="sm" 
+                  @change="updateWorkflow"></b-form-select>
                 </div>
               </div>
-            </div>
+            </b-card>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <b-table class="table-time-tracking" striped hover :items="answers" :fields="fields" >
+            <b-table class="table-time-tracking" hover :items="answers" :fields="fields" >
               <template v-slot:cell(title)="data" >
                 <div class="d-flex align-items-center">
                   <span v-if="data.item.status.id === 0" class="badge badge-warning">{{ data.item.status.name}}</span>

@@ -1,4 +1,6 @@
 .sidebar {
+    position: sticky;
+    top: 95px;
     padding: 0;
     .nav {
         overflow: hidden;

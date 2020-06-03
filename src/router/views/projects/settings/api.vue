@@ -115,7 +115,6 @@ export default {
     </template>
 
     <div slot="content" class="project-api-management pt-10px">
-
       <b-container>
         <b-row>
           <b-col cols="3">
@@ -138,33 +137,29 @@ export default {
             -->
           </b-col>
           <b-col cols="9">
-            <b-card>
-              <h4 class="h5">{{ $t('Project API Credentials') }}</h4>
-              <p class="mt-10px mb-10px">{{ $t('Use GitScrum\'s new API to programmatically interact with your organization\'s data. You can also develop (third-party) apps and build upon GitScrum core product features. The API ID and the Project key are required for you to use our API in a secure way.') }}</p>
+            <b-card :header="$t('Project API Credentials')">
+              <p>{{ $t('Use GitScrum\'s new API to programmatically interact with your organization\'s data. You can also develop (third-party) apps and build upon GitScrum core product features. The API ID and the Project key are required for you to use our API in a secure way.') }}</p>
               <hr>
               <b-row>
                 <b-col cols="6">
-                  <label>{{ $t('API ID') }} 
+                  <b-form-group :label="$t('API ID')">
+                    <b-input-group>
+                      <b-input v-model="apiId" 
+                        :disabled="apiId === ''" 
+                        :readonly="apiId !== ''" 
+                        autocomplete="off"></b-input>
+                      <b-input-group-append>
+                        <b-button variant="outline-secondary" @click="copyApiID">
+                          <font-awesome-icon :icon="['far', 'copy']" />
+                        </b-button>
+                      </b-input-group-append>
+                    </b-input-group>
                     <small class="text-success" v-text="copyApiIDSuccess"></small>
-                  </label>
-                  <b-input-group>
-                    <b-input v-model="apiId" 
-                      :disabled="apiId === ''" 
-                      :readonly="apiId !== ''" 
-                      autocomplete="off"></b-input>
-                    <b-input-group-append>
-                      <b-button variant="outline-secondary" @click="copyApiID">
-                        <font-awesome-icon :icon="['far', 'copy']" />
-                      </b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                  
+                  </b-form-group>
                 </b-col>
                 <b-col cols="6">
-                  <label>{{ $t('Project Key') }} 
-                    <small class="text-success" v-text="copyProjectKeySuccess"></small>
-                  </label>
-                  <b-input-group>
+                  <b-form-group :label="$t('Project Key')">
+                    <b-input-group>
                     <b-input v-model="projectKey" 
                       :disabled="projectKey === ''" 
                       :readonly="projectKey !== ''"
@@ -175,8 +170,10 @@ export default {
                       </b-button>
                     </b-input-group-append>
                   </b-input-group>
+                    <small class="text-success" v-text="copyProjectKeySuccess"></small>
+                  </b-form-group>
                 </b-col>
-                <b-col class="mt-10px text-right">
+                <b-col class="text-right">
                   <b-link class="small" @click="updateAPIKeys">{{ $t('Update Project Key') }}</b-link>
                 </b-col>
               </b-row>

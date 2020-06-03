@@ -5,9 +5,9 @@
         padding: 0;
     }
     .nav-tabs {
-        position: relative;
-        margin-left: 68px;
-        z-index: 3;
+        position: absolute;
+        top: 5px;
+        right: 0;
     }
     .nav-tabs .nav-link {
         width: auto;
@@ -28,7 +28,7 @@
         border-bottom: 0 solid transparent;
     }
     .tab-pane {
-        position: absolute;
+        position: relative;
         top: -10px;
         width: 100%;
     }

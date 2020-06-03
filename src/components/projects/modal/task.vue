@@ -381,7 +381,7 @@ export default {
         <button v-if="authorize('tasks', 'read')" type="button" aria-label="Close" class="close" @click="hideModal">×</button>
         <div v-if="task.workflow" :style="'border-top: 10px solid ' + task.workflow.color"> </div>
         <div class="row task-content">
-          <div class="col-12 col-md-9 task-left">
+          <div class="col-12 col-md-8 task-left">
             <div class="row">
               <div class="col-md-1 d-none d-sm-block"></div>
               <div class="col-12 col-md-11">
@@ -691,7 +691,7 @@ export default {
 
           <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 
-          <div class="col-md-3 task-right d-none d-sm-block">
+          <div class="col-md-4 task-right d-none d-sm-block">
             
             <div v-if="currentUser">
               <div class="row d-block" style="height:45px"> </div>

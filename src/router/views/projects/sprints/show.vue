@@ -265,26 +265,24 @@ export default {
 
     <div slot="content" class="sprint pt-10px">
       
-      <div class="container">
-        <div v-if="sprint" class="row mb-30-px">
-          <div class="col-lg-12">
-            <div class="wd-100">
-
+      <b-container>
+        <b-row>
+          <b-col>
+            <b-card :header="$t('Sprint')">
               <div class="title-component">
                 <LabelEdit v-if="authorize('sprints', 'update')" :placeholder="$t('Sprint Name')" class="wd-100" :text="sprint.title" @text-updated-blur="titleUpdate" @text-updated="titleUpdate"></LabelEdit>
                 <span v-else class="vlabeledit-label" v-text="sprint.title"></span>
               </div>
-              
               <div class="d-flex justify-content-between">
                 <div class="d-flex justify-content-start" style="height: 25px;">
-                  <span class="tx-14-px fw-600">{{ $t('Timebox') }}</span>
+                  <span class="font-weight-bold">{{ $t('Timebox') }}</span>
                   <div v-if="sprint" class="sprint-timebox ml-10-px wd-150">
                     <div :class="timeboxEditMode ? 'none' : ''">
-                      <span class="fw-normal txt-68748F" v-text="sprint.timebox"></span>
+                      <span v-text="sprint.timebox"></span>
                       <font-awesome-icon
                         v-if="authorize('sprints', 'update')"
                         :icon="['far', 'calendar-alt']"
-                        class="calendar-edit txt-3D4F9F ml-10-px txt-9EA9C1"
+                        class="calendar-edit ml-2"
                         @click="handleDatePicker"
                       />
                     </div>
@@ -309,9 +307,9 @@ export default {
                       ></b-spinner>
                     </div>
                   </div>
-                  <div v-if="sprint" class="tx-14-px fw-600 ml-20-px">
-                    {{ $t('Duration') }}
-                    <span class="fw-normal ml-10-px txt-68748F" v-text="sprint.duration"></span>
+                  <div v-if="sprint">
+                    <span class="font-weight-bold ml-4">{{ $t('Duration') }}</span>
+                    <span class="ml-3" v-text="sprint.duration"></span>
                   </div>
                 </div>
                 <div class="d-flex justify-content-start v-select-mini sprint-status">
@@ -331,8 +329,7 @@ export default {
                     label="label"
                     :clearable="false"
                     :searchable="false"
-                    @input="updateStatus"
-                  >
+                    @input="updateStatus">
                     <!-- <slot name="selected-option" v-bind="typeof option === 'object' ? option : { [label]: option }">
 
                       {{ option }}
@@ -340,13 +337,12 @@ export default {
                   </v-select>
                 </div>
               </div>
-            </div>
-          </div>
-
-
-          <div class="col-lg-12 mb-15-px">
-            
-            <div v-if="sprint.stats" class="d-flex align-items-center">
+            </b-card>
+          </b-col>
+        </b-row>
+        <b-row v-if="sprint.stats" class="pt-2 pb-3">
+          <b-col>
+            <div class="d-flex align-items-center">
               <span class="txt-909CB8 percentage-text"> {{ parseFloat(sprint.stats.percentage) | percent(0) }}</span>
               <div class="progress wd-100 ml-10-px">
                 <div
@@ -355,69 +351,90 @@ export default {
                   :aria-valuenow="sprint.stats.percentage + 1"
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  :style="'width:' + sprint.stats.percentage + '%'"
-                >
+                  :style="'width:' + sprint.stats.percentage + '%'">
                 </div>
               </div>
             </div>
-          </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="3">
+              <b-jumbotron 
+              v-if="sprint.stats" 
+              :lead="sprint.stats.worked_hours" 
+              class="sprint-jumbotron-yellow">
+                <p v-text="$t('Hours Worked')"></p>
+              </b-jumbotron>
+              <b-jumbotron 
+              v-if="sprint.stats.story_points" 
+              :lead="sprint.stats.story_points" 
+              class="sprint-jumbotron-lime">
+                <p v-text="$t('Effort')"></p>
+              </b-jumbotron>
+              <b-jumbotron 
+              v-if="sprint.stats" 
+              :lead="sprint.stats.closed_tasks + ' / ' + sprint.stats.total_tasks" 
+              class="sprint-jumbotron-blue">
+                <p v-text="$t('Tasks')"></p>
+              </b-jumbotron>
 
-          <div class="col-lg-3">
-            <div class="hero-card-row">
-              <div class="hero-card hero-unique card-md">
-                <span class="icon">
-                  <span class="hours">
-                    <font-awesome-icon :icon="['far', 'clock']" class="txt-FBBB00" />
-                  </span>
-                </span>
-                <span v-if="sprint.stats" class="number mt-5-px mb-4-px" v-text="sprint.stats.worked_hours"></span>
-                <span class="text pb-10-px">{{ $t('Hours Worked') }}</span>
-              </div>
+              <b-card :header="$t('Sprint Team')">
+                <ListUsers
+                  :link="true"
+                  :users="sprint.users"
+                  :limit="100"
+                  :wrap="true"
+                  class="list-users-left"></ListUsers>
+              </b-card>
 
-              <div class="d-flex justify-content-between">
-                <div class="hero-card hero-one card-md">
-                  <span class="icon">
-                    <span class="closed">
-                      <font-awesome-icon :icon="['far', 'tasks']" class="txt-3D4F9F" />
-                    </span>
-                  </span>
-                  <span class="number mt-5-px mb-4-px">
-                    <span v-if="sprint.stats" v-text="sprint.stats.story_points"> </span>
-                  </span>
-                  <span class="text pb-10-px">
-                    {{ $t('Total Effort') }}
-                  </span>
-                </div>
-              
-                <div class="hero-card hero-two card-md">
-                  <span class="icon">
-                    <span class="completed">
-                      <font-awesome-icon :icon="['far', 'check']" class="txt-26DC8E" />
-                    </span>
-                  </span>
-                  <span v-if="sprint.stats" class="number mt-5-px mb-4-px">
-                    {{ sprint.stats.closed_tasks }}/{{ sprint.stats.total_tasks }}
-                  </span>
-                  <span class="text pb-10-px">
-                    {{ $tc('Task', 2) }}
-                  </span>
-                </div>
-              </div>
+              <b-link
+                href="javascript:;"
+                class="txt-68748F fw-500 lh-15-px tx-10-px mr-10-px tx-uppercase"
+                :title="$t('Delete Sprint')"
+                @click="deleteSprint">
+                <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
+                {{ $t('Delete Sprint') }}
+              </b-link>
+          </b-col>
+          <b-col cols="9">
+            <b-card :header="$t('Sprint Burndown')" class="sprint-burndown">
+              <b-tabs class="tabs-burndown" style="margin-left: -8px;">
+                <b-tab :title="$t('Burndown by Task')" active>
+                  <Burndown v-if="sprint.charts" type-name="Task" :data="sprint.charts.burndown_tasks"></Burndown>
+                </b-tab>
+                <b-tab :title="$t('Burndown by Effort')">
+                  <Burndown v-if="sprint.charts" type-name="Effort" :data="sprint.charts.burndown_efforts"></Burndown>
+                </b-tab>
+              </b-tabs>
+            </b-card>
+
+            <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+            <div v-if="totalRows" class="d-flex justify-content-center mt-4">
+              <b-pagination
+                v-model="currentPage"
+                hide-goto-end-buttons
+                class="paginator"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                @change="getTasks"
+              >
+                <template slot="prev-text">
+                  <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
+                </template>
+                <template slot="next-text">
+                  <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
+                </template>
+              </b-pagination>
             </div>
-          </div>
+          </b-col>
+        </b-row>
+      </b-container>
 
-          <div class="col-lg-7">
 
-            <b-tabs class="tabs-burndown" style="margin-left: -8px;">
-              <b-tab :title="$t('Burndown by Task')" active>
-                <Burndown v-if="sprint.charts" type-name="Task" :data="sprint.charts.burndown_tasks"></Burndown>
-              </b-tab>
-              <b-tab :title="$t('Burndown by Effort')">
-                <Burndown v-if="sprint.charts" type-name="Effort" :data="sprint.charts.burndown_efforts"></Burndown>
-              </b-tab>
-            </b-tabs>
+      <div class="container">
+        <div v-if="sprint" class="row mb-30-px">
+          
 
-          </div>
 
           <div class="col-lg-2">
 

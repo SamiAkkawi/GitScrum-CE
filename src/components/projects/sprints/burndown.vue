@@ -2,8 +2,17 @@
   <div>
     <highcharts v-show="data" :options="chartOptions" style="width:100%; height:312px;"></highcharts>
     
-    <div class="alert alert-info mt-4" v-show="!data">
-      <span> {{ $t('Burndown is not available. You should add tasks to this sprint.') }} </span>
+    <div v-show="!data" class="alert text-center">
+      {{ $t('Burndown is not available. You should add tasks to this sprint.') }}
+      <router-link
+        v-if="authorize('sprints', 'update')"
+        :to="{
+        name: 'projects.sprints.assign-tasks',
+        params: {
+          companySlug: $route.params.companySlug,
+          projectSlug: $route.params.projectSlug,
+          sprintSlug: $route.params.sprintSlug,
+        } }">{{ $t('Go to Assign Tasks') }}</router-link>
     </div>
   </div>
 </template>

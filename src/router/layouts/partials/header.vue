@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      gsNight: false,
       isMobile: isMobile,
       loading: false,
       details: null,
@@ -100,6 +101,14 @@ export default {
       } else {
         this.statusMyNextTask = true;
       }
+    },
+    changeTheme(){
+      const el = document.body;
+      if ( this.gsNight ){
+        el.classList.remove('GitScrum-Night');
+      } else {
+        el.classList.add('GitScrum-Night');
+      }
     }
   },
 }
@@ -129,6 +138,9 @@ export default {
 
       <b-collapse v-if="!sharing" id="nav-collapse" is-nav>
         <b-navbar-nav>
+          <li>
+            <b-form-checkbox v-model="gsNight" switch size="sm" @change="changeTheme"></b-form-checkbox>
+          </li>
           <HeaderLanguage></HeaderLanguage>
           
           <li v-if="currentCompany.subscription === 'free' && currentCompany.owner.username === currentUser.username">

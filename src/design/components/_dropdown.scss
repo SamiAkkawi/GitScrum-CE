@@ -58,6 +58,15 @@
     }
 }
 
+.styled-dropdown.badge {
+    font-size: 12px !important;
+    padding: 3px 6px !important;
+    .btn {
+        font-size: 12px;
+        color: $black-400;
+    }
+}
+
 .styled-dropdown.badge-team-members {
     button {
         padding: 0;
