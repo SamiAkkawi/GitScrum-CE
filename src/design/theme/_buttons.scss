@@ -74,27 +74,6 @@
     height: 32px;
 }
 
-.btn-download {
-    border: 1px solid #2A3B9C;
-    border-radius: 4px;
-    background: #F4F6F9;
-    font-size: 12px;
-    line-height: 18px;
-    color: #2A3B9C;
-    padding: 3px 6px;
-    .tx-14-px {
-        color: #2A3B9C;
-    }
-    &:hover {
-        text-decoration: none;
-        background: #2A3B9C;
-        color: #fff;
-        .tx-14-px {
-            color: #fff;
-        }
-    }
-}
-
 .btn-light {
     font-size: 14px;
     color: #1e1e2f !important;
@@ -113,17 +92,6 @@
 .btn-danger {
     background: #ef5958 !important;
     border-radius: 3px;
-}
-
-.btn-success {
-    background: #26dc8e;
-    color: #fff;
-    border-radius: 4px;
-    box-shadow: 0px 6px 20px rgba(38, 220, 142, 0.3);
-    // /* shadowgreen */
-    // &-shadow {
-    //   box-shadow: 0px 6px 20px rgba(38, 220, 142, 0.3);
-    // }
 }
 
 .btn-001737 {

@@ -365,7 +365,7 @@ a.badge-secondary.focus {
 
 .statusProjectExtra {
     position: absolute;
-    margin-top: -3px;
+    margin-top: -2px;
     right: 15px;
 }
 
@@ -488,6 +488,13 @@ a.badge-secondary.focus {
     -webkit-box-pack: start !important;
     -ms-flex-pack: start !important;
     justify-content: flex-start !important;
+}
+
+.textarea-description {
+    .vlabeledit-label {
+        font-size: 14px;
+        line-height: 18px;
+    }
 }
 
 
