@@ -8,13 +8,15 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import DescriptionEditable from '@components/utils/description-editable'
 import LabelEdit from 'label-edit'
+import InputEditable from '@components/utils/input-editable' 
+import TextareaEditable from '@components/utils/textarea-editable' 
 
 export default {
   page: {
     title: 'User Story',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, ListUsers, ListTasks, LabelEdit, vSelect, TitleLoading, DescriptionEditable },
+  components: { Layout, ListUsers, ListTasks, LabelEdit, vSelect, TitleLoading, DescriptionEditable, InputEditable, TextareaEditable },
   data() {
     return {
       loading: true,
@@ -217,7 +219,19 @@ export default {
       }
       this.update(params)
       this.userStory.title = title
-    }
+    },
+
+    updateAdditionalInformation(content){
+      let params = { additional_information: content.text }
+      this.update(params)
+      this.sprint.additional_information = content.text
+    },
+
+    updateAcceptanceCriteria(content){
+      let params = { acceptance_criteria: content.text }
+      this.update(params)
+      this.sprint.acceptance_criteria = content.text
+    },
   },
 }
 </script>
@@ -228,67 +242,87 @@ export default {
      <TitleLoading
         :title="$t('User Stories')"
         :subtitle="$t('User stories are short and simple descriptions of capabilities')"
-      >
+        :loading="loading">
       </TitleLoading>
     </template>
 
     <div slot="content" class="user-story pt-10px">
       
-      <div class="container">
-    
-        <div class="row mb-30-px">
-          <div class="col-lg-12">
-            <div class="wd-100">
-            
-              <div class="title-component">
-                <LabelEdit v-if="authorize('userStories', 'update')" class="wd-100" :text="userStory.title" v-on:text-updated-blur="titleUpdate"  v-on:text-updated-enter="titleUpdate"  v-on:text-updated="titleUpdate" :placeholder="$t('User Story Name')"></LabelEdit>
-                <span v-else class="vlabeledit-label" v-text="userStory.title"></span>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <div class="d-flex ml-7-px">
-                  <div class="mr-12-px">
-                    <ListUsers :link="true" :user="userStory.user" size="30"></ListUsers>
+      <b-container v-if="userStory">
+        <b-row>
+          <b-col>
+            <b-card :header="$t('User Story')">
+              <InputEditable v-if="authorize('userStories', 'update')" 
+                :placeholder="$t('Sprint Name')"
+                :text="userStory.title"
+                :current-object="userStory"
+                @text-updated-blur="updateTitle"  
+                @text-updated-enter="updateTitle"></InputEditable>
+                <span v-else class="vlabeledit-label" v-text="userStory.title" />
+                
+                <div class="d-flex justify-content-between">
+                  <div class="wd-100">
+                    <div class="textarea-description">
+                      <span class="small ml-1 font-weight-bold" v-text="$t('Additional information')" />
+                      <TextareaEditable
+                      v-if="authorize('userStories', 'update')" 
+                      :placeholder="$t('User Story')"
+                      :text="userStory.additional_information"
+                      :current-object="sprint"
+                      @text-updated-blur="updateAdditionalInformation"  
+                      @text-updated-enter="updateAdditionalInformation"></TextareaEditable>
+                      <span v-else class="vlabeledit-label" v-text="userStory.additional_information"></span>
+                    </div>
+                    <div class="textarea-description">
+                      <span class="small ml-1 font-weight-bold" v-text="$t('Acceptance criteria')" />
+                      <TextareaEditable
+                      v-if="authorize('userStories', 'update')" 
+                      :placeholder="$t('User Story')"
+                      :text="userStory.acceptance_criteria"
+                      :current-object="sprint"
+                      @text-updated-blur="updateAcceptanceCriteria"  
+                      @text-updated-enter="updateAcceptanceCriteria"></TextareaEditable>
+                      <span v-else class="vlabeledit-label" v-text="userStory.acceptance_criteria"></span>
+                    </div>
                   </div>
-                  <div>
+                  <div class="pt-2 ml-2" style="min-width:260px">
                     <router-link
                       :to="{
-                        name: 'profile.user',
-                        params: { username: userStory.user.username },
-                      }"
-                      class="d-block lh-16-px fw-600 tx-14-px txt-1E1E2F"
-                      v-text="userStory.user.name"
-                    >
+                        name: 'projects.board',
+                        params: {
+                          companySlug: this.$route.params.companySlug,
+                          projectSlug: this.$route.params.projectSlug,
+                        }, query: { userStorySlug: this.$route.params.userStorySlug } }" 
+                        class="btn btn-primary btn-sm btn-block" v-text="$t('User Story in Board')">
                     </router-link>
-                    <span class="d-block txt-909CB8 tx-12-px">
-                      {{ $t('Created on') }}
-                      <span v-text="userStory.created_at.date_for_humans"></span>
-                    </span>
+                    <router-link
+                      :to="{
+                        name: 'projects.user-stories.assign-tasks',
+                        params: {
+                          companySlug: $route.params.companySlug,
+                          projectSlug: $route.params.projectSlug,
+                          userStorySlug: $route.params.userStorySlug } }"
+                      class="btn btn-success btn-sm btn-block" v-text="$t('Assign Tasks')">
+                    </router-link>
                   </div>
                 </div>
-                  
-                <div class="d-flex justify-content-start v-select-mini user-story-priority">
-                  
-                  <v-select
-                    id="user-story-priority"
-                    v-model="userStory.priority.title"
-                    :options="userStoryPriorities"
-                    class="d-flex tx-uppercase"
-                    :style="'color: ' + invertColor(userStory.priority.color, true) + ';background: ' + userStory.priority.color"
-                    label="label"
-                    :clearable="false"
-                    :searchable="false"
-                    @input="updatePriority"
-                  >
-                  </v-select>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-12 mb-15-px">
-            <div v-if="userStory.stats" class="d-flex align-items-center">
+              
+                <span class="small text-secondary ml-1">
+                  {{ $t('Created on') }}
+                  <span v-if="userStory.created_at" v-text="userStory.created_at.date_for_humans"></span> - 
+                  <router-link
+                  v-if="userStory.user"
+                  :to="{
+                    name: 'profile.user',
+                    params: { username: userStory.user.username } }"
+                  v-text="userStory.user.name"></router-link>
+                </span>
+            </b-card>
+          </b-col>
+        </b-row>
+        <b-row v-if="userStory.stats" class="pt-2 pb-3">
+          <b-col>
+            <div class="d-flex align-items-center">
               <span class="txt-909CB8 percentage-text"> {{ parseFloat(userStory.stats.percentage) | percent(0) }}</span>
               <div class="progress wd-100 ml-10-px">
                 <div
@@ -297,161 +331,62 @@ export default {
                   :aria-valuenow="userStory.stats.percentage + 1"
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  :style="'width:' + userStory.stats.percentage + '%'"
-                >
+                  :style="'width:' + userStory.stats.percentage + '%'">
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="hero-card-row">
-              <div class="hero-card hero-unique card-md">
-                <span class="icon">
-                  <span class="hours">
-                    <font-awesome-icon :icon="['far', 'clock']" class="txt-FBBB00" />
-                  </span>
-                </span>
-                <span v-if="userStory.stats" class="number mt-5-px mb-4-px" v-text="userStory.stats.worked_hours"></span>
-                <span class="text pb-10-px">{{ $t('Hours Worked') }}</span>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <div class="hero-card hero-one card-md">
-                  <span class="icon">
-                    <span class="closed">
-                      <font-awesome-icon :icon="['far', 'tasks']" class="txt-3D4F9F" />
-                    </span>
-                  </span>
-                  <span class="number mt-5-px mb-4-px">
-                    <span v-if="userStory.stats" v-text="userStory.stats.story_points"> </span>
-                  </span>
-                  <span class="text pb-10-px">
-                    {{ $t('Total Effort') }}
-                  </span>
-                </div>
-              
-                <div class="hero-card hero-two card-md">
-                  <span class="icon">
-                    <span class="completed">
-                      <font-awesome-icon :icon="['far', 'check']" class="txt-26DC8E" />
-                    </span>
-                  </span>
-                  <span v-if="userStory.stats" class="number mt-5-px mb-4-px">
-                    {{ userStory.stats.closed_tasks }}/{{ userStory.stats.total_tasks }}
-                  </span>
-                  <span class="text pb-10-px">
-                    {{ $tc('Task', 2) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <span class="mt-10-px btn btn-secondary btn-sm txt-link d-block" @click="downloadExcel">
-              <font-awesome-icon :icon="['fal', 'cloud-download']" class="mr-4-px tx-14-px" />
-              {{ $t('Download TimeSheet') }}
-            </span>
-
-            <div class="mt-1">
-              <router-link
-                :to="{
-                  name: 'projects.user-stories.assign-tasks',
-                  params: {
-                    companySlug: $route.params.companySlug,
-                    projectSlug: $route.params.projectSlug,
-                    userStorySlug: $route.params.userStorySlug,
-                  },
-                }"
-                class="btn btn-success btn-sm wd-100"
-              >
-                {{ $tc('Assign Tasks', 2) }}
-              </router-link>
-            </div>
-
-            <div class="mt-1 mb-2">
-              <router-link
-                :to="{
-                  name: 'projects.board',
-                  params: {
-                    companySlug: this.$route.params.companySlug,
-                    projectSlug: this.$route.params.projectSlug,
-                  },
-                  query: { userStorySlug: this.$route.params.userStorySlug },
-                }"
-                class="btn btn-primary btn-sm wd-100"
-              >
-                {{ $t('User Story in Board') }} ({{ tasks.length }})
-              </router-link>
-            </div>
-
-            <div v-if="userStory.users" class="hero-card text-left mb-2">
-              <h3 class="tx-16-px fw-600 m-0">{{ $tc('Team', 1) }}</h3>
-              <div class="p-5-px">
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="3">
+              <b-jumbotron 
+              v-if="userStory.stats" 
+              :lead="userStory.stats.worked_hours" 
+              class="sprint-jumbotron-yellow">
+                <p><span class="d-block">{{ $t('Hours Worked') }}</span>
+                  <b-link class="small" @click="downloadExcel">
+                    {{ $t('Download TimeSheet') }}
+                  </b-link></p>
+              </b-jumbotron>
+              <b-jumbotron 
+              v-if="userStory.stats.story_points" 
+              :lead="userStory.stats.story_points" 
+              class="sprint-jumbotron-lime">
+                <p v-text="$t('Effort')"></p>
+              </b-jumbotron>
+              <b-jumbotron 
+              v-if="userStory.stats" 
+              :lead="userStory.stats.closed_tasks + ' / ' + userStory.stats.total_tasks" 
+              class="sprint-jumbotron-blue">
+                <p v-text="$t('Tasks')"></p>
+              </b-jumbotron>
+              <b-card :header="$t('Sprint Team')">
                 <ListUsers
                   :link="true"
                   :users="userStory.users"
                   :limit="100"
-                ></ListUsers>
-              </div>
-            </div>
-
-            <div class="hero-card text-left mb-10-px">
-              <h3 class="tx-16-px fw-600 m-0">{{ $t('Additional information') }}</h3>
-              <DescriptionEditable
-                class="mt-15-px"
-                :description="userStory.additional_information"
-                :description-mention="userStory.additional_information_mention"
-                :endpoint="userStoryEndpoint"
-                paramName="additional_information"
-                :placeholder="$t('Additional information Description')"
-                :company-slug="$route.params.companySlug"
-                :project-slug="$route.params.projectSlug"
-                permission-feature="userStories"
-              ></DescriptionEditable>
-            </div>
-
-            <div class="hero-card text-left mb-10-px">
-              <h3 class="tx-16-px fw-600 m-0">{{ $t('Acceptance criteria') }}</h3>
-              <DescriptionEditable
-                class="mt-15-px"
-                :description="userStory.acceptance_criteria"
-                :description-mention="userStory.acceptance_criteria_mention"
-                :endpoint="userStoryEndpoint"
-                paramName="acceptance_criteria"
-                :placeholder="$t('Acceptance criteria Description')"
-                :company-slug="$route.params.companySlug"
-                :project-slug="$route.params.projectSlug"
-                permission-feature="userStories"
-              ></DescriptionEditable>
-            </div>
-
-            <div v-if="authorize('userStories', 'delete')" class="hero-card text-left">
-                <a
-                  href="javascript:;"
-                  class="txt-68748F fw-500 lh-15-px tx-10-px mr-10-px tx-uppercase"
-                  title="Delete User Story"
-                  @click="deleteUserStory"
-                  >
-                  <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
-                  {{ $t('Delete User Story') }}
-                </a>
-            </div>
-          </div>
-
-          <div class="col-lg-9">
-
-            <ListTasks class="mg-t-20" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
-          
+                  :wrap="true"
+                  class="list-users-left"></ListUsers>
+              </b-card>
+              <b-link
+                href="javascript:;"
+                class="txt-68748F fw-500 lh-15-px tx-10-px mr-10-px tx-uppercase"
+                :title="$t('Delete Sprint')"
+                @click="deleteUserStory">
+                <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
+                {{ $t('Delete User Story') }}
+              </b-link>
+          </b-col>
+          <b-col cols="9">
+            <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
             <div v-if="totalRows" class="d-flex justify-content-center mt-4">
-            <!-- <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4"> -->
               <b-pagination
                 v-model="currentPage"
                 hide-goto-end-buttons
                 class="paginator"
                 :total-rows="totalRows"
                 :per-page="perPage"
-                @change="getTasks"
-              >
+                @change="getTasks">
                 <template slot="prev-text">
                   <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
                 </template>
@@ -460,10 +395,9 @@ export default {
                 </template>
               </b-pagination>
             </div>
-
-          </div>
-        </div>
-      </div>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </Layout>
 </template>

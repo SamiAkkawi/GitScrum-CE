@@ -31,7 +31,8 @@ html {
             padding: 21px 40px;
             background: #ffffff;
             border: none;
-            button.close {
+            button.close,
+            button.task-close {
                 font-size: 30px;
                 padding: 0;
                 margin: 6px 0px;
@@ -103,11 +104,17 @@ html {
     }
     .modal-lg,
     .modal-xl {
+        /*
         .close {
             z-index: 9999 !important;
             position: absolute !important;
             top: 10px !important;
             right: 35px !important;
+            font-size: 60px !important;
+        }
+        */
+        .close {
+            background: transparent;
             font-size: 60px !important;
         }
     }

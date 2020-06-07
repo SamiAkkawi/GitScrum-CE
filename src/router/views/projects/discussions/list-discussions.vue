@@ -163,11 +163,10 @@ export default {
                 :company-slug="$route.params.companySlug"
                 :project-slug="$route.params.projectSlug"
                 @cancel="cancel"
-                @text="created"
-              ></CommentEditor>
+                @text="created"></CommentEditor>
             </div>
 
-            <b-table class="table-discussions" striped hover="" :items="comments" :fields="fields" >
+            <b-table class="table-discussions" hover="" :items="comments" :fields="fields" >
               <template v-slot:cell(comment)="data" >
                 <router-link
                   :to="{

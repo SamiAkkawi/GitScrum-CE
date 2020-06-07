@@ -1,13 +1,12 @@
 <script>
 import Axios from '@utils/axios'
 import vSelect from 'vue-select'
-import TitleLoading from '@components/utils/title-loading'
 import Alert from '@components/utils/alert'
 
 import 'vue-select/dist/vue-select.css'
 
 export default {
-  components: { vSelect, TitleLoading, Alert },
+  components: { vSelect, Alert },
   props: {
     companySlug: {
       type: String,
@@ -168,33 +167,16 @@ export default {
 </script>
 
 <template>
-  <div class="dropdown mb-8-px">
-    <button
-      class="btn btn-block dropdown-toggle"
-      data-toggle="dropdown"
-      @click="getProjects"
-      :disabled="!authorize('tasks', 'update')"
-    >
-      <span class="icon-size"><font-awesome-icon :icon="['far', 'exchange']" style="font-size:14px"/></span>
-      <span>{{ $t('Move') }}</span>
+  <div>
+    <button 
+      v-if="authorize('tasks', 'update')" 
+      v-b-toggle.move-task 
+      class="btn btn-secondary btn-block">
+      {{ $t('Move to another Project') }}
     </button>
-    <div ref="dropdown" class="dropdown-menu navbar-dropdown" style="margin:3px 0 0 0; width: 335px;">
-      <b-dd-form class="dropdown-padding">
-        <div class="header-dropdown-topitem">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>{{ $t('Move to another Project') }}</div>
-            <div class="d-flex justify-content-end"> </div>
-          </div>
-        </div>
-
-        <b-spinner
-          v-show="projects.length === 0 && loading"
-          :label="$t('Loading')"
-          variant="secondary"
-          small
-          class="title-loading"
-        ></b-spinner>
-
+    <b-collapse id="move-task" @shown="getProjects">
+      <b-card>
+        
         <div class="header-dropdown-topitem">
           <div>
             <div class="mt-5-px pd-b-10">
@@ -230,7 +212,7 @@ export default {
           :message="alertMessage"
           :status="alertStatus"
         ></Alert>
-      </b-dd-form>
-    </div>
+      </b-card>
+    </b-collapse>
   </div>
 </template>

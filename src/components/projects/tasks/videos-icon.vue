@@ -1,11 +1,10 @@
 <script>
 import Axios from '@utils/axios'
 import ButtonLoading from '@components/utils/button-loading'
-import TitleLoading from '@components/utils/title-loading'
 import { taskManager } from '@state/helpers'
 
 export default {
-  components: { ButtonLoading, TitleLoading },
+  components: { ButtonLoading },
   props: {
     task: {
       type: Object,
@@ -46,42 +45,29 @@ export default {
 </script>
 
 <template>
-
-<div class="mb-8-px">
-
-  <b-dropdown v-if="authorize('tasks', 'create')" ref="dropdown" right class="dropdown-400px styled-dropdown">
-    <template v-slot:button-content >
-      <span class="icon-size"><font-awesome-icon :icon="['far', 'video']" style="font-size:14px"/></span>
-      <span>{{ $t('Videos') }}</span>
-    </template>
-    <b-dropdown-header>
-      <div class="d-flex align-items-center justify-content-between">
-        <TitleLoading :title="$t('Videos')" :loading="loading"></TitleLoading>
-        <div class="dropdown-header-icons">
-          <div>
-            <font-awesome-icon :icon="['far', 'video']" />
-            <span>{{$t('Add YouTube videos')}}</span>
-          </div>
-        </div>
-      </div>
-    </b-dropdown-header>
-    <b-dropdown-form>
-  
-      <b-form-input v-model="youtubeURL" size="sm" :placeholder="$t('Copy the YouTube URL to add video')" class="mb-5px"></b-form-input>
-
-      <div class="d-flex justify-content-end">
-        <ButtonLoading
-          type="btn-md"
-          mode="button"
+<div>
+  <button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.videos-icon 
+    class="btn btn-secondary btn-block">
+    {{ $t('Videos') }}
+  </button>
+  <b-collapse id="videos-icon">
+    <b-card>
+      <b-input-group>
+        <b-input-group-append class="wd-100">
+          <b-form-input 
+          v-model="youtubeURL" 
+          :placeholder="$t('Copy the YouTube URL')"
+          size="sm"></b-form-input>
+          <ButtonLoading
           :loading="loading"
-          :title="$t('Add Video')"
-          :title-loading="$t('Adding')"
-          @action="addVideo"
-        ></ButtonLoading>
-      </div>
-      
-    </b-dropdown-form>
-  </b-dropdown>
-
+          type="btn-sm"
+          icon="plus"
+          @action="addVideo"></ButtonLoading>
+        </b-input-group-append>
+      </b-input-group>
+    </b-card>
+  </b-collapse>
 </div>
 </template>

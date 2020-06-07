@@ -4,11 +4,12 @@
     box-shadow: none !important;
 }
 
-small {
+small,
+.small {
     display: flow-root;
     color: $black-200 !important;
-    line-height: 18px;
     font-size: 13px;
+    line-height: 125%;
 }
 
 .badge {
@@ -102,6 +103,10 @@ a.badge-secondary.focus {
         width: 100%;
         margin-bottom: 4px;
     }
+}
+
+.b-form-tags.form-control {
+    border: 0 !important;
 }
 
 .table-small {
@@ -484,6 +489,7 @@ a.badge-secondary.focus {
     }
 }
 
+.task-assignees .justify-content-end,
 .list-users-left .justify-content-end {
     -webkit-box-pack: start !important;
     -ms-flex-pack: start !important;
@@ -497,12 +503,50 @@ a.badge-secondary.focus {
     }
 }
 
+.task-close {
+    border: 0 solid transparent !important;
+    background: transparent !important;
+    font-size: 44px;
+    line-height: 30px !important;
+    color: $grey-800;
+    &:focus,
+    &:hover {
+        background: transparent !important;
+    }
+}
 
-/*
+.modal-task-dates {
+    position: relative;
+    top: -18px;
+}
 
-Scrollbar
+.list-tasks {
+    .task-timer {
+        padding: 0 !important;
+        #time {
+            padding: 4px 8px !important;
+            width: 67px !important;
+            text-align: left !important;
+            font-size: 13px !important;
+            color: $grey-500 !important;
+            line-height: 14px;
+        }
+        .fa-play,
+        .fa-stop {
+            top: 0px;
+            right: 5px;
+            position: relative;
+            font-size: 11px !important;
+            color: $grey-300 !important;
+            &:hover {
+                color: $grey-900 !important;
+            }
+        }
+    }
+}
 
-*/
+
+/* Scrollbar */
 
 ul::-webkit-scrollbar,
 div::-webkit-scrollbar {

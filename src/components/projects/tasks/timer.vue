@@ -210,26 +210,31 @@ export default {
 </script>
 
 <template>
-  <div class="badge badge-light" @click.stop.prevent="clickhandler">
+  <div class="badge badge-light mb-1 task-timer timer-content" @click.stop.prevent="clickhandler">
     <h5 v-if="displayTitle" class="mg-b-10">{{ $t('Task Time Tracking') }}</h5>
 
     <b-spinner v-if="!clockIsReady" v-show="!clockIsReady" :label="$t('Loading')" variant="secondary" small></b-spinner>
 
-    <div v-else class="d-flex justify-content-between task-timer timer-content">
+    <div v-else class="d-flex justify-content-between ">
       <div id="time">{{ time }}</div>
-      <span :disabled="true" class="cursor-pointer" v-show="btnStart && clockIsReady" @click.stop.prevent="start"
-        ><i class="fas fa-play"></i
-      ></span>
-      <span v-show="btnStop && clockIsReady" class="cursor-pointer" @click.stop.prevent="stop"
-        ><i class="fas fa-stop"></i
-      ></span>
+      <div class="ml-1">
+        <font-awesome-icon 
+        v-show="btnStart && clockIsReady" 
+        class="cursor-pointer" 
+        :icon="['fas', 'play']"
+        @click.stop.prevent="start" />
+        <font-awesome-icon 
+        v-show="btnStop && clockIsReady" 
+        class="cursor-pointer" 
+        :icon="['fas', 'stop']"
+        @click.stop.prevent="stop" />
+       </div>
     </div>
 
     <b-modal
       id="modal"
       ref="modal"
       class="modalConfirmBody"
-      lazy
       size="md"
       :title="modalTitle"
       ok-title="Confirm"

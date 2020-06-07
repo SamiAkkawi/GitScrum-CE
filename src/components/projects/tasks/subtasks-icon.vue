@@ -1,11 +1,10 @@
 <script>
 import Axios from '@utils/axios'
 import ButtonLoading from '@components/utils/button-loading'
-import TitleLoading from '@components/utils/title-loading'
 import { taskManager } from '@state/helpers'
 
 export default {
-  components: { TitleLoading, ButtonLoading },
+  components: { ButtonLoading },
   props: {
     task: {
       type: Object,
@@ -22,10 +21,33 @@ export default {
       subtaskTitle: '',
       alertMessage: '',
       alertStatus: false,
+      workflow: '',
+      workflows: null
     }
   },
   methods: {
     ...taskManager,
+
+    getWorkflows() {
+      if (!this.workflows) {
+        this.loading = true
+        Axios()
+        .get(
+          'project-templates/workflow/?company_slug=' +
+            this.task.company.slug +
+            '&project_slug=' +
+            this.task.project.slug
+        )
+        .then((response) => {
+          this.workflows = response.data.data
+          this.workflow = this.workflows[0].id
+          this.loading = false
+        })
+        .catch((e) => {
+          console.error(e)
+        })
+      }
+    },
 
     createTask() {
       this.btnLoading = true
@@ -34,7 +56,6 @@ export default {
       if (this.subtaskTitle.length > 3) {
         this.showAddCardLoading = true
         this.showAddCard = false
-
         Axios()
           .post('/tasks/?company_slug=' + 
           this.task.company.slug + 
@@ -42,7 +63,7 @@ export default {
           this.task.project.slug, {
             title: this.subtaskTitle,
             parent_id: this.task.uuid,
-            config_workflow_id: this.task.workflow.id,
+            config_workflow_id: this.workflow,
           })
           .then((response) => {
             
@@ -63,40 +84,35 @@ export default {
 </script>
 
 <template>
-<div class="mb-8-px">
-
-  <b-dropdown v-if="authorize('tasks', 'create')" ref="dropdown" right class="dropdown-400px styled-dropdown">
-    <template v-slot:button-content >
-      <span class="icon-size"><font-awesome-icon :icon="['far', 'tasks']" style="font-size:14px"/></span>
-      <span>{{ $t('Subtasks') }}</span>
-    </template>
-    <b-dropdown-header>
-      <div class="d-flex align-items-center justify-content-between">
-        <TitleLoading :loading="loading" :title="$t('Subtasks')"></TitleLoading>
-        <div class="dropdown-header-icons">
-          <div>
-            <font-awesome-icon :icon="['far', 'plus-square']" />
-            <span>{{$t('Create a Subtask')}}</span>
-          </div>
-        </div>
-      </div>
-    </b-dropdown-header>
-    <b-dropdown-form>
-  
-      <b-form-input v-model="subtaskTitle" size="sm" :placeholder="$t('Write a title for subtask')" class="mb-5px"></b-form-input>
-      <div class="d-flex justify-content-end">
-        <ButtonLoading
-          type="btn-md"
-          mode="button"
+<div>
+  <button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.subtasks-icon 
+    class="btn btn-secondary btn-block">
+    {{ $t('Subtasks') }}
+  </button>
+  <b-collapse id="subtasks-icon" @shown="getWorkflows">
+    <b-card>
+      <b-input-group>
+        <b-form-select 
+          v-model="workflow" 
+          :options="workflows"
+          value-field="id"
+          text-field="title" 
+          size="sm"></b-form-select>
+        <b-input-group-append class="mt-2 wd-100">
+          <b-form-input 
+          v-model="subtaskTitle"  
+          :placeholder="$t('Write a title for subtask')"
+          size="sm"></b-form-input>
+          <ButtonLoading
           :loading="btnLoading"
-          :title="$t('Add Subtask')"
-          :title-loading="$t('Adding')"
-          @action="createTask"
-        ></ButtonLoading>
-      </div>
-      
-    </b-dropdown-form>
-  </b-dropdown>
-
+          type="btn-sm"
+          icon="plus"
+          @action="createTask"></ButtonLoading>
+        </b-input-group-append>
+      </b-input-group>
+    </b-card>
+  </b-collapse>
 </div>
 </template>

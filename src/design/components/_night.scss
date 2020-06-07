@@ -118,8 +118,8 @@
         }
         .btn:focus,
         .btn:active {
-            background: $grey-900 !important;
-            border: 1px solid transparent !important;
+            background: $grey-900;
+            border: 1px solid transparent;
         }
     }
     .bunny-project-card button:focus,
@@ -300,5 +300,28 @@
     }
     .text-secondary {
         color: $grey-300 !important;
+    }
+    .comment-editor-button {
+        .btn {
+            color: $grey-50 !important;
+        }
+    }
+    .task-modal {
+        background: $black-400;
+    }
+    .task-content-left {
+        background: $black-700;
+    }
+    .comment {
+        background: $grey-900;
+    }
+    .comment-avatar span {
+        color: $grey-100;
+    }
+    .comment-content p,
+    .comment-content span,
+    .comment-content div,
+    .comment-content code {
+        color: $grey-300;
     }
 }

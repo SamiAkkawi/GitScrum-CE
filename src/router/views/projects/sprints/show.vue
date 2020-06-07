@@ -220,7 +220,6 @@ export default {
     },
 
     updateStatus(status) {
-      console.log(status)
       let params = {sprint_status_slug: status,}
       this.update(params)
     },

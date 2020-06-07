@@ -93,7 +93,7 @@ export default {
 </script>
 <template>
 	<div class="vlabeledit">
-		<div v-if="!edit" class="vlabeledit-label" @click="onLabelClick">{{vlabel}}</div>
+		<div v-if="!edit" v-html="vlabel" class="vlabeledit-label" @click="onLabelClick"></div>
 		<b-form-textarea
 		v-if="edit"
 		ref="labeledit"

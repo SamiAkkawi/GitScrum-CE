@@ -118,102 +118,91 @@ export default {
      <TitleLoading
         :title="$t('Discussions')"
         :subtitle="$t('Discussion is essential to promote dialogue for project’s goals')"
+        :loading="loading"
       >
       </TitleLoading>
     </template>
 
     <div slot="content" class="project-discussions pt-15px">
-      
-      <div class="container">
 
-        <div class="row mb-30-px">
-          <div class="col-md-8">
-            
-            
-
-            <div class="title mb-30-px">
-              <div v-show="!editComment">
-                
-                <div class="comments-title" v-html="item.comment_mention"></div>
-
-                <div class="d-flex justify-content-between">
-                  <div class="box-useravatar mr-2 pr-2">
-                    <ListUsers :user="item.user" :link="true" size="14"></ListUsers>
-                    <router-link
-                    :to="{
-                      name: 'profile.user',
-                      params: { username: item.user.username },
-                    }"
-                    >
-                      {{item.user.name}}
-                    </router-link>
-                  </div>
-                  <div style="font-size: 12px;color: #55617c;font-weight: 500;">
-                     {{ $t('Posted at') }}
-                    <span v-text="item.created_at.date_for_humans"></span>
+      <b-container>
+        <b-row>
+          <b-col cols="8">
+            <b-card>
+              <template v-slot:header>
+                <div class="d-flex align-content-center justify-content-between">
+                  <h6 class="font-weight-bold mb-0">{{$t('Discussion')}}</h6>
+                  <div v-if="authorize('discussions', 'create')" class="d-flex justify-content-end">
+                    <b-link class="mr-15-px" @click="deleteComment">{{ $t('Delete') }}</b-link>
+                    <b-link @click="editComment = true">{{ $t('Edit Discussion') }}</b-link>
                   </div>
                 </div>
-                
-                <hr />
-                
-                <div v-if="authorize('discussions', 'create')" class="d-flex justify-content-end">
-                  <a href="javascript:;" class="mr-15-px" @click="deleteComment">{{ $t('Delete') }}</a>
-                  <a href="javascript:;" @click="editComment = true">{{ $t('Edit Discussion') }}</a>
-                </div>
+              </template>
+
               
-              </div>
 
+
+              <h2 v-show="!editComment" class="h6" v-html="item.comment_mention"></h2>
               <div v-show="editComment">
-                <CommentEditor
-                  :edit-mode="true"
-                  :cancel-mode="true"
-                  :edit-content="item.comment_mention"
-                  :comment-id="item.id"
-                  :company-slug="$route.params.companySlug"
-                  :project-slug="$route.params.projectSlug"
-                  @text="updateText"
-                  @cancel="cancel"
-                ></CommentEditor>
-
-                <hr />
-
-              </div>
-
-            </div>
-
-            <hr />
-
-            <div v-if="!loading" class="post-comment">
-
               <CommentEditor
-                :btn-title="$t('Topic reply')"
-                :parent-id="item.id"
-                :cancel-mode="false"
-                :edit-mode="false"
-                :comment-id="item.id"
-                :company-slug="$route.params.companySlug"
-                :project-slug="$route.params.projectSlug"
-                @text="reply"
-                @cancel="cancel"
-              ></CommentEditor>
+              :edit-mode="true"
+              :cancel-mode="true"
+              :edit-content="item.comment_mention"
+              :comment-id="item.id"
+              :company-slug="$route.params.companySlug"
+              :project-slug="$route.params.projectSlug"
+              @text="updateText"
+              @cancel="cancel" ></CommentEditor>
+              </div>
+              <div class="d-flex justify-content-between">
+                <div class="box-useravatar mr-2 pr-2">
+                  <ListUsers :user="item.user" :link="true" size="14"></ListUsers>
+                  <router-link
+                  :to="{
+                    name: 'profile.user',
+                    params: { username: item.user.username } }" >
+                    {{item.user.name}}
+                  </router-link>
+                </div>
+                <div style="font-size: 12px;color: #55617c;font-weight: 500;">
+                    {{ $t('Posted at') }}
+                  <span v-text="item.created_at.date_for_humans"></span>
+                </div>
+              </div>
+            </b-card>
 
-            </div>
+            <b-card>
+              <CommentEditor
+              :btn-title="$t('Topic reply')"
+              :parent-id="item.id"
+              :cancel-mode="false"
+              :edit-mode="false"
+              :comment-id="item.id"
+              :company-slug="$route.params.companySlug"
+              :project-slug="$route.params.projectSlug"
+              @text="reply"
+              @cancel="cancel"></CommentEditor>
+            </b-card>
 
-            <ListComments
-                :data="item.replies"
-                :show-title="true"
-                :company-slug="$route.params.companySlug"
-                :project-slug="$route.params.projectSlug"
-              >
+            <b-card>
+              <ListComments
+              :data="item.replies"
+              :show-title="true"
+              :company-slug="$route.params.companySlug"
+              :project-slug="$route.params.projectSlug">
               </ListComments>
-
-          </div>
-          <div class="col-md-3 offset-md-1">
-            <ListOtherDiscussions :company-slug="$route.params.companySlug" :project-slug="$route.params.projectSlug">
-            </ListOtherDiscussions>
-          </div>
-        </div>
-      </div>
+            </b-card>
+          </b-col>
+          <b-col cols="3" offset="1">
+            <b-card :header="$t('Other discussions')">
+              <ListOtherDiscussions 
+              :company-slug="$route.params.companySlug" 
+              :project-slug="$route.params.projectSlug">
+              </ListOtherDiscussions>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </Layout>
 </template>

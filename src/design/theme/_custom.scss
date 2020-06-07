@@ -429,14 +429,23 @@
     }
     
     .gallery-box {
-        width: 210px;
-        margin-right: 15px;
-    }
-    
-    .gallery-box:hover {
-        .gallery-dropdown {
-            opacity: 1;
-            transition: opacity ease-in 0.2s;
+        width: 205px;
+        margin: 0 15px 15px 0;
+        .gallery-image {
+            border-radius: 4px;
+            div div {
+                z-index: 9;
+                position: absolute;
+                padding: 5px 9px;
+            }
+        }
+        .text-danger {
+            opacity: 0;
+        }
+        &:hover {
+            .text-danger {
+                opacity: 1;
+            }
         }
     }
     
@@ -473,11 +482,6 @@
         opacity: 1;
         background: rgba(255, 255, 255, 1) !important;
     }
-    /*
-    .gallery-box:nth-child(odd) {
-        margin-left: 28px;
-    }
-    */
     
     .silentbox-item {
         cursor: pointer;

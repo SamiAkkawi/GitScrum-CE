@@ -91,9 +91,10 @@ export default {
       })
     },
     updateFieldSelected(field) {
+      console.log(field)
       this.update({
         field_id: field.id,
-        value: field.value ? field.value.label : '',
+        value: field.value ? field.value : '',
       })
     },
   },
@@ -101,66 +102,45 @@ export default {
 </script>
 
 <template>
-  <div v-if="fields[0]">
-    <b-container class="mt-20-px">
-      <b-row class="mb-10-px">
-        <b-col cols="1" class="task-left-icon">
-          <font-awesome-icon :icon="['far', 'file-alt']" />
-        </b-col>
-        <b-col cols="11" class="task-left-content">
-          <h5>{{ $t('Custom Fields') }}</h5>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="1"></b-col>
-        <b-col cols="11" class="task-left-content">
-          <b-row>
-            <div v-for="field in fields" :key="field.id" class="col-md-6">
-              <div v-if="field.type === 'text'" class="mb-10-px">
-                <label class="d-block tx-12-px txt-A7AFB7" v-text="field.name"></label>
-                <b-form-input
-                  v-model="field.value"
-                  class="input-xs"
-                  :disabled="!authorize('tasks', 'update')"
-                  @change="updateField(field)"
-                ></b-form-input>
-              </div>
-              <div v-if="field.type === 'textarea'" class="mb-10-px">
-                <label class="d-block tx-12-px txt-A7AFB7" v-text="field.name"></label>
-                <b-form-textarea
-                  v-model="field.value"
-                  rows="3"
-                  max-rows="6"
-                  class="input-xs"
-                  :disabled="!authorize('tasks', 'update')"
-                  @change="updateField(field)"
-                ></b-form-textarea>
-              </div>
-              <div v-if="field.type === 'checkbox'" class="mb-10-px">
-                <b-form-checkbox
-                  v-model="field.value"
-                  value="true"
-                  :disabled="!authorize('tasks', 'update')"
-                  @change="updateFieldCheckbox(field)"
-                >
-                  <label class="d-block tx-12-px txt-A7AFB7" v-text="field.name"></label>
-                </b-form-checkbox>
-              </div>
-              <div v-if="field.type === 'select'" class="mb-10-px">
-                <label class="d-block tx-12-px txt-A7AFB7" v-text="field.name"></label>
-
-                <v-select
-                  v-model="field.value"
-                  :options="field.selectableOptions"
-                  :disabled="!authorize('tasks', 'update')"
-                  title="label"
-                  @input="updateFieldSelected(field)"
-                ></v-select>
-              </div>
-            </div>
-          </b-row>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+  <b-row v-if="fields[0]" class="mb-3">
+    <b-col cols="1" class="task-left-icon">
+      <font-awesome-icon :icon="['far', 'file-alt']" />
+    </b-col>
+    <b-col class="task-left-content">
+      <h5 class="mb-3">{{ $t('Custom Fields') }}</h5>
+      <div v-for="field in fields" :key="field.id" class="d-block">
+        <b-form-group v-if="field.type === 'text'" :label="field.name" class="mb-1">
+          <b-form-input
+          v-model="field.value"
+          :disabled="!authorize('tasks', 'update')"
+          @change="updateField(field)"></b-form-input>
+        </b-form-group>
+        <b-form-group v-if="field.type === 'textarea'" :label="field.name" class="mb-1">
+          <b-form-textarea
+          v-model="field.value"
+          rows="3"
+          max-rows="6"
+          :disabled="!authorize('tasks', 'update')"
+          @change="updateField(field)"></b-form-textarea>
+        </b-form-group>
+        <b-form-checkbox v-if="field.type === 'checkbox'"
+          v-model="field.value"
+          value="true" 
+          class="mb-1" 
+          :disabled="!authorize('tasks', 'update')"
+          @change="updateFieldCheckbox(field)">
+          <label v-text="field.name"></label>
+        </b-form-checkbox>
+        <b-form-group v-if="field.type === 'select'" :label="field.name" class="mb-1">
+          <b-form-select
+          v-model="field.value"
+          :options="field.selectableOptions"
+          value-field="id"
+          text-field="label"
+          :disabled="!authorize('tasks', 'update')"
+          @input="updateFieldSelected(field)"></b-form-select>
+        </b-form-group>
+      </div>
+    </b-col>
+  </b-row>
 </template>

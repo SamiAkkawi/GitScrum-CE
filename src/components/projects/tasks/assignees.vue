@@ -90,33 +90,35 @@ export default {
 </script>
 
 <template>
-  <div class="task-assignees d-flex justify-content-start"> 
+  <div class="task-assignees"> 
+    <p class="mb-0 font-weight-bold">{{ $t('Assigned to') }}</p>
+    <div class="d-flex justify-content-start">
+      <b-dropdown v-if="authorize('tasks', 'update')" class="styled-dropdown" @shown="clickDropdown" >
+        <template v-slot:button-content>
+          <font-awesome-icon v-show="!btnLoading" :icon="['far', 'plus']" style="font-size:14px" />
+          <b-spinner v-show="btnLoading" tag="div" :label="$t('Loading')" small></b-spinner>
+        </template>
+        <b-dropdown-group class="dropdown-header-group-title" :header="$t('Assign User')">
+          <b-dropdown-item v-for="member in projectMembers" :key="member.username" @click="addUser(member)">
+            <div class="d-flex align-items-center justify-content-start">
+              <ListUsers :user="member" :link="true" size="18"></ListUsers>
+              <span class="fw-600 ml-5-px">{{ member.name }}</span>
+            </div>
+          </b-dropdown-item>
+        </b-dropdown-group>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-group class="dropdown-header-group-title" :header="$t('Remove User')">
+          <b-dropdown-item v-for="member in task.users" :key="member.username" @click="removeUser(member)">
+            <div class="d-flex align-items-center justify-content-start">
+              <ListUsers :user="member" :link="true" size="18"></ListUsers>
+              <span class="fw-600 ml-5-px">{{ member.name }}</span>
+            </div>
+          </b-dropdown-item>
+        </b-dropdown-group>
+      </b-dropdown>
 
-    <b-dropdown v-if="authorize('tasks', 'update')" class="styled-dropdown" @shown="clickDropdown" >
-      <template v-slot:button-content>
-        <font-awesome-icon v-show="!btnLoading" :icon="['far', 'plus']" style="font-size:14px" />
-        <b-spinner v-show="btnLoading" tag="div" :label="$t('Loading')" small></b-spinner>
-      </template>
-      <b-dropdown-group class="dropdown-header-group-title" :header="$t('Assign User')">
-        <b-dropdown-item v-for="member in projectMembers" :key="member.username" @click="addUser(member)">
-          <div class="d-flex align-items-center justify-content-start">
-            <ListUsers :user="member" :link="true" size="18"></ListUsers>
-            <span class="fw-600 ml-5-px">{{ member.name }}</span>
-          </div>
-        </b-dropdown-item>
-      </b-dropdown-group>
-      <b-dropdown-divider></b-dropdown-divider>
-      <b-dropdown-group class="dropdown-header-group-title" :header="$t('Remove User')">
-        <b-dropdown-item v-for="member in task.users" :key="member.username" @click="removeUser(member)">
-          <div class="d-flex align-items-center justify-content-start">
-            <ListUsers :user="member" :link="true" size="18"></ListUsers>
-            <span class="fw-600 ml-5-px">{{ member.name }}</span>
-          </div>
-        </b-dropdown-item>
-      </b-dropdown-group>
-    </b-dropdown>
-
-    <ListUsers :users="task.users" :limit="30" :link="true" size="26" class="mt-3-px ml-2-px"></ListUsers>
-
+      <ListUsers :users="task.users" :limit="32" :link="true" :wrap="true" size="30" class="ml-2"></ListUsers>
+    </div>
+   
   </div>
 </template>

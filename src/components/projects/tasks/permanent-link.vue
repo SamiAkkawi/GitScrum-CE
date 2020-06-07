@@ -1,6 +1,4 @@
 <script>
-import { taskManager } from '@state/helpers'
-
 export default {
   props: {
     task: {
@@ -14,18 +12,9 @@ export default {
   data() {
     return {
       taskUrl: '',
-      copySuccess: ''
+      projectExtraIcon: 'plus-square',
+      projectExtra: false
     }
-  },
-  computed: {
-    ...taskManager
-  },
-  watch: {
-    statusTask(data){
-      if ( data.item.name === 'type.change' ){
-        this.type = data.item.object
-      }
-    },
   },
   created(){
     this.formatLink()
@@ -45,17 +34,34 @@ export default {
     },
     onCopy(){
       this.$copyText(this.taskUrl)
-      this.copySuccess = 'Copied'
+    },
+    statusPermanentOpen(){
+      if (this.projectExtra){
+        this.projectExtraIcon = 'plus-square'
+        this.projectExtra = false
+      } else {
+        this.projectExtraIcon = 'minus-square'
+        this.projectExtra = true
+      }
+
     }
   }
 }
 </script>
 
 <template>
-  <div class="task-permanent-link mb-15-px">
-    <label>{{ $t('Permanent Link') }} <small class="text-success" v-text="copySuccess"></small></label>
-    
-    <b-input-group>
+  <b-form-group
+    class="task-permanent-link badge badge-light wd-100 text-left">
+    <b-link @click="statusPermanentOpen">
+      <font-awesome-icon 
+        :icon="['far', projectExtraIcon]" 
+        class="cursor-pointer" 
+        style="font-size:18px; color: #909CB8;" 
+         />
+      {{ $t('Permanent Link') }}
+      
+    </b-link>
+    <b-input-group v-show="projectExtra">
       <b-input v-model="taskUrl" 
         :readonly="true" 
         autocomplete="off"></b-input>
@@ -68,5 +74,5 @@ export default {
         </b-button>
       </b-input-group-append>
     </b-input-group>
-  </div>
+  </b-form-group>
 </template>

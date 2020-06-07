@@ -157,19 +157,15 @@ export default {
 </script>
 
 <template>
-  <div class="dropdown mb-8-px">
-    <button
-      class="btn btn-block dropdown-toggle"
-      data-toggle="dropdown"
-      @click="loadMore"
-      :disabled="!authorize('tasks', 'create')"
-    >
-      <span class="icon-size"><font-awesome-icon :icon="['far', 'box-full']" style="font-size:14px"/></span>
-      <span>{{ $t('User Stories') }}</span>
+  <div>
+    <button 
+      v-if="authorize('tasks', 'create')" 
+      v-b-toggle.user-story-icon
+      class="btn btn-secondary btn-block">
+      {{ $t('User Stories') }}
     </button>
-    <div ref="dropdown" class="dropdown-menu navbar-dropdown" style="margin:3px 0 0 0; width: 335px;height: 400px;">
-      <b-dd-form class="dropdown-padding">
-
+    <b-collapse id="user-story-icon" @shown="loadMore">
+      <b-card>
         <div class="sprints-search mb-15-px">
           <div class="form-group m-0">
             <div class="input-group">
@@ -240,7 +236,7 @@ export default {
             ></b-spinner>
           </div>
         </div>
-      </b-dd-form>
-    </div>
+      </b-card>
+    </b-collapse>
   </div>
 </template>

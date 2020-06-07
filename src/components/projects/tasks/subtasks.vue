@@ -63,24 +63,13 @@ export default {
 </script>
 
 <template>
-  <div v-if="subtasks[0]">
-
-    <b-container class="mt-20-px">
-      <b-row class="mb-10-px">
-        <b-col cols="1" class="task-left-icon">
-          <font-awesome-icon :icon="['far', 'tasks']" />
-        </b-col>
-        <b-col cols="11" class="task-left-content">
-          <h5>{{ $t('Subtasks') }}</h5>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="1"></b-col>
-        <b-col cols="11" class="task-left-content">
-          <ListTasks v-show="!loading" :items="subtasks" :modal-flag="modalFlag"></ListTasks>
-        </b-col>
-      </b-row>
-    </b-container>
-
-  </div>
+  <b-row v-if="subtasks[0]">
+    <b-col cols="1" class="task-left-icon">
+      <font-awesome-icon :icon="['far', 'tasks']" />
+    </b-col>
+    <b-col class="task-left-content">
+      <h5 class="mb-3">{{ $t('Subtasks') }}</h5>
+      <ListTasks v-show="!loading" :items="subtasks" :modal-flag="modalFlag"></ListTasks>
+    </b-col>
+  </b-row>
 </template>

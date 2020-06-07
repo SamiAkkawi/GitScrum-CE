@@ -214,135 +214,110 @@ export default {
 }
 </script>
 <template>
-
-  <div class="mb-8-px">
-
-    <b-dropdown ref="dropdown" right class="dropdown-400px styled-dropdown" @shown="loadMore">
-      <template v-slot:button-content>
-        <span class="icon-size"><font-awesome-icon :icon="['far', 'stopwatch']" style="font-size:14px"/></span>
-        <span>{{ $t('Time Tracking') }}</span>
-      </template>
-      <b-dropdown-header>
-        <div class="d-flex align-items-center justify-content-between">
-          <TitleLoading :title="$t('Time Tracking') + ' - ' + workedHours" :loading="loading"></TitleLoading>
-          <div class="dropdown-header-icons">
-            <div @click="downloadExcel">
-              <font-awesome-icon :icon="['far', 'download']" />
-              <span>{{$t('Export')}}</span>
-            </div>
-            <div @click="statusAddTime = !statusAddTime">
-              <font-awesome-icon :icon="['far', 'stopwatch']" />
-              <span>{{$t('Add Time')}}</span>
-            </div>
+  <div>
+    <button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.timetracking-icon
+    class="btn btn-secondary btn-block">
+      {{ $t('Time Tracking') }}
+    </button>
+    <b-collapse id="timetracking-icon">
+      <b-card>
+        <div class="d-flex justify-content-between mb-2">
+          <div class="badge badge-light font-weight-bold">{{ $t('Log') + ': ' + workedHours }}</div>
+          <div>
+            <b-link v-b-toggle.timetracking-form class="badge badge-light">
+              <font-awesome-icon :icon="['far', 'plus']" />
+              {{$t('Add Time')}}
+            </b-link>
+            <b-link  class="badge badge-light mr-0" @click="downloadExcel">
+              <font-awesome-icon :icon="['far', 'cloud-download']" />
+              {{$t('Download')}}
+            </b-link>
           </div>
         </div>
-      </b-dropdown-header>
-      <b-dropdown-form>
-    
-          <div v-show="statusAddTime">
+        <b-collapse id="timetracking-form" class="mb-2">
+          <DatePicker
+            v-model="newTime.date"
+            lang="en"
+            format="YYYY-MM-DD"
+            confirm
+            style="width: 100% !important;"
+            :not-after="new Date()"></DatePicker>
+          <div class="d-flex mt-5px mb-5px">
             <DatePicker
-              v-model="newTime.date"
+              v-model="newTime.startTime"
               lang="en"
-              format="YYYY-MM-DD"
-              confirm
-              style="width: 100% !important;"
-              :not-after="new Date()"
-            ></DatePicker>
-
-            <div class="d-flex mt-5px mb-5px">
-              <DatePicker
-                v-model="newTime.startTime"
-                lang="en"
-                value-type="format"
-                format="HH:mm"
-                type="time"
-                placeholder="Start Time"
-                class="time-picker mr-5-px"
-                :minute-step="5"
-                confirm
-              >
-              </DatePicker>
-              <DatePicker
-                v-model="newTime.endTime"
-                lang="en"
-                value-type="format"
-                format="HH:mm"
-                type="time"
-                placeholder="End Time"
-                class="time-picker ml-5-px"
-                :minute-step="5"
-                confirm
-              ></DatePicker>
-            </div>
-
-            <b-form-input v-model="newTime.comment" size="sm" :placeholder="$t('Write a comment')" class="mb-5px"></b-form-input>
-
-            <div class="d-flex justify-content-end">
-              <ButtonLoading
-                type="btn-md"
-                mode="button"
-                :loading="btnLoading"
-                :title="$t('Add Time Log')"
-                :title-loading="$t('Adding')"
-                @action="addTime"
-              ></ButtonLoading>
-            </div>
-
-            <hr />
-
+              value-type="format"
+              format="HH:mm"
+              type="time"
+              placeholder="Start Time"
+              class="time-picker mr-5-px"
+              :minute-step="5"
+              confirm></DatePicker>
+            <DatePicker
+              v-model="newTime.endTime"
+              lang="en"
+              value-type="format"
+              format="HH:mm"
+              type="time"
+              placeholder="End Time"
+              class="time-picker ml-5-px"
+              :minute-step="5"
+              confirm></DatePicker>
           </div>
+          <b-form-input 
+          v-model="newTime.comment" 
+          :placeholder="$t('Write a comment')" 
+          size="sm" class="mb-5px"></b-form-input>
+          <div class="d-flex justify-content-end">
+            <ButtonLoading
+            type="btn-md"
+            mode="button"
+            :loading="btnLoading"
+            :title="$t('Add Time Log')"
+            :title-loading="$t('Adding')"
+            @action="addTime"></ButtonLoading>
+          </div>
+        </b-collapse>
+        <div 
+          v-infinite-scroll="loadMore" 
+          infinite-scroll-disabled="busy" 
+          infinite-scroll-distance="200"
+          style="max-height:316px; overflow-x:auto;">
 
-          <div 
-            v-infinite-scroll="loadMore" 
-            infinite-scroll-disabled="busy" 
-            infinite-scroll-distance="200"
-            style="max-height:316px; overflow-x:auto;">
-
-            <b-card v-for="(item, index) in timetrackings" :key="index">
-              <b-media>
-
-                <template v-slot:aside>
-                  <ListUsers :user="item.user" :link="true"></ListUsers>
-                </template>
-
-                <div v-if="item.comment" class="fs-11px mb-5px" :title="item.comment" :alt="item.comment">{{ item.comment | truncate(95) }}</div>
-
-                <div class="fs-11px"> 
-                  {{ item.time.start.timezone }} {{ $t('to')}}
-                  <span v-if="item.time.end.timezone">
-                  {{ item.time.end.timezone }}
-                  </span>  
-                </div>
-                
-                <div class="d-flex justify-content-between">
-                  <div v-if="item.time.end.timezone" class="fs-11px fw-600">
-                    {{ $t('Time Spent') }}: {{ item.time.total }}
-                  </div>
-                  <div
-                    v-if="authorize('tasks', 'delete')"
-                    class="card-delete"
-                    @click="removeTime(item.time.id)"
-                  >
-                    {{ $t('Delete') }}
-                  </div>
-                </div>
-
-              </b-media>
-            </b-card>
-          </div>    
-      </b-dropdown-form>
-      <b-dropdown-item 
+          <b-card v-for="(item, index) in timetrackings" :key="index" class="mb-1">
+            <div v-if="item.comment" 
+              :title="item.comment" 
+              :alt="item.comment" class="small txt-muted">{{ item.comment | truncate(95) }}</div>
+            <b-link class="small txt-primary" v-text="item.user.name"></b-link>
+            <div class="small"> 
+              {{ item.time.start.timezone }} {{ $t('to')}}
+              <span v-if="item.time.end.timezone" v-text="item.time.end.timezone" />
+              <span v-if="!item.time.end.timezone">{{ $t('current time') }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div v-if="item.time.end.timezone" class="small font-weight-bold">
+                {{ $t('Time Spent') }}: {{ item.time.total }}
+              </div>
+              <div
+                v-if="authorize('tasks', 'delete')"
+                class="card-delete"
+                @click="removeTime(item.time.id)">
+                {{ $t('Delete') }}
+              </div>
+            </div>
+          </b-card>
+        </div>
+        <b-link 
         :to="{
-          name: 'projects.addons.time-tracking',
-          params: {
-            companySlug: task.company.slug,
-            projectSlug: task.project.slug,
-          },
-        }" class="mt-10px">
-        <font-awesome-icon :icon="['far', 'external-link-square-alt']" />
-        {{ $t('View All') }} 
-        </b-dropdown-item>
-    </b-dropdown>
-
+        name: 'projects.addons.time-tracking',
+        params: {
+          companySlug: task.company.slug,
+          projectSlug: task.project.slug } }" 
+        class="small txt-primary" 
+        v-text="$t('Go to Project Time Tracking')" />
+      </b-card>
+    </b-collapse>
   </div>
 </template>

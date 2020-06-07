@@ -282,27 +282,21 @@ export default {
 </script>
 
 <template>
+<div class="task-labels">
+  <button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.label-icon 
+    class="btn btn-secondary btn-block">
+    {{ $t('Labels') }}
+  </button>
+  <b-collapse id="label-icon" @shown="getAllLabels">
+    <b-card>
 
-<div class="task-labels mb-8-px">
+      <b-link  v-b-toggle.label-create>
+        <font-awesome-icon :icon="['far', 'plus-square']" />
+        <span>{{$t('Create a Label')}}</span>
+      </b-link>
 
-  <b-dropdown v-if="authorize('tasks', 'create')" ref="dropdown" right class="dropdown-400px styled-dropdown" @shown="getAllLabels">
-    <template v-slot:button-content >
-      <span class="icon-size"><font-awesome-icon :icon="['far', 'tags']" style="font-size:14px"/></span>
-      <span>{{ $tc('Label', 2) }}</span>
-    </template>
-    <b-dropdown-header>
-      <div class="d-flex align-items-center justify-content-between">
-        <TitleLoading :title="$tc('Label', 2)" :loading="loading"></TitleLoading>
-        <div class="dropdown-header-icons">
-          <div @click="openCreate">
-            <font-awesome-icon :icon="['far', 'plus-square']" />
-            <span>{{$t('Create a Label')}}</span>
-          </div>
-        </div>
-      </div>
-    </b-dropdown-header>
-    <b-dropdown-form>
-  
       <div v-show="boxSelected === 'edit'">
         <div class="project-label-form">
           <b-form-input v-model="label.title" size="sm" :placeholder="$t('Label Name')"></b-form-input>
@@ -335,7 +329,7 @@ export default {
         <hr>
       </div>
 
-      <div v-show="boxSelected === 'create'">
+      <b-collapse id="label-create">
         <div class="project-label-form mb-20-px">
           <b-form-input v-model="label.title" size="sm" :placeholder="$t('Label Name')"></b-form-input>
           <Swatches
@@ -356,38 +350,36 @@ export default {
             @action="addLabel"
           ></ButtonLoading>
         </div>
-    </div>
-          
+      </b-collapse>
 
       <div class="label-line">
 
-        <div v-for="item in labels" :key="item.id" class="dropdown-item">
-          <div class="label-name d-flex align-items-center justify-content-start" @click="assignLabel(item)">
-            <span class="square" :style="'background:' + item.color"></span>
-            <span class="fw-600 ml-5-px">{{ item.title }}</span>
+        <div v-for="labelItem in labels" :key="labelItem.id" class="dropdown-item">
+          <div class="label-name d-flex align-items-center justify-content-start" @click="assignLabel(labelItem)">
+            <span class="square" :style="'background:' + labelItem.color"></span>
+            <span class="fw-600 ml-5-px">{{ labelItem.title }}</span>
           </div>
-          <div class="action-edit" @click="openEdit(item)">
+          <div class="action-edit" @click="openEdit(labelItem)">
             <font-awesome-icon :icon="['far', 'pencil']" style="font-size:12px" />
           </div>
         </div>
 
         <b-dropdown-group v-if="task.labels.length" class="dropdown-header-group-title" :header="$t('Remove Label')">
-          <div v-for="item in task.labels" :key="item.id" class="dropdown-item ">
-            <div class="label-name" @click="removeLabel(item)">
-              <span class="square" :style="'background:' + item.color"></span>
-              <span class="fw-600 ml-5-px">{{ item.title }}</span>
+          <div v-for="taskLabel in task.labels" :key="taskLabel.id" class="dropdown-item ">
+            <div class="label-name" @click="removeLabel(taskLabel)">
+              <span class="square" :style="'background:' + taskLabel.color"></span>
+              <span class="fw-600 ml-5-px">{{ taskLabel.title }}</span>
             </div>
-            <div class="action-edit" @click="openEdit(item)">
+            <div class="action-edit" @click="openEdit(taskLabel)">
               <font-awesome-icon :icon="['far', 'pencil']" style="font-size:12px" />
             </div>
           </div>
         </b-dropdown-group>
 
       </div>
-      
-    </b-dropdown-form>
-  </b-dropdown>
 
+    </b-card>
+  </b-collapse>
 </div>
 
 </template>

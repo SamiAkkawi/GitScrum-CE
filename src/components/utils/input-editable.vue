@@ -30,7 +30,7 @@ export default {
 	computed: {
 		vplaceholder: function(){
 			// check if the placeholder is undefined or empty
-			if(this.placeholder==undefined || this.placeholder==''){
+			if(this.placeholder === undefined || this.placeholder === ''){
 				// if it is empty or undefined, pre-populate with built-in place holder text
 			 	return this.empty
 			}else{
@@ -40,7 +40,7 @@ export default {
 		vlabel: function(){
 			// after text has been updated
 			// return text value or place holder value depends on value of the text
-			if(this.text==undefined||this.text==''){
+			if(this.text === undefined||this.text === ''){
 				return this.vplaceholder
 			}else{
 				return this.label
@@ -59,14 +59,14 @@ export default {
 	},
 	watch: {
 		text: function(value){
-			if(value==''||value==undefined){
+			if(value === '' || value === undefined){
 				this.label = this.vplaceholder
 			}
 		}
   },
   methods: {
 		initText: function(){
-			if(this.text==''||this.text==undefined){
+			if(this.text === ''||this.text === undefined){
 				this.label = this.vlabel
 			}else{
 				this.label = this.text

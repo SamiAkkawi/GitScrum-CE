@@ -1,5 +1,4 @@
 <script>
-import Axios from '@utils/axios'
 import hexToRgba from 'hex-to-rgba'
 
 export default {
@@ -22,16 +21,16 @@ export default {
 </script>
 
 <template>
-  <div v-if="task.labels.length">
+  <div v-if="task.labels[0]">
+    <p class="mb-0 font-weight-bold pr-2">{{ $t('Task Labels') }}</p>
     <span
       v-for="label in task.labels"
       :key="label.slug"
       :alt="label.title"
       :title="label.title"
-      class="badge badge-labels mg-r-5 mg-b-5"
-      :style="'color: ' + label.color + ';background:' + backgroundColor(label.color)"
-    >
-      <span v-text="label.title"></span>
+      class="badge mr-2"
+      :style="'color:' + label.color + ';background:' + backgroundColor(label.color)" 
+      v-text="label.title">
     </span>
   </div>
 </template>
