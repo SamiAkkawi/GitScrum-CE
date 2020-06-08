@@ -252,7 +252,7 @@ export default {
                 @text-updated-blur="updateTitle"  
                 @text-updated-enter="updateTitle"></InputEditable>
                 <span v-else class="vlabeledit-label" v-text="sprint.title"></span>
-                <div class="textarea-description">
+                <div class="textarea-description mb-2">
                   <TextareaEditable
                   v-if="authorize('sprints', 'update')" 
                   :placeholder="$t('Sprint Name')"
@@ -264,7 +264,8 @@ export default {
                 </div>
                 <span class="small text-secondary ml-1">
                   {{ $t('Created on') }}
-                  <span v-if="sprint.created_at" v-text="sprint.created_at.date_for_humans"></span> - 
+                  <span v-if="sprint.created_at" v-text="sprint.created_at.date_for_humans"></span> 
+                  {{ $t('by') }} 
                   <router-link
                   v-if="sprint.user"
                   :to="{

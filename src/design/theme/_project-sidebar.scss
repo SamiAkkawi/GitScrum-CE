@@ -140,7 +140,7 @@
     color: $black-600;
     margin-top: 10px;
     padding: 8px 0 25px 0px;
-    height: 10px !important;
+    height: 0 !important;
     background-color: transparent;
 }
 
@@ -347,6 +347,6 @@
 
 .v-sidebar-menu .vsm--toggle-btn {
     opacity: 0;
-    height: 12px !important;
+    height: 15px !important;
     padding: 0;
 }

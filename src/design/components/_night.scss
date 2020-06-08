@@ -132,7 +132,7 @@
         color: $grey-100 !important;
     }
     .card {
-        background: $grey-800 !important;
+        background: $black-300 !important;
         .card-title {
             color: $grey-100 !important;
         }
@@ -147,7 +147,7 @@
             }
         }
         .card-header {
-            background-color: $grey-900 !important;
+            background-color: $black-500 !important;
             color: $grey-400 !important;
         }
     }
@@ -177,29 +177,13 @@
             border: 2px solid $grey-700;
         }
     }
+    .editor .ProseMirror,
     .custom-select,
     .form-control,
     .mx-input {
         background-color: $grey-300 !important;
         border: 2px solid $grey-900 !important;
-        color: $grey-900 !important;
-    }
-    .mx-datepicker-popup {
-        border: 1px solid $grey-400 !important;
-        background-color: $grey-200 !important;
-    }
-    .mx-calendar {
-        color: $black-800 !important;
-        a {
-            color: $blue-800 !important;
-        }
-    }
-    .mx-datepicker-btn {
-        background-color: $grey-50 !important;
-    }
-    .mx-panel-date td.last-month,
-    .mx-panel-date td.next-month {
-        color: $grey-400 !important;
+        color: $black-900 !important;
     }
     .task-total {
         color: $black-50;
@@ -209,7 +193,8 @@
     .board-workflow {
         background-color: $black-700;
         .add-card {
-            background: $grey-900;
+            background: $black-400;
+            border: 1px solid $grey-900;
         }
         .task-title {
             color: $grey-50;
@@ -341,5 +326,96 @@
         padding: 4px 6px !important;
         font-size: 14px !important;
         line-height: 18px !important;
+    }
+    .input-title div {
+        color: $grey-50 !important;
+    }
+    .task-content-left h1,
+    .task-content-left h2,
+    .task-content-left h3,
+    .task-content-left h4,
+    .task-content-left h5,
+    .task-content-left p,
+    .task-content-left div {
+        color: $grey-100 !important;
+    }
+    .task-content-left {
+        .badge.badge-light {
+            background-color: $black-300 !important;
+            color: $grey-50 !important;
+        }
+        .txt-3D4F9F {
+            color: $grey-50 !important;
+        }
+        h5 {
+            color: $grey-200 !important;
+        }
+    }
+    .task-left-content {
+        background-color: $black-400 !important;
+        border: 2px solid $black-300 !important;
+    }
+    .modal-task-date.task-left-content {
+        background-color: transparent !important;
+        border: 2px solid transparent !important;
+    }
+    .modal-task-dates {
+        .due_date_content,
+        .start_date_content {
+            color: $grey-900 !important;
+        }
+    }
+    .task-actions {
+        .card {
+            background-color: $black-500 !important;
+        }
+        .badge.badge-light {
+            background-color: $black-300 !important;
+            color: $grey-50 !important;
+        }
+    }
+    .dropdown-fake.label-line {
+        .dropdown-item {
+            color: $grey-200 !important;
+            .square {
+                border: 1px solid $grey-600 !important;
+            }
+        }
+    }
+    .comment {
+        background-color: $black-500 !important;
+    }
+    .tab-content {
+        .table {
+            background: transparent !important;
+            td {
+                border-top: 1px solid $grey-400 !important;
+                color: #fff !important;
+            }
+        }
+        .table-hover tbody tr:hover {
+            background-color: $grey-500 !important;
+        }
+    }
+    #provider-buttons a,
+    .dropbox-dropin-default {
+        color: $black-700 !important;
+    }
+    .document-card .card .document-details {
+        background: $black-800 !important;
+    }
+    .gallery-image {
+        background: $black-800 !important;
+    }
+    .textarea-description .vlabeledit-label {
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: $grey-200 !important;
+        }
     }
 }

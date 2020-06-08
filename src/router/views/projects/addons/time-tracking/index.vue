@@ -309,7 +309,7 @@ export default {
 
         </div>
 
-        <b-table class="table-time-tracking" striped hover :items="items" :fields="fields" >
+        <b-table class="table-time-tracking" hover :items="items" :fields="fields" >
           <template v-slot:cell(user.name)="data" >
             
             <b-link v-if="data.item.task.code" href="#" class="txt-primary-title" @click="modal('task', data.item.task)">{{ data.item.task.code }} - {{ data.item.task.title }}</b-link >

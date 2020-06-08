@@ -88,17 +88,17 @@ export default {
         {{ $t('Enable Form2Task for this project') }}
     </b-form-checkbox>
 
-    <div>
+    <div class="d-flex">
       <router-link
         v-show="enableShareableLink"
         :to="{ name: 'projects.addons.task-form.public',
-        params: { token: config.token } }" target="_blank">
+        params: { token: config.token } }" target="_blank" class="small font-weight-bold text-primary">
           {{ $t('See my Form2Task') }}
       </router-link>
-      <router-link v-if="goto === 'answers'" :to="{ name: 'projects.addons.task-form' }" class="fw-700 ml-3">
+      <router-link v-if="goto === 'answers'" :to="{ name: 'projects.addons.task-form' }" class="small font-weight-bold ml-3">
         {{ $t('Go to Answers') }}
       </router-link>
-      <router-link v-if="goto === 'settings'" :to="{ name: 'projects.addons.task-form.settings' }" class="fw-700 ml-3">
+      <router-link v-if="goto === 'settings'" :to="{ name: 'projects.addons.task-form.settings' }" class="small font-weight-bold ml-3">
         {{ $t('Go to Settings') }}
       </router-link>
     </div>
