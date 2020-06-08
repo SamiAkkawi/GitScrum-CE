@@ -23,6 +23,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    labels: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -257,7 +261,7 @@ export default {
               </b-collapse>
 
               <ListLabels
-                v-show="project.labels[0]"
+                v-show="project.labels[0] && labels"
                 :labels="project.labels"
                 class="mt-1 labels-size"></ListLabels>
             </div>

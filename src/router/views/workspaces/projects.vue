@@ -20,6 +20,7 @@ export default {
     return {
       loading: true,
       canDragProjects: false,
+      showLabels: false,
       projects: [],
       projectsFiltered: [],
       seachByProjectName: '',
@@ -183,19 +184,28 @@ export default {
           :loading="loading"></TitleLoading>
         
         <div class="d-flex justify-content-end" >
+          
           <b-form-input
             v-model="seachByProjectName"
             autocomplete="off"
             type="search"
             size="sm"
-            :placeholder="$t('Search by project name')"
-          ></b-form-input>
+            :placeholder="$t('Search by project name')"></b-form-input>
 
-          <b-form-select v-model="projectsStatusSelect" :options="projectsStatuses" size="sm" @change="filterByStatus"></b-form-select>
+          <b-form-select 
+            v-model="projectsStatusSelect" 
+            :options="projectsStatuses" 
+            size="sm" @change="filterByStatus"></b-form-select>
+
+          <div class="badge badge-light p-0 pl-2 pr-2 mr-2" style="padding-top:2px !important;">
+            <b-form-checkbox v-model="showLabels" switch>
+              {{ $t('Labels') }}
+            </b-form-checkbox>
+          </div>
 
           <b-button v-b-toggle.collapse-1 variant="light" size="sm">
             <font-awesome-icon :icon="['fa', 'tags']" />
-            {{ $t('Labels') }}
+            {{ $t('Filter labels') }}
           </b-button>
 
         </div>
@@ -231,7 +241,7 @@ export default {
           <b-col class="p-2">
             <Alert v-if="projectAccess" :message="projectAccessMessage" :status="projectAccessStatus"></Alert>
             <div v-if="projects.length && !loading" style="margin-bottom: 180px">
-              <ListProjects :disabled="canDragProjects" :data="projectsFiltered"></ListProjects>
+              <ListProjects :disabled="canDragProjects" :data="projectsFiltered" :labels="showLabels"></ListProjects>
             </div>
           </b-col>
         </b-row>

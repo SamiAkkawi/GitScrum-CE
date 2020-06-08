@@ -30,7 +30,13 @@ export default {
       :alt="label.title"
       :title="label.title"
       class="badge badge-light mb-1"
-      :style="'border:1px solid ' + label.color  + ';color: ' + invertColor(label.color, true) + ';background:' + opacityColor(label.color, '0.2') + ' !important'">
+      :style="'border:1px solid ' + 
+      label.color + 
+      ';color: ' + 
+      invertColor(label.color, true) + 
+      ' !important; background:' + 
+      opacityColor(label.color, '0.6') + 
+      ' !important'">
       <div v-if="limit">{{ label.title | truncate(limit) }}</div>
       <div v-if="!limit">{{ label.title }}</div>
       <span v-show="label.total">({{ label.total }})</span>

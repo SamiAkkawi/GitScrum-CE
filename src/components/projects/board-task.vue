@@ -469,7 +469,7 @@ export default {
               {{ $t('Add Task') }}
             </div>
             <div class="cursor-pointer d-flex ml-3 align-items-center close-add-card" @click="closeAddCard">
-              <i class="fas fa-times" style="font-size:20px"></i>
+              <font-awesome-icon :icon="['fas', 'times']" />
             </div>
           </div>
         </div>
