@@ -290,20 +290,9 @@ export default {
                 </button>
 
                 <div v-if="showCancelBtn" class="btn btn-sm cancel-btn">
-                  <i class="fas fa-times" @click="cancel"></i>
+                  <font-awesome-icon :icon="['fas', 'times']" />
                 </div>
               </div>
-              <!--
-              <div class="col-sm-6 d-flex justify-content-end mention-symbols">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-link"
-                  @click="applyUserMention"
-                >
-                  <i class="fas fa-at"></i>
-                </button>
-              </div>
-              -->
             </div>
           </At>
         </At>

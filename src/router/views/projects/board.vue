@@ -195,10 +195,10 @@ export default {
           <div v-show="!loading" class="mg-r-20 mg-l-0">
             <div class="addColumnBox" @click="toggleNewColumn">
               <span v-if="!boxNewColumn">
-                <i class="fas fa-plus"></i>
+                <font-awesome-icon :icon="['fas', 'plus']" />
               </span>
               <span v-if="boxNewColumn">
-                <i class="fas fa-times"></i>
+                <font-awesome-icon :icon="['fas', 'times']" />
               </span>
             </div>
             <div v-show="boxNewColumn" class="addColumnForm" :style="'border-top-color:' + colorColumn">

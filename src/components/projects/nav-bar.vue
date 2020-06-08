@@ -21,17 +21,9 @@ export default {
           <div class="float-left">
             <div class="d-flex">
               <button class="btn-header pd-r-15">
-                <i class="fas fa-lock"></i>
+                <font-awesome-icon :icon="['fas', 'lock']" />
                 <strong class="mg-l-8 tx-15"></strong>
               </button>
-              <!--
-              <button class="mg-l-8 tx-18 pd-r-10">
-                <i class="fas fa-columns"></i>
-              </button>
-              <button class="mg-l-8 tx-18 pd-r-10">
-                <i class="fas fa-th-list"> </i>
-              </button>
-              -->
               <ShareableBoard></ShareableBoard>
               <slot name="filters"></slot>
             </div>

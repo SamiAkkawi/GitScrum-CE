@@ -12,6 +12,7 @@
             margin-right: 0;
         }
     }
+    .dropdown-fake,
     .dropdown-menu {
         width: auto;
         padding: 10px;
@@ -54,6 +55,14 @@
             border: 1px solid #9EA9C1 !important;
             background: #909CB8 !important;
             color: #fff !important;
+        }
+    }
+    .dropdown-fake.label-line {
+        padding: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        .dropdown-item {
+            padding: 0.25rem 4px !important;
         }
     }
 }

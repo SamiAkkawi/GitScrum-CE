@@ -143,26 +143,24 @@ export default {
                 <td>{{ teammate.accepted_at }}</td>
                 <td>{{ teammate.created_at }}</td>
                 <td>
-                  <a
+                  <b-link
                     v-if="teammate.creator.email === currentUserEmail && teammate.accepted_at === null"
                     href="javascript:;"
                     alt="Resend"
                     title="Resend"
-                    @click="resendInvitation(teammate)"
-                  >
-                    <i class="fas fa-sync"></i>
-                  </a>
+                    @click="resendInvitation(teammate)">
+                    <font-awesome-icon :icon="['fas', 'sync']" />
+                  </b-link>
                 </td>
                 <td>
-                  <a
+                  <b-link
                     v-if="teammate.creator.email === currentUserEmail && teammate.accepted_at === null"
                     href="javascript:;"
                     alt="Delete"
                     title="Delete"
-                    @click="deleteInvitation(row)"
-                  >
-                    <i class="far fa-trash-alt"></i
-                  ></a>
+                    @click="deleteInvitation(row)">
+                    <font-awesome-icon :icon="['far', 'trash-alt']" />
+                  </b-link>
                 </td>
               </tr>
             </tbody>

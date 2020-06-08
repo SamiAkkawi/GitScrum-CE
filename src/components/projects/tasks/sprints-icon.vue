@@ -51,8 +51,6 @@ export default {
     },
 
     getSprints() {
-      this.loading = true
-      this.alertStatus = false
       Axios()
         .get(
           'sprints/?company_slug=' +

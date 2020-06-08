@@ -24,7 +24,7 @@ export default {
     right
   >
     <template slot="button-content">
-      <i class="fas fa-sync"></i>
+      <font-awesome-icon :icon="['fas', 'sync']" />
     </template>
     <b-dropdown-form>
       <div>
