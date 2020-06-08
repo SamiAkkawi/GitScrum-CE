@@ -46,12 +46,15 @@ export default {
 
 <template>
 <div>
-  <button 
-    v-if="authorize('tasks', 'create')" 
-    v-b-toggle.videos-icon 
-    class="btn btn-secondary btn-block">
-    {{ $t('Videos') }}
-  </button>
+  <b-button 
+  v-if="authorize('tasks', 'create')" 
+  v-b-toggle.videos-icon 
+  class="btn btn-secondary btn-block"
+  :style="(task.type) ? 'color: ' + 
+  invertColor(task.type.color, true) + 
+  ';background: ' + 
+  opacityColor(task.type.color, '0.6') : ''"
+  v-text="$t('Videos')"></b-button>
   <b-collapse id="videos-icon">
     <b-card>
       <b-input-group>

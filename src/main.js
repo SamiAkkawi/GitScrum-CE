@@ -18,6 +18,7 @@ import VueCookies from 'vue-cookies'
 import Axios from '@utils/axios'
 import vueNotVisible from 'vue-not-visible'
 import VueAnalytics from 'vue-analytics';
+import hexToRgba from 'hex-to-rgba'
 import appConfig from '@src/app.config'
 import {
     library
@@ -543,6 +544,14 @@ Vue.mixin({
 
                 return '#' + this.padZero(r) + this.padZero(g) + this.padZero(b)
             }
+        },
+        opacityColor(hexColor, opacity) {
+
+            hexColor = !hexColor ? '#000000' : hexColor
+
+            opacity = !opacity ? '0.2' : opacity
+
+            return hexToRgba(hexColor, opacity)
         },
         workflowState(state) {
             if (state === 1) {

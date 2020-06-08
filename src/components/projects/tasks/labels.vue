@@ -1,5 +1,4 @@
 <script>
-import hexToRgba from 'hex-to-rgba'
 
 export default {
   components: {},
@@ -13,9 +12,6 @@ export default {
     },
   },
   methods: {
-    backgroundColor(hexColor) {
-      return hexToRgba(hexColor, 0.2)
-    },
   },
 }
 </script>
@@ -29,7 +25,7 @@ export default {
       :alt="label.title"
       :title="label.title"
       class="badge mr-2"
-      :style="'color:' + label.color + ';background:' + backgroundColor(label.color)" 
+      :style="'color:' + label.color + ';background:' + opacityColor(label.color, '0.2')" 
       v-text="label.title">
     </span>
   </div>

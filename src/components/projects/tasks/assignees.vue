@@ -116,9 +116,7 @@ export default {
           </b-dropdown-item>
         </b-dropdown-group>
       </b-dropdown>
-
       <ListUsers :users="task.users" :limit="32" :link="true" :wrap="true" size="30" class="ml-2"></ListUsers>
     </div>
-   
   </div>
 </template>

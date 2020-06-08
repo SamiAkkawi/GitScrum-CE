@@ -36,9 +36,11 @@ $list-bg-color: rgba(255, 255, 255, 0.8);
     .task-progress {
         top: -3px;
         position: relative;
-        height: 4px;
+        height: 7px;
         .progress {
-            height: 4px;
+            height: 7px;
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
         }
     }
     .list-bg-color {
@@ -264,6 +266,13 @@ footer {
 
 .list-group {
     min-height: 20px;
+    .badge-light {
+        border: 0 solid transparent;
+    }
+    .badge.task-timer {
+        font-size: 13px;
+        padding: 4px 8px 4px !important;
+    }
 }
 
 .btn-header .dropdown-menu {
@@ -625,21 +634,6 @@ ul.drag-inner-list {
     line-height: 18px;
     color: #6c7293;
     margin-right: -10px;
-}
-
-.list-group-item.task-card .task-labels span {
-    color: #68748f;
-    padding: 4px 8px !important;
-    margin-left: 10 !important;
-    font-size: 10px !important;
-}
-
-.list-group-item.task-card .task-labels span.badge {
-    margin: 0 5px 5px 0;
-    padding: 5px 8px 0 !important;
-    margin-left: 10 !important;
-    font-size: 10px !important;
-    height: 19px !important;
 }
 
 .editColumn textarea {

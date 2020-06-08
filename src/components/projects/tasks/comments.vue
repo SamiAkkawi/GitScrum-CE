@@ -69,13 +69,11 @@ export default {
 </script>
 
 <template>
-  <div>
-    <b-container class="mt-20-px">
-      <b-row class="mb-10-px">
+      <b-row class="mb-3">
         <b-col cols="1" class="task-left-icon">
           <font-awesome-icon :icon="['far', 'comments-alt']" />
         </b-col>
-        <b-col cols="11" class="task-left-content">
+        <b-col class="task-left-content">
           <div class="d-flex justify-content-between">
             <h5>
               {{ $t('Comments') }}
@@ -85,11 +83,6 @@ export default {
               <b-form-select v-model="selected" :options="options" size="sm" @change="getComments" ></b-form-select>
             </div>
           </div>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="1"></b-col>
-        <b-col id="comments" cols="11" class="task-left-content">
           <CommentEditor
             v-if="authorize('comments', 'read')"
             :edit-mode="false"
@@ -101,9 +94,8 @@ export default {
             :btn-subtitle="$t('Sending')"
             :redirect="false"
             commentable-type="issues"
-            @text="updateText"
-          ></CommentEditor>
-
+            @text="updateText"></CommentEditor>
+          <hr>
           <ListComments 
             :data="comments" 
             :company-slug="task.company.slug" 
@@ -113,6 +105,4 @@ export default {
           </ListComments>
         </b-col>
       </b-row>
-    </b-container>
-  </div>
 </template>

@@ -223,81 +223,83 @@ export default {
 </script>
 
 <template>
-  <b-row v-if="checklists[0]" class="mt-3">
-    <b-col cols="1">
+  <b-row v-if="checklists[0]" class="mb-3 task-checklist">
+    <b-col cols="1" class="task-left-icon">
       <font-awesome-icon 
       :icon="['far', 'list']" 
       class="task-icon" />
     </b-col>
     <b-col class="task-left-content">
-      <h5>{{ $t('Checklists') }} {{ parseFloat(progressbar) | percent(0) }}</h5>
-      <b-row>
-        <b-col class="task-left-content">
-          <b-progress>
-            <b-progress-bar 
-            :style="{ 'background-color': task.workflow.color }" 
-            :value="progressbar" 
-            :max="100"></b-progress-bar>
-          </b-progress>
-        </b-col>
-      </b-row>
-      <b-row class="mt-3">
-        <b-col>
-          <Draggable 
-          :list="checklists" 
-          :disabled="!enabled" 
-          group="list" 
-          v-bind="dragOptions" 
-          @change="checklistMove">
-            <b-row 
-            v-for="(checklist, index) in checklists" 
-            :key="checklist.id" 
-            class="mb-2"
-            @mouseover="showById = checklist.id" 
-            @mouseout="showById = null">
-            <b-col cols="1" class="task-left-icon">
-              <font-awesome-icon v-if="authorize('tasks', 'update')" v-show="showById === checklist.id" :icon="['fas', 'arrows-alt']" />
-            </b-col>
-            <b-col cols="11" class="task-left-content vlabeledit-label">
+      <div class="d-flex justify-content-between">
+        <h5>{{ $t('Checklists') }}</h5>
+        <span>{{ parseFloat(progressbar) | percent(0) }}</span>
+      </div>
+      <b-progress>
+        <b-progress-bar 
+        :style="{ 'background-color': task.workflow.color }" 
+        :value="progressbar" 
+        :max="100"></b-progress-bar>
+      </b-progress>
+      <div class="mt-3 wd-100">
+        <Draggable 
+        :list="checklists" 
+        :disabled="!enabled" 
+        group="list" 
+        class="wd-100"
+        v-bind="dragOptions" 
+        @change="checklistMove">
+          <div
+          v-for="(checklist, index) in checklists" 
+          :key="checklist.id" 
+          class="mb-2 d-flex wd-100 task-checklist-item">
+            <font-awesome-icon 
+            v-if="authorize('tasks', 'update')"
+            :icon="['fas', 'arrows-alt']"
+            class="move-level-1 cursor-grab" />
+          
+            <div class="vlabeledit-label wd-100">
 
               <InputEditable v-if="authorize('tasks', 'update')" 
                 :placeholder="$t('Task Title')"
                 :text="checklist.title" 
                 :current-object="checklist"
+                class="font-weight-bold"
                 @text-updated-blur="updateTitle"  
                 @text-updated-enter="updateTitle"></InputEditable>
-              <span class="vlabeledit-label" v-else v-text="checklist.title" />
+              <span v-else class="vlabeledit-label" v-text="checklist.title" />
 
               <span
                 v-if="authorize('tasks', 'update')"
-                v-show="showById === checklist.id"
                 class="checklist-remove"
                 @click="removeChecklist(checklist.id, '', checklist.title)">
                 <font-awesome-icon :icon="['fas', 'times']" style="color:#1E1E2F" />
               </span>
 
               <div v-if="checklist.user" class="checklist-details">
-                {{ $t('Created by') }} <span v-text="checklist.user.name" /> {{ $t('at') }}
+                {{ $t('Created by') }} <b-link :to="{
+                  name: 'profile.user',
+                  params: { username: checklist.user.username } }" 
+                  v-text="checklist.user.name" /> 
+                  {{ $t('at') }}
                 <span v-text="checklist.created_at.date_for_humans" />
               </div>
 
                 <Draggable
-                  class="checklist-item"
                   :group="{ name: `list-item-${checklist.id}` }"
                   :list="checklist.children"
                   v-bind="dragOptions"
                   @change="checklistMove">
 
-                <b-row 
+                <div
                   v-for="checklistItem in checklist.children"
                   :key="checklistItem.id"
-                  class="checklist-item-line"
-                  @mouseover="showById = checklistItem.id"
-                  @mouseout="showById = null">
-                  <b-col cols="1" class="task-left-icon">
-                    <font-awesome-icon v-if="authorize('tasks', 'update')" :icon="['fas', 'arrows-alt']" />
-                  </b-col>
-                  <b-col cols="11">
+                  class="d-flex checklist-item-line">
+                 
+                  <font-awesome-icon 
+                    v-if="authorize('tasks', 'update')" 
+                    :icon="['fas', 'arrows-alt']" 
+                    class="move-level-2 cursor-grab" />
+                  <div class="wd-100">
                     <div class="d-flex wd-100">
                       <b-form-checkbox
                         v-if="showEditParent !== checklistItem.id"
@@ -321,19 +323,25 @@ export default {
                     </span>
                     <div v-if="checklistItem.user" class="checklist-details">
                       {{ $t('Created by') }}
-                      <span v-text="checklistItem.user.name" /> at
+                      <b-link :to="{
+                      name: 'profile.user',
+                      params: { username: checklistItem.user.username } }" 
+                      v-text="checklistItem.user.name" /> {{ $t('at') }} 
                       <span v-text="checklistItem.created_at.date_for_humans" />
-                      <span v-if="checklistItem.done.user && checklistItem.done.status" class="d-block">
+                      <span v-if="checklistItem.done.user && checklistItem.done.status" class="d-block mt-1">
                         {{ $t('Checked by') }}
-                        <span v-text="checklistItem.done.user.name" />
+                        <b-link :to="{
+                        name: 'profile.user',
+                        params: { username: checklistItem.done.user.username } }" 
+                        v-text="checklistItem.done.user.name" />
                       </span>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
               </Draggable>
               <div v-if="authorize('tasks', 'update')" class="new-checklist-item">
 
-                <div v-if="showChecklistForm === checklist.id">
+                <div v-if="showChecklistForm === checklist.id" class="mt-2">
                   <b-form-textarea
                     v-model="checklist.titleItem"
                     :placeholder="$t('Add checklist item')"
@@ -351,16 +359,17 @@ export default {
                   ></ButtonLoading>
                 </div>
 
-                <b-link v-if="showChecklistForm !== checklist.id" @click="toggleFormChecklist(checklist)">
-                  {{ $t('add checklist item') }}
-                </b-link>
-
+                <div class="d-flex justify-content-end">
+                  <b-link 
+                  v-if="showChecklistForm !== checklist.id" 
+                  @click="toggleFormChecklist(checklist)" 
+                  v-text="$t('add checklist item')" />
+                </div>
               </div>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           </Draggable>
-        </b-col>
-      </b-row>
+      </div>
     </b-col>
   </b-row>
 </template>

@@ -1,6 +1,8 @@
 <script>
+import VueMarkdownIt from 'vue-markdown-it'
 
 export default {
+  components: { VueMarkdownIt },
   props: {
     currentObject: {
       type: Object,
@@ -87,22 +89,33 @@ export default {
 		updateTextEnter: function(){
 			this.edit = false;
 			this.$emit('text-updated-enter', {text: this.label, object: this.currentObject})
-		}
+		},
+		inputHandler(e) {
+			if (e.keyCode === 13 && !e.shiftKey) {
+				e.preventDefault();
+				this.updateTextEnter(e);
+			}
+		},
 	},
 }
 </script>
 <template>
 	<div class="vlabeledit">
-		<div v-if="!edit" v-html="vlabel" class="vlabeledit-label" @click="onLabelClick"></div>
-		<b-form-textarea
-		v-if="edit"
-		ref="labeledit"
-		v-model="label"
-		:placeholder="vplaceholder"
-		rows="3"
-		max-rows="6"
-		class="vlabeledit-input" 
-		@blur="updateTextBlur" 
-		@keyup.enter="updateTextEnter"></b-form-textarea>
+    <div @click="onLabelClick">
+      <VueMarkdownIt id="" :source="vlabel" class="vlabeledit-label" />
+    </div>
+		<div v-if="edit">
+      <b-form-textarea
+      ref="labeledit"
+      v-model="label"
+      :placeholder="vplaceholder"
+      rows="3"
+      max-rows="6"
+      class="vlabeledit-input" 
+      @blur="updateTextBlur" 
+      @keyup.enter="inputHandler"></b-form-textarea>
+      <small class="mt-2 font-weight-bold">
+        <font-awesome-icon :icon="['far', 'info-square']" class="mr-1" /> {{ $t('You can you use markdown in description') }}</small>
+    </div>
 	</div>
 </template>

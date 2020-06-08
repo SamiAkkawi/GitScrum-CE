@@ -496,10 +496,35 @@ a.badge-secondary.focus {
     justify-content: flex-start !important;
 }
 
+.input-title {
+    margin: -2px 0 5px;
+    .vlabeledit-label {
+        margin: 0 0 0 !important;
+    }
+    div {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 28px;
+        color: $black-600 !important;
+    }
+}
+
 .textarea-description {
     .vlabeledit-label {
         font-size: 14px;
         line-height: 18px;
+        color: $black-600 !important;
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        small {
+            color: $black-600 !important;
+            margin-bottom: 0;
+        }
     }
 }
 
@@ -515,9 +540,16 @@ a.badge-secondary.focus {
     }
 }
 
+.modal-task-date {
+    background: transparent;
+    border: 2px solid transparent;
+    padding: 12px 0 0 !important;
+    margin-right: 0;
+    border-radius: 0;
+}
+
 .modal-task-dates {
-    position: relative;
-    top: -18px;
+    margin-top: -14px;
 }
 
 .list-tasks {
@@ -542,6 +574,29 @@ a.badge-secondary.focus {
                 color: $grey-900 !important;
             }
         }
+    }
+}
+
+.dark-mode {
+    cursor: pointer;
+    margin: 8px 15px 0 10px;
+    font-weight: 500;
+    color: #68748F;
+    background-color: transparent;
+    border-color: transparent;
+    border: 0 solid transparent !important;
+    .custom-control-label {
+        cursor: pointer;
+    }
+    .custom-control-label::before {
+        color: #fff;
+        border-color: $grey-600 !important;
+        background-color: $grey-900 !important;
+    }
+    .custom-control-label::after {
+        color: #fff;
+        border-color: #fff !important;
+        background-color: #fff !important;
     }
 }
 

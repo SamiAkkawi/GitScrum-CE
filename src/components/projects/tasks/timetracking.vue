@@ -215,12 +215,15 @@ export default {
 </script>
 <template>
   <div>
-    <button 
+    <b-button 
     v-if="authorize('tasks', 'create')" 
     v-b-toggle.timetracking-icon
-    class="btn btn-secondary btn-block">
-      {{ $t('Time Tracking') }}
-    </button>
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Time Tracking')"></b-button>
     <b-collapse id="timetracking-icon">
       <b-card>
         <div class="d-flex justify-content-between mb-2">
@@ -280,6 +283,10 @@ export default {
             @action="addTime"></ButtonLoading>
           </div>
         </b-collapse>
+        <b-spinner 
+          v-if="loading" 
+          :label="$t('Loading')" 
+          tag="div" small class="ml-1 mb-1"></b-spinner>
         <div 
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
@@ -287,25 +294,25 @@ export default {
           style="max-height:316px; overflow-x:auto;">
 
           <b-card v-for="(item, index) in timetrackings" :key="index" class="mb-1">
-            <div v-if="item.comment" 
-              :title="item.comment" 
-              :alt="item.comment" class="small txt-muted">{{ item.comment | truncate(95) }}</div>
-            <b-link class="small txt-primary" v-text="item.user.name"></b-link>
+            <b-link class="small text-secondary font-weight-bold" v-text="item.user.name"></b-link>
             <div class="small"> 
               {{ item.time.start.timezone }} {{ $t('to')}}
               <span v-if="item.time.end.timezone" v-text="item.time.end.timezone" />
               <span v-if="!item.time.end.timezone">{{ $t('current time') }}</span>
             </div>
+            <div v-if="item.comment" 
+            :title="item.comment" 
+            :alt="item.comment" class="small txt-muted">{{ item.comment | truncate(95) }}</div>
             <div class="d-flex justify-content-between">
-              <div v-if="item.time.end.timezone" class="small font-weight-bold">
+              <div v-if="item.time.end.timezone" class="small text-info font-weight-bold">
                 {{ $t('Time Spent') }}: {{ item.time.total }}
               </div>
-              <div
+              <b-link
                 v-if="authorize('tasks', 'delete')"
-                class="card-delete"
+                class="small text-danger"
                 @click="removeTime(item.time.id)">
                 {{ $t('Delete') }}
-              </div>
+              </b-link>
             </div>
           </b-card>
         </div>
@@ -315,7 +322,7 @@ export default {
         params: {
           companySlug: task.company.slug,
           projectSlug: task.project.slug } }" 
-        class="small txt-primary" 
+        class="small txt-primary mt-2 ml-1" 
         v-text="$t('Go to Project Time Tracking')" />
       </b-card>
     </b-collapse>

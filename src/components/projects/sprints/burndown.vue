@@ -50,7 +50,7 @@ export default {
         align: 'left',
       },
       chart: {
-        backgroundColor: 'transparent',
+        opacityColor: 'transparent',
       },
       colors: ['blue', 'rgba(50,152,50,1)'],
       plotOptions: {

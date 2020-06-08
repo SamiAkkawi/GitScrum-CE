@@ -4,7 +4,7 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 10px -5px, rgba(0, 0, 0, 0.14) 0px 16px 24px 2px, rgba(0, 0, 0, 0.12) 0px 6px 30px 5px;
     .col-4 {
         min-height: calc(100vh - 15px);
-        padding: 0 30px;
+        padding: 3px 30px;
     }
     .badge-light {
         margin-bottom: 0;
@@ -46,7 +46,7 @@
     }
     p,
     div {
-        color: $grey-300;
+        color: $black-600;
     }
 }
 
@@ -119,19 +119,24 @@
 }
 
 .task-actions {
+    margin-top: 25px;
     .card {
         background: rgba(255, 255, 255, 0.5) !important;
         box-shadow: none;
         border: 0;
         border-radius: 4px !important;
         margin-bottom: 20px;
+        .card-body {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px !important;
+        }
     }
     .dropdown {
         width: 100%;
     }
     .btn-secondary.btn-block {
-        background: rgba(255, 255, 255, 0.4);
-        border: 2px solid #fff !important;
+        background: rgba(0, 0, 0, 0.2);
+        border: 2px solid rgba(0, 0, 0, 0.2) !important;
         color: rgba(0, 0, 0, 0.6);
         font-weight: 700;
         margin-bottom: 6px;
@@ -139,16 +144,16 @@
         font-size: 14px;
         &:hover,
         &:visited {
-            background: rgba(255, 255, 255, 1);
+            background: rgba(0, 0, 0, 0.5) !important;
         }
     }
     .btn-secondary.btn-block:not(:disabled):not(.disabled):active,
     .btn-secondary.btn-block:not(:disabled):not(.disabled).active {
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(0, 0, 0, 0.5);
         color: rgba(0, 0, 0, 0.6);
     }
     .btn-secondary.btn-block.not-collapsed {
-        background: rgba(255, 255, 255, 1);
+        background: rgba(0, 0, 0, 0.5) !important;
     }
     .btn-medium {
         font-size: 13px;
@@ -243,7 +248,7 @@
 
 .task-left-icon {
     text-align: right;
-    margin-top: 2px;
+    margin: 16px 8px 0 0;
     span,
     svg {
         font-size: 22px;
@@ -261,6 +266,11 @@
 }
 
 .task-left-content {
+    background: rgba(237, 238, 242, 0.4);
+    border: 2px solid rgba(237, 238, 242, 0.8);
+    padding: 12px 10px 10px;
+    margin-right: 15px;
+    border-radius: 6px;
     padding-left: 2px;
     h5 {
         margin: 2px 0 0 0;
@@ -274,71 +284,6 @@
         height: 10px;
         .progress-bar {
             border-radius: 0 !important;
-        }
-    }
-    .vlabeledit-label {
-        margin: 0 0 1px 0;
-        padding: 0 3px 0;
-        font-size: 16px;
-        line-height: 20px;
-    }
-    .vlabeledit-input {
-        position: relative;
-        top: -6px;
-        width: 100%;
-        font-size: 16px;
-        line-height: 20px;
-        background: #E5EFFF;
-    }
-    .checklist-remove {
-        position: absolute;
-        padding: 0 0 0 30px;
-        right: -25px;
-        top: -4px;
-        svg {
-            cursor: pointer;
-            color: #9EA9C1 !important;
-            font-size: 18px;
-        }
-    }
-    .checklist-item {
-        margin: 8px 0 0 0;
-    }
-    .checklist-item-line {
-        background: rgb(255, 255, 255);
-        border-radius: 6px;
-        padding: 0px 0px 4px;
-        svg {
-            position: relative;
-            top: 5px;
-            display: none !important;
-        }
-        &:hover {
-            svg {
-                display: block !important;
-            }
-        }
-        .task-left-icon {
-            max-width: 30px;
-            span {
-                margin: 0 0 0 4px;
-            }
-        }
-        .checklist-details {
-            margin-left: 26px;
-            .d-block {
-                margin: 2px 0 0 0;
-            }
-        }
-        .col-11 {
-            margin: 4px 0 0 0;
-        }
-        .vlabeledit {
-            width: 100%;
-            margin: 2px 0 0 0;
-        }
-        .vlabeledit-input {
-            width: 100%
         }
     }
     .checklist-details {
@@ -377,10 +322,95 @@
     }
 }
 
-.task-permanent-link {
-    label {
-        font-size: 11px;
-        color: #9EA9C1;
+.task-checklist {
+    .vlabeledit-label {
+        margin: 0 0 1px 0;
+        padding: 0 3px 0;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .vlabeledit-input {
+        position: relative;
+        top: -1px;
+        width: 100%;
+        font-size: 16px;
+        line-height: 20px;
+        background: #E5EFFF;
+    }
+    .checklist-item-line {
+        margin: 8px 0 0 0;
+        padding: 0 0 4px;
+        .task-left-icon {
+            max-width: 30px;
+            span {
+                margin: 0 0 0 4px;
+            }
+        }
+        .checklist-details {
+            margin-left: 26px;
+            .d-block {
+                margin: 2px 0 0 0;
+            }
+        }
+        .col-11 {
+            margin: 4px 0 0 0;
+        }
+        .vlabeledit {
+            width: 100%;
+            margin: 2px 0 0 0;
+        }
+        .vlabeledit-input {
+            width: 100%
+        }
+    }
+    .checklist-remove {
+        opacity: 0;
+        position: absolute;
+        padding: 0 0 0 0;
+        right: 15px;
+        margin-top: -22px;
+        svg {
+            cursor: pointer;
+            color: #9EA9C1 !important;
+            font-size: 18px;
+        }
+    }
+    .fa-arrows-alt {}
+}
+
+.task-checklist .task-checklist-item {
+    .move-level-1 {
+        position: relative;
+        opacity: 0;
+        top: 2px;
+    }
+    &:hover {
+        .move-level-1 {
+            opacity: 1;
+        }
+        .checklist-remove {
+            opacity: 1;
+        }
+    }
+}
+
+.task-checklist .checklist-item-line {
+    .checklist-remove {
+        opacity: 0 !important;
+    }
+    .move-level-2 {
+        position: relative;
+        opacity: 0;
+        left: -19px;
+        top: 4px;
+    }
+    &:hover {
+        .move-level-2 {
+            opacity: 1;
+        }
+        .checklist-remove {
+            opacity: 1 !important;
+        }
     }
 }
 

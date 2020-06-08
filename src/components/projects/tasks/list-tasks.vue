@@ -159,7 +159,7 @@ export default {
           <ListUsers v-not-visible="'tablet'" :users="item.users" :link="true" :limit="2" size="28" :wrap="false"></ListUsers>
         </div>
       </div>
-      <hr />
+      <hr v-if="items[ index + 1 ]" />
     </div>
   </div>
 </template>

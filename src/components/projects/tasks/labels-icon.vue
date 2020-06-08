@@ -3,11 +3,9 @@ import Axios from '@utils/axios'
 import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
 import ButtonLoading from '@components/utils/button-loading'
-import TitleLoading from '@components/utils/title-loading'
 
 export default {
   components: {
-    TitleLoading,
     ButtonLoading,
     Swatches,
   },
@@ -283,41 +281,53 @@ export default {
 
 <template>
 <div class="task-labels">
-  <button 
+  <b-button 
     v-if="authorize('tasks', 'create')" 
     v-b-toggle.label-icon 
-    class="btn btn-secondary btn-block">
-    {{ $t('Labels') }}
-  </button>
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Labels')"></b-button>
   <b-collapse id="label-icon" @shown="getAllLabels">
     <b-card>
-
-      <b-link  v-b-toggle.label-create>
-        <font-awesome-icon :icon="['far', 'plus-square']" />
-        <span>{{$t('Create a Label')}}</span>
-      </b-link>
+      
+      <div class="d-flex justify-content-between">
+        <b-link  v-b-toggle.label-create>
+          <span class="badge badge-light">{{$t('Create a Label')}}</span>
+        </b-link>
+        <b-spinner 
+          v-if="loading" 
+          :label="$t('Loading')" 
+          tag="div" small class="mt-1 ml-1 mb-1"></b-spinner>
+      </div>
+      
 
       <div v-show="boxSelected === 'edit'">
-        <div class="project-label-form">
-          <b-form-input v-model="label.title" size="sm" :placeholder="$t('Label Name')"></b-form-input>
-          <Swatches
+        <b-input-group>
+          <b-input-group-append class="wd-100">
+            <Swatches
             v-model="label.color"
             colors="text-advanced"
             popover-to="left"
             :trigger-style="{
               width: '32px',
               height: '31px',
-              borderRadius: '0',
-            }"
-            class="swatches-input"
-          ></Swatches>
-          <ButtonLoading
-            type="btn-sm"
-            mode="button"
+              borderRadius: '0' }" class="swatches-input"></Swatches>
+            <b-form-input 
+            v-model="label.title" 
+            size="sm" 
+            :placeholder="$t('Label Name')"></b-form-input>
+            <ButtonLoading
             :loading="btnLoading"
+            type="btn-sm"
+            icon="plus"
             @action="editLabel(label)"
-          ></ButtonLoading>
-        </div>
+            ></ButtonLoading>
+          </b-input-group-append>
+        </b-input-group>
+        
         <div class="project-label-form-actions ">
           <a href="javascript:;" @click="boxSelected = ''">
             {{ $t('Close') }}
@@ -330,29 +340,35 @@ export default {
       </div>
 
       <b-collapse id="label-create">
-        <div class="project-label-form mb-20-px">
-          <b-form-input v-model="label.title" size="sm" :placeholder="$t('Label Name')"></b-form-input>
-          <Swatches
+        <b-input-group>
+          <b-input-group-append class="wd-100">
+            <Swatches
             v-model="label.color"
             colors="text-advanced"
             popover-to="left"
             :trigger-style="{
               width: '32px',
               height: '31px',
-              borderRadius: '0',
-            }"
-            class="swatches-input"
-          ></Swatches>
-          <ButtonLoading
-            type="btn-sm"
-            mode="button"
+              borderRadius: '0' }"
+            class="swatches-input"></Swatches>
+            <b-form-input 
+            v-model="label.title" 
+            size="sm" 
+            :placeholder="$t('Label Name')"></b-form-input>
+            <ButtonLoading
             :loading="btnLoading"
+            type="btn-sm"
+            icon="plus"
             @action="addLabel"
-          ></ButtonLoading>
-        </div>
+            ></ButtonLoading>
+          </b-input-group-append>
+        </b-input-group>
       </b-collapse>
 
+      
+
       <div class="label-line">
+        
 
         <div v-for="labelItem in labels" :key="labelItem.id" class="dropdown-item">
           <div class="label-name d-flex align-items-center justify-content-start" @click="assignLabel(labelItem)">

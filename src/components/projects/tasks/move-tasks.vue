@@ -1,25 +1,11 @@
 <script>
 import Axios from '@utils/axios'
-import vSelect from 'vue-select'
-import Alert from '@components/utils/alert'
-
-import 'vue-select/dist/vue-select.css'
+import ButtonLoading from '@components/utils/button-loading'
 
 export default {
-  components: { vSelect, Alert },
+  components: { ButtonLoading },
   props: {
-    companySlug: {
-      type: String,
-      required: true,
-    },
-    task: {
-      type: Object,
-      required: false,
-      default: function() {
-        return []
-      },
-    },
-    project: {
+   task: {
       type: Object,
       required: false,
       default: function() {
@@ -30,137 +16,72 @@ export default {
   data() {
     return {
       loading: false,
+      projectLoading: true,
+      workflowLoading: false,
+      visible: false,
+      
       openMoveTasks: false,
-      visible: true,
-      projects: [],
+      
+      projects: null,
       workflows: [],
       selectedProject: this.project,
-      selectedWorkflow: {},
-      btnLoading: false,
-      isBtnSaveVisible: false,
-      alertMessage: '',
-      alertStatus: false,
+      selectedWorkflow: '',
     }
   },
-  watch: {
-    selectedProject() {
-      this.getWorkflows()
-    },
-    selectedWorkflow() {
-      if (this.selectedWorkflow && this.selectedWorkflow.code) this.isBtnSaveVisible = true
-    },
-  },
   methods: {
-    openArea() {
-      this.openMoveTasks = !this.openMoveTasks
-    },
     moveTask() {
-      this.btnLoading = true
-
+      this.loading = true
       Axios()
         .post('tasks/' + this.task.uuid + '/move', {
           company_slug: this.task.company.slug,
           project_slug: this.task.project.slug,
           new_company_slug: this.task.company.slug,
-          new_project_slug: this.selectedProject.code,
-          new_workflow_id: this.selectedWorkflow.code,
+          new_project_slug: this.selectedProject,
+          new_workflow_id: this.selectedWorkflow,
         })
         .then((response) => {
-          if (response.data.message) {
-            this.alertMessage = 'Error. ' + response.data.message
-            this.alertStatus = true
-            this.btnLoading = false
-          } else {
-            this.btnLoading = false
-            // reload page to new project board and open task modal
-
-            this.$router.push({
-              name: 'projects.board.task-details',
-              params: {
-                companySlug: this.task.company.slug,
-                projectSlug: this.selectedProject.code,
-                taskSlug: this.task.uuid,
-              },
-            })
-          }
-        })
-        .catch((error) => {
-          this.alertMessage = 'Error. ' + error.response.data.message
-          this.alertStatus = true
+          this.$router.push({
+            name: 'projects.board.task-details',
+            params: {
+              companySlug: this.task.company.slug,
+              projectSlug: this.selectedProject,
+              taskSlug: this.task.uuid,
+            },
+          })
         })
     },
     getProjects() {
-      if (this.$refs.dropdown.className === 'dropdown-menu navbar-dropdown') {
-        this.loading = true
-        this.isBtnSaveVisible = false
-
+      if ( !this.projects ){
+        this.visible = false
+        this.projectLoading = true
         Axios()
-          .get('projects/?company_slug=' + this.task.company.slug)
-          .then((response) => {
-            if (response.data.message) {
-              this.alertMessage = 'Error. ' + response.data.message
-              this.alertStatus = true
-            } else {
-              let arr = []
-              for (let i = 0; i < response.data.data.length; i++) {
-                if (this.selectedProject.slug === response.data.data[i]['slug'])
-                  this.selectedProject = {
-                    code: response.data.data[i]['slug'],
-                    label: response.data.data[i]['name'],
-                  }
-
-                arr.push({
-                  code: response.data.data[i]['slug'],
-                  label: response.data.data[i]['name'],
-                })
-              }
-              this.projects = arr
-
-              // this.getWorkflows()
-            }
-
-            this.loading = false
-          })
-          .catch((error) => {
-            this.alertMessage = 'Error. ' + error.response.data.message
-            this.alertStatus = true
-          })
+        .get('projects/?company_slug=' + 
+        this.task.company.slug)
+        .then((response) => {
+          this.projects = response.data.data
+          this.selectedProject = this.projects[0].slug
+          this.projectLoading = false
+          this.getWorkflows()
+        })
       }
     },
     getWorkflows() {
-      this.isBtnSaveVisible = false
-      this.selectedWorkflow = {}
+      this.visible = false
+      this.workflowLoading = true
       this.workflows = []
       Axios()
-        .get(
-          'projects-workflows/?company_slug=' + this.task.company.slug + '&project_slug=' + this.selectedProject.code
-        )
-        .then((response) => {
-          if (response.data.message) {
-            this.alertMessage = 'Error. ' + response.data.message
-            this.alertStatus = true
-          } else {
-            let arr = []
-            for (let i = 0; i < response.data.data.length; i++) {
-              if (this.selectedWorkflow.slug === response.data.data[i]['slug'])
-                this.selectedWorkflow = {
-                  code: response.data.data[i]['id'],
-                  label: response.data.data[i]['title'],
-                }
-
-              arr.push({
-                code: response.data.data[i]['id'],
-                label: response.data.data[i]['title'],
-              })
-            }
-
-            this.workflows = arr
-          }
-        })
-        .catch((error) => {
-          this.alertMessage = 'Error. ' + error.response.data.message
-          this.alertStatus = true
-        })
+      .get(
+        'projects-workflows/?company_slug=' + 
+        this.task.company.slug + 
+        '&project_slug=' + 
+        this.selectedProject
+      )
+      .then((response) => {
+        this.workflows = response.data.data
+        this.selectedWorkflow = this.workflows[0].id
+        this.workflowLoading = false
+        this.visible = true
+      })
     },
   },
 }
@@ -168,50 +89,58 @@ export default {
 
 <template>
   <div>
-    <button 
-      v-if="authorize('tasks', 'update')" 
-      v-b-toggle.move-task 
-      class="btn btn-secondary btn-block">
-      {{ $t('Move to another Project') }}
-    </button>
+    <b-button 
+    v-if="authorize('tasks', 'update')" 
+    v-b-toggle.move-task 
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Move to another Project')"></b-button>
     <b-collapse id="move-task" @shown="getProjects">
       <b-card>
-        
-        <div class="header-dropdown-topitem">
-          <div>
-            <div class="mt-5-px pd-b-10">
-              <label>{{ $t('Project') }}</label>
-              <v-select v-model="selectedProject" :options="projects" label="label" :clearable="false"></v-select>
-            </div>
-            <div class="mt-15-px pd-b-10">
-              <label>{{ $t('Workflow Stage') }}</label>
-              <v-select v-model="selectedWorkflow" :options="workflows" label="label" :clearable="false"></v-select>
-            </div>
-
-            <div class="mt-10-px">
-              <b-button v-if="btnLoading" variant="primary" class="btn btn-mini btn-primary">
-                <b-spinner small type="grow"></b-spinner>
-                {{ $t('Moving...') }}
-              </b-button>
-
-              <button
-                v-if="!btnLoading"
-                class="btn btn-mini btn-primary"
-                type="submit"
-                :disabled="!isBtnSaveVisible"
-                @click="moveTask"
-              >
-                {{ $t('Move') }}
-              </button>
-            </div>
+        <b-spinner 
+          v-if="projectLoading" 
+          :label="$t('Loading')" 
+          tag="div" small class="mt-1 ml-1 mb-1"></b-spinner>
+        <b-form-group
+          v-if="!projectLoading"
+          :label="$t('Project')" class="mb-1">
+          <b-form-select 
+          v-model="selectedProject" 
+          :options="projects"
+          value-field="slug"
+          text-field="name"
+          size="sm"
+          @change="getWorkflows"></b-form-select>
+        </b-form-group>
+        <b-spinner 
+          v-if="workflowLoading" 
+          :label="$t('Loading')" 
+          tag="div" small class="mt-2 ml-1 mb-1"></b-spinner>  
+        <b-form-group
+          v-if="visible"
+          :label="$t('Workflow Stage')">
+          <b-form-select 
+          v-model="selectedWorkflow" 
+          :options="workflows"
+          value-field="id"
+          text-field="title"
+          size="sm"></b-form-select>
+        </b-form-group>
+        <div v-if="visible" class="mt-3 mb-2">
+          <hr>
+          <div class="d-flex justify-content-between">
+            <div></div>
+            <ButtonLoading
+            :title="$t('Move')"
+            :title-loading="$t('Moving')"
+            :loading="loading"
+            type="btn-md"
+            @action="moveTask"></ButtonLoading>
           </div>
         </div>
-        <Alert
-          v-show="alertMessage.length && alertStatus"
-          class="p-10-px"
-          :message="alertMessage"
-          :status="alertStatus"
-        ></Alert>
       </b-card>
     </b-collapse>
   </div>

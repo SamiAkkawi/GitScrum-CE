@@ -161,8 +161,7 @@ export default {
                     :title-loading="$t('Updating Details')"
                     :loading="loading"
                     type="btn-md"
-                    @action="updateCompany"
-                  ></ButtonLoading>
+                    @action="updateCompany"></ButtonLoading>
                 </div>
               </div>
           </b-card>

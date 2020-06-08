@@ -11,7 +11,6 @@ import Timer from '@components/projects/tasks/timer'
 import { modalManager, taskFilter } from '@state/helpers'
 import { isMobile } from 'mobile-device-detect';
 import Mentions from '@components/utils/mentions'
-import hexToRgba from 'hex-to-rgba'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -390,9 +389,6 @@ export default {
         this.getTasks()        
       }
     },
-    backgroundColor(hexColor) {
-      return hexToRgba(hexColor, '0.4')
-    },
   },
 
 }
@@ -509,8 +505,8 @@ export default {
 
             <div class="content-task-card" 
               :data-uuid="task.uuid" 
-               :data-color="(task.type) ? backgroundColor(task.type.color) : ''" 
-              :style="(task.type) ? 'background: ' + backgroundColor(task.type.color) : ''">
+              :data-color="(task.type) ? opacityColor(task.type.color, '0.2') : ''" 
+              :style="(task.type) ? 'background: ' + opacityColor(task.type.color, '0.2') : ''">
 
               <span class="task-title">
                 <strong v-if="task.code">{{ task.code }} - </strong>
@@ -519,10 +515,6 @@ export default {
 
               <div v-if="hasImage(task.image)" class="cover-container">
                 <img v-lazy="task.image" class="cover task-image" />
-              </div>
-
-              <div v-if="task.labels[0]">
-                <ListLabels v-if="task.labels[0]" :labels="task.labels" :limit="15"></ListLabels>
               </div>
 
               <div v-if="task.type || task.effort || task.timer" class="d-flex align-items-center flex-wrap">
@@ -536,8 +528,7 @@ export default {
               <div
                 v-if="task.users.length > 0"
                 class="col-md d-flex justify-content-start"
-                style="padding: 5px 0 5px 5px;"
-              >
+                style="padding: 5px 0 5px 5px;">
                 <ListUsers size="26" :users="task.users" :link="true" :limit="6"></ListUsers>
               </div>
 
@@ -586,6 +577,9 @@ export default {
                   </div>
                 </div>
               </div>
+
+              <ListLabels :labels="task.labels" :limit="15"></ListLabels>
+
             </div>
 
             <div

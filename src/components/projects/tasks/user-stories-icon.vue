@@ -1,10 +1,9 @@
 <script>
 import Axios from '@utils/axios'
-import Alert from '@components/utils/alert'
 import ButtonLoading from '@components/utils/button-loading'
 
 export default {
-  components: { Alert, ButtonLoading },
+  components: { ButtonLoading },
   props: {
     task: {
       type: Object,
@@ -13,10 +12,6 @@ export default {
         return []
       },
     },
-    // refresh: {
-    //   type: Array,
-    //   required: true,
-    // },
     activities: {
       type: Array,
       required: true,
@@ -24,131 +19,89 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       btnLoading: false,
+      selectUserStoryLoading: false,
       userStories: [],
 
-      alertMessage: '',
-      alertStatus: false,
       currentPage: 0,
       totalPages: 1,
       perPage: 15,
-      loadingMore: false,
-      userStorySelected: [],
+      loadingMore: true,
       searchTerm: '',
       termSearched: false,
       searchLoading: false,
     }
   },
   methods: {
-    handleScroll(ev) {
-      if (
-        ev.target.scrollHeight - 400 <= ev.target.scrollTop &&
-        !this.loadingMore &&
-        this.currentPage <= this.totalPages
-      ) {
-        this.loadMore()
-      }
-    },
-
+   
     loadMore() {
       this.currentPage = this.currentPage + 1
       if (this.currentPage <= this.totalPages) {
         this.loadingMore = true
         this.getUserStories()
+      } else {
+        this.loadingMore = false
       }
     },
 
     getUserStories() {
-      this.loading = true
-      this.alertStatus = false
       Axios()
-        .get(
-          'user-stories/?company_slug=' + 
-          this.task.company.slug +
-          '&project_slug=' +
-          this.task.project.slug +
-          '&search=' + 
-          this.searchTerm +
-          '&page=' +
-          this.currentPage
-        )
-        .then((response) => {
-          
-          this.currentPage = response.data.current_page
-          this.totalPages = response.data.total_pages
-          this.perPage = response.data.per_page
-          if (this.userStories.length && this.currentPage > this.total_pages) {
-            this.currentPage = 1
-            this.getUserStories()
-          } else {
-            for (let i = 0; i < response.data.data.length; i++) {
-              let userStory = response.data.data[i]
-              this.$set(userStory, 'selected', false)
-              this.$set(userStory, 'selectUserStoryLoading', false)
-              this.userStories.push(userStory)
-            }
+      .get(
+        'user-stories/?company_slug=' + 
+        this.task.company.slug +
+        '&project_slug=' +
+        this.task.project.slug +
+        '&search=' + 
+        this.searchTerm +
+        '&page=' +
+        this.currentPage
+      )
+      .then((response) => {
+        this.currentPage = response.data.current_page
+        this.totalPages = response.data.total_pages
+        this.perPage = response.data.per_page
+        if ( !this.userStories && this.currentPage > this.total_pages) {
+          this.currentPage = 1
+          this.getUserStories()
+        } else {
+          for (let i = 0; i < response.data.data.length; i++) {
+            let userStory = response.data.data[i]
+            this.userStories.push(userStory)
           }
-          
-          this.loadingMore = false
-          this.searchLoading = false
-          this.loading = false
-        })
-        .catch((error) => {
-          this.alertMessage = 'Error. ' + error.response.data.message
-          this.alertStatus = true
-          this.loading = false
-          this.loadingMore = false
-        })
-    },
-
-    selectUserStory(userStory) {
-      if (this.userStorySelected && this.userStorySelected.selected) {
-        let userStoryIndex = this.userStories.indexOf(this.userStorySelected)
-        if ( this.userStories[userStoryIndex] ){
-          this.userStories[userStoryIndex].selected = false
         }
-      }
-      userStory.selected = true
-      this.userStorySelected = userStory
-      this.task.user_story = userStory
+
+        this.searchLoading = false
+        this.loading = false
+      })
     },
 
     changeTaskUserStory(userStory) {
-      this.alertStatus = false
-      userStory.selectUserStoryLoading = true
-      Axios()
+      if( !this.selectUserStoryLoading ){
+        this.selectUserStoryLoading = userStory.id
+        Axios()
         .put(
           'tasks/' +
-            this.task.uuid +
-            '/?company_slug=' +
-            this.task.company.slug +
-            '&project_slug=' +
-            this.task.project.slug,
+          this.task.uuid +
+          '/?company_slug=' +
+          this.task.company.slug +
+          '&project_slug=' +
+          this.task.project.slug,
           {
             user_story_id: userStory.id,
           }
         )
         .then((response) => {
-          if (response.data.message) {
-            this.alertMessage = 'Error. ' + response.data.message
-            this.alertStatus = true
-          } else {
-            this.selectUserStory(userStory)
-          }
-          userStory.selectUserStoryLoading = false
+          this.task.user_story = userStory
+          this.selectUserStoryLoading = false
         })
-        .catch((error) => {
-          this.alertMessage = 'Error. ' + error.response.data.message
-          this.alertStatus = true
-          userStory.selectUserStoryLoading = false
-        })
+      }
     },
 
     search() {
       this.searchLoading = true
       this.userStories = []
-      this.currentPage = 1
+      this.currentPage = 0
       this.termSearched = true
       this.getUserStories()
     },
@@ -158,82 +111,61 @@ export default {
 
 <template>
   <div>
-    <button 
-      v-if="authorize('tasks', 'create')" 
-      v-b-toggle.user-story-icon
-      class="btn btn-secondary btn-block">
-      {{ $t('User Stories') }}
-    </button>
+    <b-button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.user-story-icon
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('User Stories')"></b-button>
     <b-collapse id="user-story-icon" @shown="loadMore">
       <b-card>
-        <div class="sprints-search mb-15-px">
-          <div class="form-group m-0">
-            <div class="input-group">
-              <input
-                v-model="searchTerm"
-                maxlength="45"
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                :placeholder="$t('Search user story')"
-                @keydown.enter.prevent="search"
-                style="height: 32px"
-              />
-              <div class="input-group-append">
-                <ButtonLoading
-                  type="btn-sm"
-                  mode="button"
-                  :loading="searchLoading"
-                  :fa-icon="'far'"
-                  :icon="'search'"
-                  @action="search"
-                ></ButtonLoading>
+        <b-spinner 
+          v-if="loading" 
+          :label="$t('Loading')" 
+          tag="div" small class="mt-1 ml-1 mb-1"></b-spinner>
+        <div v-if="!loading">
+          <b-input-group class="mb-2">
+            <b-input-group-append class="wd-100">
+              <b-form-input 
+              v-model="searchTerm" 
+              maxlength="45"
+              :placeholder="$t('Search')"
+              type="search" size="sm"></b-form-input>
+              <ButtonLoading
+                :loading="searchLoading"
+                type="btn-sm"
+                icon="search"
+                @action="search"
+              ></ButtonLoading>
+            </b-input-group-append>
+          </b-input-group>
+          <div v-if="userStories.length" class="scroll-activate-h200">
+            <div v-for="userStory in userStories" 
+              v-if="userStory.id !== task.user_story.id" 
+              :key="userStory.id" 
+              class="mb-2 pb-2 border-bottom">
+              <b-link class="small txt-primary" @click="changeTaskUserStory(userStory)" v-text="userStory.title"></b-link>
+              <div class="d-flex justify-content-between">
+                <span v-if="userStory.priority" class="badge mt-1" 
+                :style="'color: ' + 
+                invertColor(userStory.priority.color, true) + 
+                ';background:' + 
+                userStory.priority.color"
+                v-text="userStory.priority.title" />
+                <b-spinner
+                  v-show="selectUserStoryLoading === userStory.id"
+                  :label="$t('Loading')"
+                  small
+                  class="mt-2 mr-2" ></b-spinner>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div v-if="userStories.length" class="sprints-list" v-on:scroll.passive="handleScroll">
-          <ul class="list">
-            <li
-              v-for="userStory in userStories"
-              :key="userStory.id"
-              class="mb-10-px p-10-px"
-              @click="changeTaskUserStory(userStory)"
-              :class="userStory.selected ? 'selected' : ''"
-            >
-              <div>
-                <span class="d-block tx-12-px fw-500 mb-5-px" :class="userStory.selected ? 'txt-3D4F9F' : 'txt-68748F'">
-                  {{ userStory.title }}
-                </span>
-                <div class="d-flex justify-content-between">
-                  <span class="d-block tx-10-px ls-003" :class="userStory.selected ? 'txt-3D4F9F' : 'txt-68748F'">
-                    {{ userStory.priority.title }}
-                  </span>
-                  <font-awesome-icon
-                    v-if="userStory.selected && !userStory.selectUserStoryLoading"
-                    :icon="['far', 'check-double']"
-                    class="txt-464DEE"
-                    style="font-size: 12px;"
-                  />
-                  <b-spinner
-                    v-show="userStory.selectUserStoryLoading"
-                    :label="$t('Loading')"
-                    small
-                    class="btn-small-loading"
-                  ></b-spinner>
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div class="text-center">
-            <b-spinner
-              v-show="loadingMore"
-              :label="$t('Loading')"
-              variant="secondary"
-              small
-              class="title-loading"
-            ></b-spinner>
+            <b-link 
+            v-if="loadingMore" 
+            class="txt-primary small font-weight-bold" 
+            @click="loadMore">{{ $t('Load more') }}</b-link>
           </div>
         </div>
       </b-card>

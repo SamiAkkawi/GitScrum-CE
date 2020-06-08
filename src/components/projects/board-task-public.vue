@@ -4,7 +4,6 @@ import ListUsers from '@components/utils/list-users'
 import ListLabels from '@components/utils/list-labels'
 import StartDueDates from '@components/projects/tasks/start-due-dates'
 import BoardTaskOptions from '@components/projects/board-task-options'
-import hexToRgba from 'hex-to-rgba'
 import Types from '@components/projects/tasks/types'
 import Efforts from '@components/projects/tasks/efforts'
 
@@ -157,9 +156,6 @@ export default {
         this.getTasks()        
       }
     },
-    backgroundColor(hexColor) {
-      return hexToRgba(hexColor, '0.06')
-    },
   },
 
 }
@@ -195,8 +191,8 @@ export default {
 
             <div class="content-task-card" 
               :data-uuid="task.uuid" 
-              :data-color="(task.type) ? backgroundColor(task.type.color) : ''" 
-              :style="(task.type) ? 'background: ' + backgroundColor(task.type.color) : ''">
+              :data-color="(task.type) ? opacityColor(task.type.color, '0.06') : ''" 
+              :style="(task.type) ? 'background: ' + opacityColor(task.type.color, '0.06') : ''">
 
               <span class="task-title">
                 <strong v-if="task.code">{{ task.code }} - </strong>

@@ -41,6 +41,9 @@ export default {
     if (this.hidden) {
       this.getInfosDetails()
     }
+    this.gsNight = !localStorage.getItem('GS_NIGHT')
+    this.changeTheme()
+    this.gsNight = !this.gsNight
   },
   data() {
     return {
@@ -104,10 +107,13 @@ export default {
     },
     changeTheme(){
       const el = document.body;
+
       if ( this.gsNight ){
         el.classList.remove('GitScrum-Night');
+        localStorage.removeItem('GS_NIGHT')
       } else {
         el.classList.add('GitScrum-Night');
+        localStorage.setItem('GS_NIGHT', true)
       }
     }
   },
@@ -138,10 +144,17 @@ export default {
 
       <b-collapse v-if="!sharing" id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <li>
-            <b-form-checkbox v-model="gsNight" switch size="sm" @change="changeTheme"></b-form-checkbox>
-          </li>
           <HeaderLanguage></HeaderLanguage>
+          <li>
+            <div class="dark-mode">
+              <b-form-checkbox 
+              v-model="gsNight" 
+              switch 
+              size="sm" 
+              @change="changeTheme">{{ $t('Dark') }}</b-form-checkbox>
+            </div>
+          </li>
+          
           
           <li v-if="currentCompany.subscription === 'free' && currentCompany.owner.username === currentUser.username">
             <a href="https://site.gitscrum.com/pricing-growing-companies" target="_blank">

@@ -63,7 +63,7 @@ export default {
 </script>
 
 <template>
-  <b-row v-if="subtasks[0]">
+  <b-row v-if="subtasks[0]" class="mb-3">
     <b-col cols="1" class="task-left-icon">
       <font-awesome-icon :icon="['far', 'tasks']" />
     </b-col>

@@ -28,12 +28,27 @@
 
 .comment {
     margin: 10px 0 0 0;
-    background: #F4F6F9;
+    background: $red-A100;
+    border: 2px solid $blue-50;
     padding: 10px 14px;
     border-radius: 6px;
+    p {
+        margin: 0 !important;
+    }
     pre {
         background: #e8eff4;
         padding: 15px;
+    }
+    .buttons-row {
+        margin-top: 3px;
+        opacity: 0;
+        font-size: 13px;
+        font-weight: 700;
+    }
+    &:hover {
+        .buttons-row {
+            opacity: 1;
+        }
     }
 }
 

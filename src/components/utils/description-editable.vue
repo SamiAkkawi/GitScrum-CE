@@ -128,8 +128,7 @@ export default {
       :placeholder="placeholder"
       @input="resize"
       @focus="resize"
-      @focusout="updateDescription"
-    ></textarea>
+      @focusout="updateDescription"></textarea>
 
     <!--
     <Mentions

@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       types: [],
       currentPage: 0,
       totalPages: 1,
@@ -101,7 +102,7 @@ export default {
 <div>
   <span
     v-if="task.type !== null && !dropdown"
-    class="badge mr-2 mb-1"
+    class="badge mr-1 mb-1"
     :style="'color: ' + invertColor(task.type.color, true) + ';background:' + task.type.color">
     {{task.type.title}}
   </span>
@@ -121,7 +122,11 @@ export default {
         style="position:relative; margin-left:4px;top: 0px;" />
       </span>
     </template>
-    <b-dropdown-form style="width:300px;">
+    <b-spinner 
+      v-if="loading" 
+      :label="$t('Loading')" 
+      tag="div" small class="mt-1 ml-1 mb-1"></b-spinner>
+    <b-dropdown-form v-if="!loading" style="width:300px;">
       <b-input-group class="mb-1">
         <b-input-group-append class="wd-100">
           <b-form-input 

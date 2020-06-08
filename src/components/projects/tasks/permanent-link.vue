@@ -50,29 +50,34 @@ export default {
 </script>
 
 <template>
-  <b-form-group
-    class="task-permanent-link badge badge-light wd-100 text-left">
-    <b-link @click="statusPermanentOpen">
-      <font-awesome-icon 
-        :icon="['far', projectExtraIcon]" 
-        class="cursor-pointer" 
-        style="font-size:18px; color: #909CB8;" 
-         />
-      {{ $t('Permanent Link') }}
-      
-    </b-link>
-    <b-input-group v-show="projectExtra">
-      <b-input v-model="taskUrl" 
-        :readonly="true" 
-        autocomplete="off"></b-input>
-      <b-input-group-append>
-        <b-button 
-        v-clipboard:copy="taskUrl"
-        v-clipboard:success="onCopy"
-        variant="outline-secondary" >
-          <font-awesome-icon :icon="['far', 'copy']" />
-        </b-button>
-      </b-input-group-append>
-    </b-input-group>
-  </b-form-group>
+<div class="task-permanent-link">
+  <b-button 
+  v-if="authorize('tasks', 'create')" 
+  v-b-toggle.permanent-link-icon 
+  class="btn btn-secondary btn-block"
+  :style="(task.type) ? 'color: ' + 
+  invertColor(task.type.color, true) + 
+  ';background: ' + 
+  opacityColor(task.type.color, '0.6') : ''"
+  v-text="$t('Permanent Link')"></b-button>
+  <b-collapse id="permanent-link-icon">
+    <b-card>
+      <b-input-group>
+        <b-input v-model="taskUrl" 
+          :readonly="true" 
+          autocomplete="off"></b-input>
+        <b-input-group-append>
+          <b-button 
+          v-clipboard:copy="taskUrl"
+          v-clipboard:success="onCopy"
+          variant="outline-secondary" >
+            <font-awesome-icon :icon="['far', 'copy']" />
+          </b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </b-card>
+  </b-collapse>
+
+  
+</div>
 </template>

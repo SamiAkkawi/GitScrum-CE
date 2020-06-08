@@ -101,7 +101,7 @@ export default {
                 <img :src="video.thumbnail" style="width:100%; position:relative; top:-50px" class="shadow-sm" />
               </div>
             </silentbox-item>
-            <div class="mt-5-px">
+            <div class="mt-1">
               <silentbox-item :src="video.url" :description="video.title">
                 <b-link
                   class="small"

@@ -151,127 +151,101 @@ export default {
 </script>
 
 <template>
-  <div v-if="attachments[0]">
-    <b-container class="mt-20-px">
-      <b-row class="mb-10-px">
-        <b-col cols="1" class="task-left-icon">
-          <font-awesome-icon :icon="['far', 'paperclip']" />
-        </b-col>
-        <b-col cols="11" class="task-left-content">
-          <h5>{{ $t('Attachments') }}</h5>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="1"></b-col>
-        <b-col cols="11" class="task-left-content">
-          <silentbox-group>
-            <div class="d-flex align-content-start flex-wrap">
-              <div v-for="(attachment, index) in attachments" :key="attachment.id" class="gallery-box mb-10-px">
-                <div v-if="isImage(attachment)">
-                  <div>
-
-                    <b-dropdown v-if="authorize('tasks', 'delete', checkMyTask)" right class="gallery-dropdown styled-dropdown">
-                      <template v-slot:button-content>
-                        <font-awesome-icon :icon="['far', 'ellipsis-h']" style="font-size:20px" class="txt-68748F" />
-                      </template>
-                      <b-dropdown-item @click="removeAttachment(attachment, index)">
-                        <font-awesome-icon :icon="['far', 'trash']"/>
-                        {{ $t('Delete') }}
-                      </b-dropdown-item>
-                    </b-dropdown>
-
-                    <silentbox-item :src="attachment.download.url" :description="attachment.filename">
-                      <div class="gallery-image">
-                        <ListUsers :user="attachment.user" :link="true" size="22"></ListUsers>
-                        <img :src="attachment.download.url" style="width:100%;" />
-                      </div>
-                    </silentbox-item>
+  <b-row v-if="attachments[0]" class="mb-3">
+    <b-col cols="1" class="task-left-icon">
+      <font-awesome-icon :icon="['far', 'paperclip']" />
+    </b-col>
+    <b-col class="task-left-content">
+      <h5 class="mb-3">{{ $t('Attachments') }}</h5>
+      <silentbox-group>
+        <div class="d-flex align-content-start flex-wrap">
+          <div v-for="(attachment, index) in attachments" :key="attachment.id" class="gallery-box mb-10-px">
+            <div v-if="isImage(attachment)">
+              <div>
+                <silentbox-item :src="attachment.download.url" :description="attachment.filename">
+                  <div class="gallery-image">
+                    <ListUsers :user="attachment.user" :link="true" size="22"></ListUsers>
+                    <img :src="attachment.download.url" style="width:100%;" />
                   </div>
+                </silentbox-item>
+              </div>
 
-                  <div class="mt-5-px">
-                    <silentbox-item :src="attachment.download.url" :description="attachment.filename">
-                      <span
-                        class="d-block tx-12-px fw-500 txt-6C7293 txt-link"
-                        style="margin-bottom:-3px;"
-                        :alt="attachment.filename"
-                        :title="attachment.filename"
-                      >
-                        {{ attachment.filename | truncate(52) }}
-                      </span>
-                      <span class="d-block tx-11-px txt-9EA9C1" v-b-popover.hover.top="attachment.created_at.timezone">
-                        {{ attachment.created_at.date_for_humans }}
-                      </span>
-                    </silentbox-item>
-                  </div>
-                </div>
-
-                <div v-if="!isImage(attachment)" class="wd-100p">
-                  <div>
-                    <div class="dropdown gallery-dropdown header-dropdown" v-if="authorize('tasks', 'delete', checkMyTask)">
-                      <div class="dropdown-toggle" data-toggle="dropdown">
-                        <div class="txt-A7AFB7">
-                          <font-awesome-icon :icon="['far', 'ellipsis-h']" style="font-size:20px" class="txt-68748F" />
-                        </div>
-                      </div>
-                      <div class="dropdown-menu dropdown-menu-right" style="min-width:130px;">
-                        <a class="header-dropdown-item mt-10-px" href="javascript:;" @click="removeAttachment(attachment, index)">
-                          <span class="icon-size"><font-awesome-icon :icon="['far', 'trash']"/></span>
-                          <span class="ml-2">{{ $t('Delete') }}</span>
-                        </a>
-                      </div>
-                    </div>
-                    <a :href="attachment.download.url" class="" target="_blank">
-                      <div class="gallery-image">
-                        <ListUsers :user="attachment.user" :link="true" size="22"></ListUsers>
-                        <span class="icons d-block">
-                          <font-awesome-icon
-                            :icon="['fal', 'file' + getIconByType(attachment.mimetype)]"
-                            class="txt-9EA9C1"
-                            style="font-size:60px"
-                          />
-                        </span>
-                      </div>
-                    </a>
-                  </div>
-
-                  <div class="mt-5-px">
-                    <a :href="attachment.download.url" class="" target="_blank">
-                      <span
-                        class="d-block tx-12-px fw-500 txt-6C7293 txt-link"
-                        style="margin-bottom:-3px;"
-                        :alt="attachment.filename"
-                        :title="attachment.filename"
-                      >
-                        {{ attachment.filename | truncate(52) }}
-                      </span>
-                    </a>
-                    <span class="d-block tx-11-px txt-9EA9C1" v-b-popover.hover.top="attachment.created_at.timezone">
-                      {{ attachment.created_at.date_for_humans }}
-                    </span>
-                  </div>
+              <div class="mt-1">
+                <silentbox-item :src="attachment.download.url" :description="attachment.filename">
+                  <span
+                    class="font-weight-bold small"
+                    :alt="attachment.filename"
+                    :title="attachment.filename">
+                    {{ attachment.filename | truncate(52) }}
+                  </span>
+                </silentbox-item>
+                <div class="d-flex justify-content-between">
+                  <span v-b-popover.hover.top=" attachment.created_at.date_for_humans" class="small">
+                    {{ attachment.created_at.date_for_humans }}
+                  </span>
+                  <b-link 
+                  v-if="authorize('tasks', 'update')" 
+                  class="small text-danger" 
+                  @click="removeAttachment(attachment, index)" 
+                  v-text="$t('Delete')" />
                 </div>
               </div>
             </div>
-          </silentbox-group>
-          <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
-            <b-pagination
-              v-model="currentPage"
-              hide-goto-end-buttons
-              class="paginator"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              @change="getAttachments"
-            >
-              <template slot="prev-text">
-                <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-              </template>
-              <template slot="next-text">
-                <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-              </template>
-            </b-pagination>
+
+            <div v-if="!isImage(attachment)" class="wd-100p">
+              
+              <b-link :href="attachment.download.url" target="_blank">
+                <div class="gallery-image">
+                  <ListUsers :user="attachment.user" :link="true" size="22"></ListUsers>
+                  <span class="icons d-block">
+                    <font-awesome-icon
+                      :icon="['fal', 'file' + getIconByType(attachment.mimetype)]"
+                      class="text-secondary"
+                      style="font-size:60px; top:-23px; position:relative;"
+                    />
+                  </span>
+                </div>
+              </b-link>
+
+              <b-link :href="attachment.download.url" class="d-block mt-1" target="_blank">
+                <span
+                  class="font-weight-bold small"
+                  :alt="attachment.filename"
+                  :title="attachment.filename">
+                  {{ attachment.filename | truncate(52) }}
+                </span>
+              </b-link>
+              <div class="d-flex justify-content-between">
+                <span v-b-popover.hover.top=" attachment.created_at.date_for_humans" class="small">
+                  {{ attachment.created_at.date_for_humans }}
+                </span>
+                <b-link 
+                v-if="authorize('tasks', 'update')" 
+                class="small text-danger" 
+                @click="removeAttachment(attachment, index)" 
+                v-text="$t('Delete')" />
+              </div>
+            </div>
           </div>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+        </div>
+      </silentbox-group>
+      <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
+        <b-pagination
+          v-model="currentPage"
+          hide-goto-end-buttons
+          class="paginator"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          @change="getAttachments"
+        >
+          <template slot="prev-text">
+            <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
+          </template>
+          <template slot="next-text">
+            <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
+          </template>
+        </b-pagination>
+      </div>
+    </b-col>
+  </b-row>
 </template>

@@ -3,7 +3,6 @@ import Layout from '@layouts/tpl-main-large-company'
 import Axios from '@utils/axios'
 import ListProjects from '@components/utils/list-projects'
 import TitleLoading from '@components/utils/title-loading'
-import hexToRgba from 'hex-to-rgba'
 import { modalManager } from '@state/helpers'
 import Alert from '@components/utils/alert'
 export default {
@@ -63,9 +62,6 @@ export default {
     checkCompanySettings() {
       let company = this.userCompanies.find((company) => company.slug === this.currentCompany.slug)
       this.canCreateProjects = company.settings.can_create_projects
-    },
-    backgroundColor(hexColor) {
-      return hexToRgba(hexColor, '0.1')
     },
     getProjects() {
       Axios()

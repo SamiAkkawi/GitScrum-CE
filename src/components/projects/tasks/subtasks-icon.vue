@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       btnLoading: false,
       subtaskTitle: '',
       alertMessage: '',
@@ -85,15 +85,22 @@ export default {
 
 <template>
 <div>
-  <button 
-    v-if="authorize('tasks', 'create')" 
-    v-b-toggle.subtasks-icon 
-    class="btn btn-secondary btn-block">
-    {{ $t('Subtasks') }}
-  </button>
+  <b-button 
+  v-if="authorize('tasks', 'create')" 
+  v-b-toggle.subtasks-icon 
+  class="btn btn-secondary btn-block"
+  :style="(task.type) ? 'color: ' + 
+  invertColor(task.type.color, true) + 
+  ';background: ' + 
+  opacityColor(task.type.color, '0.6') : ''"
+  v-text="$t('Subtasks')"></b-button>
   <b-collapse id="subtasks-icon" @shown="getWorkflows">
     <b-card>
-      <b-input-group>
+      <b-spinner 
+        v-if="loading" 
+        :label="$t('Loading')" 
+        tag="div" small class="mt-1 ml-1 mb-1"></b-spinner>
+      <b-input-group v-if="!loading" >
         <b-form-select 
           v-model="workflow" 
           :options="workflows"

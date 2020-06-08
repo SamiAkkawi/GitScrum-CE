@@ -1,6 +1,4 @@
 <script>
-import hexToRgba from 'hex-to-rgba'
-
 export default {
   props: {
     labels: {
@@ -19,33 +17,23 @@ export default {
     },
   },
   methods: {
-    backgroundColor(hexColor) {
-      return hexToRgba(hexColor, 0.1)
-    }
   },
 }
 </script>
 
 <template>
-  <div class="task-labels pd-t-0">
+  <div v-if="labels[0]" class="task-labels mt-2">
     <span
       v-for="label in labels"
       :key="label.slug"
       :class="customClass"
       :alt="label.title"
       :title="label.title"
-      class="badge badge-text fw-600"
-      :style="'border:1px solid ' + label.color  + ';color: ' + label.color + ';background:' + backgroundColor(label.color)"
-    >
+      class="badge badge-light mb-1"
+      :style="'border:1px solid ' + label.color  + ';color: ' + invertColor(label.color, true) + ';background:' + opacityColor(label.color, '0.2') + ' !important'">
       <div v-if="limit">{{ label.title | truncate(limit) }}</div>
       <div v-if="!limit">{{ label.title }}</div>
       <span v-show="label.total">({{ label.total }})</span>
     </span>
   </div>
 </template>
-
-<style lang="scss" scope>
-.labels span {
-  margin-right: 3px;
-}
-</style>

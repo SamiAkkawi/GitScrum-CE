@@ -2,6 +2,7 @@
 import Axios from '@utils/axios'
 import ListUsers from '@components/utils/list-users'
 
+
 export default {
   components: { ListUsers },
   props: {
@@ -45,40 +46,43 @@ export default {
           this.loading = false
           this.restricted = true
         })
-    },
+    }
   },
 }
 </script>
 
 <template>
   <div>
-    <button 
-      v-if="authorize('tasks', 'create')" 
-      v-b-toggle.activities-icon 
-      class="btn btn-secondary btn-block">
-      {{ $t('Activities') }}
-    </button>
+    <b-button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.activities-icon 
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Activities')"></b-button>
     <b-collapse id="activities-icon" @shown="getActivities">
       <b-card>
         <div v-if="!restricted">
+          <b-spinner 
+            v-if="loading" 
+            :label="$t('Loading')" 
+            tag="div" small class="ml-1 mb-1"></b-spinner>
           <div
             v-for="item in activities"
-            :key="item.id"
-            class="d-flex align-items-center ml-7-px mt-10-px tx-12-px txt-1E1E2F"
-          >
-            <ListUsers :user="item.user" :link="true" size="30"></ListUsers>
-            <div class="ml-10-px">
+            :key="item.id">
+            <div class="box-useravatar">
+              <ListUsers :user="item.user" :link="true" size="14"></ListUsers>
               <router-link
-                :to="{
-                  name: 'profile.user',
-                  params: { username: item.user.username },
-                }"
-                class="fw-600 txt-1E1E2F"
-                v-text="item.user.name"
-              >
-              </router-link>
-              <span class="ml-5-px fw-500" v-text="item.message"></span>
-              <div class="tx-11-px lh-13-px txt-A7AFB7" :title="item.created_at.timezone">
+              :to="{
+                name: 'profile.user',
+                params: { username: item.user.username } }" 
+                class="txt-primary" v-text="item.user.name" />
+            </div>
+            <div class="ml-4">
+              <span class="small text-dark" v-text="item.message"></span>
+              <div class="small text-muted" :title="item.created_at.timezone">
                 {{ item.created_at.date_for_humans }}
               </div>
             </div>

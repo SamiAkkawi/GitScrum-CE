@@ -121,12 +121,15 @@ export default {
 
 <template>
   <div>
-    <button 
-      v-if="authorize('tasks', 'create')" 
-      v-b-toggle.checklist-icon 
-      class="btn btn-secondary btn-block">
-      {{ $t('Checklist') }}
-    </button>
+    <b-button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.checklist-icon 
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Checklist')"></b-button>
     <b-collapse id="checklist-icon">
       <b-card>
         <b-link v-b-toggle.checklist-template class="badge badge-light mb-2">

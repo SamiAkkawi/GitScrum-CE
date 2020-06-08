@@ -58,14 +58,15 @@ export default {
     afterComplete(file) {
       file.previewElement.parentNode.removeChild(file.previewElement)
       this.uploadFilesCount--
-      this.handleDropzonePreview()
       this.actionTask({ name: 'attachment.reload' })
       this.loading = false
     },
 
     updateImage() {
+      this.loading = true
       this.refresh.push([])
       this.activities.push([])
+      this.loading = false
     },
 
     sending() {
@@ -74,48 +75,50 @@ export default {
       this.handleDropzonePreview()
     },
 
-    handleDropzonePreview() {
-      let dropzoneMessage = document.getElementsByClassName('dropzone-custom-content')
-      dropzoneMessage[0].parentNode.style.display = this.uploadFilesCount == 0 ? 'block' : 'none'
-    },
+    handleDropzonePreview() {},
   },
 }
 </script>
 
 <template>
   <div>
-    <button 
-      v-if="authorize('tasks', 'create')" 
-      v-b-toggle.attachments-icon
-      class="btn btn-secondary btn-block">
-      {{ $t('Attachments') }}
-    </button>
+    <b-button 
+    v-if="authorize('tasks', 'create')" 
+    v-b-toggle.attachments-icon
+    class="btn btn-secondary btn-block"
+    :style="(task.type) ? 'color: ' + 
+    invertColor(task.type.color, true) + 
+    ';background: ' + 
+    opacityColor(task.type.color, '0.6') : ''"
+    v-text="$t('Attachments')"></b-button>
     <b-collapse id="attachments-icon">
       <b-card>
-        <vue-dropzone
-          id="attachments-icon-dropzone"
-          :options="dropzoneOptions"
-          :use-custom-slot="true"
-          @vdropzone-file-added="sending"
-          @vdropzone-complete="afterComplete($event)">
-          <h3 class="h6 font-weight-bold">{{ $t('Drag and drop to upload') }}</h3>
-          <div class="small">...{{ $t('or click to select a file from your computer') }}</div>
-        </vue-dropzone>
-        <div v-if="showPicker" class="mt-2">
-          <DropboxPicker
-            :id="task.uuid"
-            :company-slug="task.company.slug"
-            :project-slug="task.project.slug"
-            attachmentable-type="issues"
-            @image-uploaded="updateImage"></DropboxPicker>
-          <GDrivePicker
-            :id="task.uuid"
-            :company-slug="$route.params.companySlug"
-            :project-slug="$route.params.projectSlug"
-            attachmentable-type="issues"
-            class="mt-2"
-            @image-uploaded="updateImage"></GDrivePicker>
-        </div>
+        <b-overlay :show="loading" rounded="sm">
+          <vue-dropzone
+            id="attachments-icon-dropzone"
+            :options="dropzoneOptions"
+            :use-custom-slot="true"
+            @vdropzone-file-added="sending"
+            @vdropzone-complete="afterComplete($event)">
+            <h3 class="h6 font-weight-bold">{{ $t('Drag and drop to upload') }}</h3>
+            <div class="small">...{{ $t('or click to select a file from your computer') }}</div>
+          </vue-dropzone>
+          <div v-if="showPicker" class="mt-2">
+            <DropboxPicker
+              :id="task.uuid"
+              :company-slug="task.company.slug"
+              :project-slug="task.project.slug"
+              attachmentable-type="issues"
+              @image-uploaded="updateImage"></DropboxPicker>
+            <GDrivePicker
+              :id="task.uuid"
+              :company-slug="$route.params.companySlug"
+              :project-slug="$route.params.projectSlug"
+              attachmentable-type="issues"
+              class="mt-2"
+              @image-uploaded="updateImage"></GDrivePicker>
+          </div>
+        </b-overlay>
       </b-card>
     </b-collapse>
   </div>
