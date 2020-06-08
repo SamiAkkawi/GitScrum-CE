@@ -364,6 +364,7 @@ export default {
         </b-row>
         <b-row>
           <b-col cols="3">
+            <div style="position:sticky; top:115px">
               <b-jumbotron 
               v-if="sprint.stats" 
               :lead="sprint.stats.worked_hours" 
@@ -401,6 +402,7 @@ export default {
                 <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
                 {{ $t('Delete Sprint') }}
               </b-link>
+            </div>
           </b-col>
           <b-col cols="9">
             <b-card :header="$t('Sprint Burndown')" class="sprint-burndown">

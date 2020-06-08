@@ -339,6 +339,7 @@ export default {
         </b-row>
         <b-row>
           <b-col cols="3">
+            <div style="position:sticky; top:115px">
               <b-jumbotron 
               v-if="userStory.stats" 
               :lead="userStory.stats.worked_hours" 
@@ -376,6 +377,7 @@ export default {
                 <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
                 {{ $t('Delete User Story') }}
               </b-link>
+            </div>
           </b-col>
           <b-col cols="9">
             <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
