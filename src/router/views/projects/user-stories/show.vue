@@ -4,10 +4,6 @@ import Axios from '@utils/axios'
 import ListUsers from '@components/utils/list-users'
 import ListTasks from '@components/projects/tasks/list-tasks'
 import TitleLoading from '@components/utils/title-loading'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
-import DescriptionEditable from '@components/utils/description-editable'
-import LabelEdit from 'label-edit'
 import InputEditable from '@components/utils/input-editable' 
 import TextareaEditable from '@components/utils/textarea-editable' 
 
@@ -16,7 +12,7 @@ export default {
     title: 'User Story',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, ListUsers, ListTasks, LabelEdit, vSelect, TitleLoading, DescriptionEditable, InputEditable, TextareaEditable },
+  components: { Layout, ListUsers, ListTasks, TitleLoading, InputEditable, TextareaEditable },
   data() {
     return {
       loading: true,

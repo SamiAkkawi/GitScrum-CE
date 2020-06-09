@@ -43,7 +43,8 @@ export default {
         { text: 'Archived Tasks', value: '1' }
       ],
 
-      cardColors: false
+      cardColors: false,
+      
     }
   },
   computed: {

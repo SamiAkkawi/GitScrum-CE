@@ -537,6 +537,7 @@ a.badge-secondary.focus {
     &:focus,
     &:hover {
         background: transparent !important;
+        color: $grey-600 !important;
     }
 }
 
@@ -600,6 +601,38 @@ a.badge-secondary.focus {
     }
 }
 
+.company-information {
+    .logo {
+        width: 128px;
+        height: 128px;
+        border-radius: 4px;
+        background: #001737;
+        border: 1px solid #e3e9f2;
+        .buttons {
+            display: none;
+        }
+        &:hover {
+            .buttons {
+                display: block;
+                position: absolute;
+                top: 130px;
+                width: 130px;
+                button {
+                    width: 28px;
+                    height: 28px;
+                }
+            }
+        }
+        img {
+            width: 128px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-left: -1px;
+            margin-top: -1px;
+        }
+    }
+}
+
 
 /* Scrollbar */
 
@@ -646,4 +679,22 @@ BASE
     color: $grey-900;
     font-size: 14px;
     font-weight: 600;
+}
+
+@include media-breakpoint-down(md) {
+    .modal-dialog {
+        .col-1,
+        .col-4,
+        .line-1-dropdown {
+            display: none !important;
+        }
+        .task-content-left.col-8 {
+            width: 100% !important;
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+        .task-left-content {
+            margin-left: 10px !important;
+        }
+    }
 }

@@ -4,9 +4,7 @@ import { modalManager } from '@state/helpers'
 
 import InputEditable from '@components/utils/input-editable' 
 import TextareaEditable from '@components/utils/textarea-editable' 
-import DescriptionEditable from '@components/utils/description-editable'
 
-import Activities from '@components/utils/activities'
 import Assignees from '@components/projects/tasks/assignees'
 import CustomFields from '@components/projects/tasks/custom-fields'
 import Checklists from '@components/projects/tasks/checklists'
@@ -35,7 +33,6 @@ import LabelsIcon from '@components/projects/tasks/labels-icon'
 import SprintsIcon from '@components/projects/tasks/sprints-icon'
 import UserStoriesIcon from '@components/projects/tasks/user-stories-icon'
 import WorkflowsIcon from '@components/projects/tasks/workflows-icon'
-import Markdown from '@components/utils/markdown'
 import DatePicker from 'vue2-datepicker'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
@@ -47,9 +44,7 @@ export default {
   components: {
     InputEditable,
     TextareaEditable,
-    DescriptionEditable,
     ActivitiesIcon,
-    Activities,
     Assignees,
     CustomFields,
     Checklists,
@@ -109,14 +104,6 @@ export default {
       }
 
     },
-  },
-  created() {
-    /*
-    this.$store.dispatch('projectData/currentProject', {
-      projectSlug: this.$route.params.projectSlug,
-      companySlug: this.$route.params.companySlug
-    })
-    */
   },
   methods: {
     checkMyTask(task) {
@@ -240,7 +227,6 @@ export default {
           }
         )
         .then((response) => {
-          //this.task.slug = response.data.data.slug
           this.task.title = this.task.title
           this.task.description = this.task.description
           this.task.effort = this.taskEffort
@@ -409,7 +395,6 @@ export default {
                     :task="task"
                     :close="isClosed"
                     scope="modal"></Timer>
-                    
                     <b-dropdown v-if="authorize('tasks', 'update', checkMyTask(task))" right class="styled-dropdown line-1-dropdown">
                       <template v-slot:button-content>
                         <font-awesome-icon :icon="['far', 'ellipsis-h']" />
@@ -427,9 +412,7 @@ export default {
                 </div>
               </b-col>
             </b-row>
-
             <hr>
-
             <b-row>
               <b-col cols="1">
                 <font-awesome-icon
@@ -447,7 +430,6 @@ export default {
                   @text-updated-enter="updateTitle" />
                   <span v-else class="vlabeledit-label" v-text="task.title" />
                 </div>
-
                 <div class="small">
                   <router-link
                   :to="{
@@ -467,11 +449,9 @@ export default {
                   <span
                   v-b-popover.hover.top="momentLocale(task.created_at.timestamp)"
                   v-text="task.created_at.date_for_humans" />
-                  <!--<small v-if="task.code" v-text="task.code" />-->
                 </div>
               </b-col>
             </b-row>
-
             <b-row class="mt-3">
               <b-col cols="1"></b-col>
               <b-col>
@@ -481,7 +461,6 @@ export default {
                 </div>
               </b-col>
             </b-row>
-
             <b-row class="mt-3">
               <b-col cols="1">
                 <font-awesome-icon
@@ -493,9 +472,7 @@ export default {
                 <Labels :task="task" class="mb-1 ml-3 pr-2 col-md-6 text-right"></Labels>
               </b-col>
             </b-row>
-
             <hr>
-
             <b-row class="mb-3">
               <b-col cols="1" class="task-left-icon">
                 <font-awesome-icon
@@ -535,9 +512,6 @@ export default {
                 </div>
               </b-col>
             </b-row>
-
-            
-
             <b-row class="mb-3">
               <b-col cols="1" class="task-left-icon">
                 <font-awesome-icon 
@@ -557,7 +531,6 @@ export default {
                   <span v-else class="vlabeledit-label" v-text="task.description"></span>
               </b-col>
             </b-row>
-
             <b-row v-if="task.sprint.title || task.user_story.title" class="mb-3">
               <b-col cols="1"></b-col>
               <b-col style="padding-left: 8px;">
@@ -603,33 +576,19 @@ export default {
                   </div>
               </b-col>
             </b-row>
-
             <Checklists :task="task"></Checklists>
             <CustomFields :task="task"></CustomFields>
             <Attachments :task="task"></Attachments>
             <Videos :task="task"></Videos>
-
             <Related
-            class="d-none d-sm-flex"
             :task="task"
             :modal-flag="true"></Related>
-
             <Subtasks
-            class="d-none d-sm-flex"
             :task="task"
             :modal-flag="true" />
-
-
-
-
             <Comments :task="task"></Comments>
-            
-
-            
-
           </b-col>
           <b-col cols="4" :style="(task.type) ? 'background: ' + opacityColor(task.type.color, '0.2') : ''">
-
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex align-items-center badge pl-0">
                   <b-form-checkbox
@@ -660,7 +619,6 @@ export default {
                   <font-awesome-icon :icon="['fas', 'times']" />
                 </b-link>
             </div>
-            
             <div class="task-actions">
               <ActivitiesIcon :task="task" context="issue"></ActivitiesIcon>
               <Timetracking v-if="task.timer" :task="task"></Timetracking>
@@ -675,317 +633,8 @@ export default {
               <PermanentLink :task="task" class="mt-4"></PermanentLink>
               <MoveTasks :task="task"></MoveTasks>
             </div>
-
           </b-col>
         </b-row>
       </b-container>
-      
-      <!--
-      
-      
-      <div class="container modal-task">
-        
-        
-        <div class="row task-content">
-          <div class="col-12 col-md-8 task-left">
-            
-            <div class="container">
-              <div class="row mt-10-px">
-              </div>
-            </div>
-            <div class="container">
-              <div class="row mt-5-px">
-                <div class="col-md-1 d-none d-sm-block"> </div>
-                <div class="col-12 col-md-11">
-                  <span class="tx-11-px txt-A7AFB7" style="position:relative;top:-4px;">
-                    <span v-if="task.code">
-                      <span class="fw-600 tx-14px ">{{ task.code }}</span>
-                      &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
-                    </span>
-                    {{ $t('Task created by') }}
-                    <router-link
-                      :to="{
-                        name: 'profile.user',
-                        params: { username: task.user.username },
-                      }"
-                    >
-                      {{ task.user.name }}
-                    </router-link>
-                    {{ $t('at') }}
-                    <span
-                      v-b-popover.hover.top="momentLocale(task.created_at.timestamp)"
-                      v-text="task.created_at.date_for_humans"
-                    >
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Types :task="task" :dropdown="true"></Types>
-              <Efforts :task="task"></Efforts>
-            </div>
-            <div class="row">
-              <div class="col-md-1 d-none d-sm-block"></div>
-              <div class="col-12 col-md-11">
-                <div class="d-flex justify-content-between align-items-center">
-                 
-
-                  <div class="d-none d-sm-block">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <b-form-checkbox
-                          v-model="task.settings.is_blocker"
-                          :disabled="!authorize('tasks', 'update', checkMyTask(task))"
-                          switch
-                          @input="changeBlocked"
-                        >
-                          <span class="txt-A7AFB7 tx-12-px">{{ $t('Blocked') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div v-if="authorize('tasks', 'update', checkMyTask(task))" class="ml-30-px">
-                        <b-form-checkbox
-                          v-model="task.settings.is_draft"
-                          :disabled="!authorize('tasks', 'update', checkMyTask(task))"
-                          switch
-                          @input="changeDraft"
-                        >
-                          <span class="txt-A7AFB7 tx-12-px">{{ $t('Draft') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                      <div class="ml-30-px">
-                        <b-form-checkbox
-                          v-model="task.settings.is_bug"
-                          :disabled="!authorize('tasks', 'update', checkMyTask(task))"
-                          switch
-                          @input="changeBug"
-                        >
-                          <span class="txt-A7AFB7 tx-12-px">{{ $t('Bug') }}</span>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="container">
-              <div class="row mt-15-px">
-                <div class="col-md-1 text-right mt-5-px d-none d-sm-block">
-                  <font-awesome-icon :icon="['far', 'users']" style="font-size:22px" class="txt-9EA9C1 mr-10-px" />
-                </div>
-                <div class="col-12 col-md-11">
-                  <div class="d-flex justify-content-between assignees-dates">
-                    <Assignees :task="task" :activities="refreshActivities"></Assignees>
-
-                    <div class="d-flex justify-content-end" style="position: relative; top: -10px;">
-                      <div class="">
-                        <span class="d-block txt-A7AFB7 start_date_content">{{ $t('Start date') }}</span>
-                        <DatePicker
-                          v-model="task.start_date.timezone"
-                          lang="en"
-                          type="datetime"
-                          format="YYYY-MM-DD hh:mm A"
-                          :time-picker-options="{
-                            start: '00:00',
-                            step: '00:30',
-                            end: '23:30',
-                          }"
-                          confirm
-                          class="start_date_input"
-                          :disabled="!authorize('tasks', 'update', checkMyTask(task))"
-                          :not-after="task.due_date.timezone"
-                          @change="changeStartDate"
-                        ></DatePicker>
-                      </div>
-
-                      <div class="ml-10-px">
-                        <span class="d-block txt-A7AFB7 due_date_content">{{ $t('Due date') }}</span>
-                        <DatePicker
-                          v-model="task.due_date.timezone"
-                          lang="en"
-                          type="datetime"
-                          format="YYYY-MM-DD hh:mm A"
-                          :time-picker-options="{
-                            start: '00:00',
-                            step: '00:30',
-                            end: '23:30',
-                          }"
-                          confirm
-                          class="due_date_input"
-                          :disabled="!authorize('tasks', 'update', checkMyTask(task))"
-                          :not-before="task.start_date.timezone"
-                          @change="changeDueDate"
-                        ></DatePicker>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Labels :task="task"></Labels>
-                  </div>
-
-                  <div class="d-flex justify-content-between">
-                    <div> </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="container">
-              <div
-                class="row mt-15-px"
-                v-if="
-                  authorize('tasks', 'update', checkMyTask(task)) || (task.description && task.description.trim() !== '')
-                "
-              >
-                <div class="col-md-1 text-right mt-8-px d-none d-sm-block">
-                  <font-awesome-icon :icon="['far', 'align-right']" style="font-size:22px" class="txt-9EA9C1 mr-10-px" />
-                </div>
-                <div class="col-12 col-md-11">
-                  <DescriptionEditable
-                    style="margin: -5px  0 0 -8px;"
-                    :description="task.description"
-                    :description-mention="task.description_mention"
-                    :endpoint="
-                      'tasks/' +
-                        this.task.uuid +
-                        '/?company_slug=' +
-                        this.$route.params.companySlug +
-                        '&project_slug=' +
-                        this.$route.params.projectSlug
-                    "
-                    :update-endpoint="
-                      'tasks/' +
-                        this.task.uuid +
-                        '/?company_slug=' +
-                        this.$route.params.companySlug +
-                        '&project_slug=' +
-                        this.$route.params.projectSlug
-                    "
-                    param-name="description"
-                    :placeholder="$t('Task Description')"
-                    :company-slug="$route.params.companySlug"
-                    :project-slug="$route.params.projectSlug"
-                    permission-feature="tasks"
-                    @update-description="updateDescription"
-                  ></DescriptionEditable>
-                </div>
-              </div>
-            </div>
-
-            <div class="container">
-              <div class="row mt-15-px">
-                <div class="col-md-1 text-right mt-8-px d-none d-sm-block"></div>
-                <div class="col-12 col-md-11">
-                  
-                </div>
-              </div>
-            </div>
-
-            
-
-            
-
-            <b-container v-if="currentUser" class="mt-20-px">
-              <b-row class="mb-10-px">
-                <b-col cols="1" class="task-left-icon">
-                  <font-awesome-icon :icon="['far', 'rss']" />
-                </b-col>
-                <b-col cols="11" class="task-left-content">
-                  <h5>{{ $t('Recent Activity') }}</h5>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col cols="1"></b-col>
-                <b-col cols="11" class="task-left-content">
-                  <Activities
-                    :company-slug="task.company.slug"
-                    :project-slug="task.project.slug"
-                    :task-slug="task.slug"
-                    context="issue"
-                  >
-                  </Activities>
-                </b-col>
-              </b-row>
-            </b-container>
-
-          </div>
-
-
-          <div 
-            class="col-md-4 task-right d-none d-sm-block" 
-            :style="(task.type) ? 'background: ' + opacityColor(task.type.color) : ' !important'">
-            
-             <WorkflowsIcon :task="task" :activities="refreshActivities"></WorkflowsIcon>
-
-            <button v-if="authorize('tasks', 'read')" type="button" aria-label="Close" class="close" @click="hideModal">×</button>
-
-
-            <div v-if="currentUser">
-              <div class="row d-block" style="height:45px"> </div>
-              <div v-if="authorize('tasks', 'read')" class="d-flex justify-content-between">
-                  <Timer
-                    v-if="task.timer"
-                    :key="task.uuid"
-                    :task="task"
-                    :close="isClosed"
-                    :scope="'modal'"
-                  ></Timer>
-
-                  <div v-if="!task.timer" style="width:10;height:55px;"></div>
-
-                  <!--
-                  <div class="text-center ml-2">
-                    <div class="upvote">
-                      <font-awesome-icon :icon="['far', 'chevron-up']" style="font-size:14px" class="txt-68748F" />
-                      <span>19</span>
-                    </div>
-                    <small class="txt-68748F tx-10-px" style="margin-top: -1px; display: block;">{{
-                      $t('upvote')
-                    }}</small>
-                  </div>
-                  --
-                  
-                <b-dropdown v-if="authorize('tasks', 'update', checkMyTask(task))" right class="menu-options styled-dropdown">
-                  <template v-slot:button-content>
-                    <font-awesome-icon :icon="['far', 'ellipsis-h']" style="font-size:20px" class="txt-68748F" />
-                  </template>
-                  <b-dropdown-item @click="duplicateTask">
-                    <font-awesome-icon :icon="['far', 'clone']"/>
-                    {{ $t('Copy Task') }}
-                  </b-dropdown-item>
-                  <b-dropdown-item @click="deleteTask">
-                    <font-awesome-icon :icon="['far', 'trash']"/>
-                    {{ $t('Delete') }}
-                  </b-dropdown-item>
-                </b-dropdown>
-
-              </div>
-              <div class="task-actions">
-
-                
-
-                <Timetracking v-if="task.timer" :task="task"></Timetracking>
-                
-                <ChecklistsIcon :task="task"></ChecklistsIcon>
-                <SubtasksIcon :task="task"></SubtasksIcon>
-                <AttachmentsIcon :task="task"></AttachmentsIcon>
-                <VideosIcon :task="task"></VideosIcon>
-                <LabelsIcon :task="task"></LabelsIcon>
-                <MoveTasks :task="task" :project="task.project" :company-slug="task.company.slug"></MoveTasks>
-              </div>
-
-              <div v-if="task.type || task.effort || task.has_sprints || task.has_user_stories" class="task-actions mt-30-px">
-                <p>{{ $t('Task Categorization') }}</p>
-                
-                <EffortsIcon v-if="task.effort" :task="task" :activities="refreshActivities"></EffortsIcon>
-                <SprintsIcon v-if="task.has_sprints" :task="task" :activities="refreshActivities"></SprintsIcon>
-                <UserStoriesIcon v-if="task.has_user_stories" :task="task" :activities="refreshActivities"></UserStoriesIcon>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
     </b-modal>
 </template>

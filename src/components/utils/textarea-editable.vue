@@ -24,24 +24,33 @@ export default {
   },
 	data() {
 		return {
-			edit: false, // define whether it is in edit mode or not
-			label: '', // v-bind data model for input text
-			empty: 'Enter some text value', // empty place holder .. replace with your own localization for default
+			edit: false,
+			label: '',
+			empty: 'Enter some text value',
+			options: {
+        html: true,
+				markdownIt: {
+          linkify: true,
+          
+				},
+				linkAttributes: {
+					attrs: {
+					target: '_blank',
+					rel: 'noopener'
+					}
+				}
+				}
 		}
   },
 	computed: {
 		vplaceholder: function(){
-			// check if the placeholder is undefined or empty
 			if(this.placeholder==undefined || this.placeholder==''){
-				// if it is empty or undefined, pre-populate with built-in place holder text
-			 	return this.empty
+				return this.empty
 			}else{
 				return this.placeholder
 			}
 		},
 		vlabel: function(){
-			// after text has been updated
-			// return text value or place holder value depends on value of the text
 			if(this.text==undefined||this.text==''){
 				return this.vplaceholder
 			}else{
@@ -50,7 +59,6 @@ export default {
 		}
 	},
 	mounted: function(){
-		// initiate the label view
 		this.initText();
 	},
 	updated: function(){
@@ -74,16 +82,12 @@ export default {
 				this.label = this.text
 			}
 		},
-		// when the div label got clicked and trigger the text box
 		onLabelClick: function(){
 			this.edit = true;
 			this.label = this.text;
 		},
-		// trigger when textbox got lost focus
 		updateTextBlur: function(){
-			// update the edit mode to false .. display div label text
 			this.edit = false;
-			// emit text updated callback
 			this.$emit('text-updated-blur', {text: this.label, object: this.currentObject})
 		},
 		updateTextEnter: function(){
@@ -102,7 +106,7 @@ export default {
 <template>
 	<div class="vlabeledit">
     <div @click="onLabelClick">
-      <VueMarkdownIt id="" :source="vlabel" class="vlabeledit-label" />
+      <VueMarkdownIt id="" :source="vlabel" :options="options" class="vlabeledit-label" />
     </div>
 		<div v-if="edit">
       <b-form-textarea

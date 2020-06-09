@@ -15,6 +15,14 @@
     .subheader {
         background: $grey-900;
     }
+    .b-sidebar-body {
+        h5 {
+            color: $grey-100;
+        }
+        p {
+            color: $grey-300;
+        }
+    }
     #sidebar-left {
         .badge.badge-light {
             background: transparent !important;
@@ -193,8 +201,19 @@
         background: $grey-700 !important;
         border: 1px solid rgba(0, 0, 0, 0.3) !important;
     }
+    .board-task-options .btn-link,
+    .board-task-options .btn-link:focus,
+    .board-task-options .btn-link:active {
+        color: $grey-200;
+    }
+    .board-task-title {
+        color: $grey-200;
+    }
     .board-workflow {
         background-color: $black-700;
+        .title-loading {
+            color: $grey-400;
+        }
         .add-card {
             background: $black-400;
             border: 1px solid $grey-900;

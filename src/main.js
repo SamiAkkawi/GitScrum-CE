@@ -36,7 +36,6 @@ import {
     FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 
-
 Vue.use(VueCookies)
 Vue.use(vueNotVisible)
 
