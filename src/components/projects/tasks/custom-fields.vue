@@ -49,20 +49,11 @@ export default {
     handleValues() {
       for (let i = 0; i < this.fields.length; i++) {
         if (this.fields[i].meta) {
-          let optionsArray = this.fields[i].meta
-          if (!this.fields[i].meta.length) {
-            optionsArray = Object.values(this.fields[i].meta)
-          }
-
           let selectableOptions = []
-          for (let j = 0; j < optionsArray.length; j++) {
-            selectableOptions.push({
-              id: optionsArray[j],
-              label: optionsArray[j],
-            })
+          if ( this.fields[i].type === 'select' ){
+            selectableOptions = this.fields[i].meta.split(',');
+            this.$set(this.fields[i], 'selectableOptions', selectableOptions)
           }
-
-          this.$set(this.fields[i], 'selectableOptions', selectableOptions)
         }
       }
     },

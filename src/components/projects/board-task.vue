@@ -426,19 +426,6 @@ export default {
               rows="3"
               max-rows="6"
               style="padding: 8px 10px;"></b-form-textarea>
-            <!--
-            <Mentions
-              ref="mentions"
-              element-type="input"
-              :mention-users="true"
-              :content-text="cardTitle"
-              :company-slug="$route.params.companySlug"
-              :project-slug="$route.params.projectSlug"
-              :placeholder="$t('Write task title')"
-              @update-text="updateTaskTitleText"
-            >
-            </Mentions>
-            -->
             <div class="members">
               <div class="item-input d-flex mt-10-px">
                 <v-select

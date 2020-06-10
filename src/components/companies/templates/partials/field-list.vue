@@ -7,7 +7,7 @@ export default {
   components: { Draggable, ButtonLoading },
   props: {
     templateSelected: {
-      type: Object,
+      type: Object | Array,
       required: true,
     },
     currentCompany: {
@@ -89,18 +89,26 @@ export default {
     },
 
     appendProjectParam(item) {
-      let optionArray = []
-      if (item.meta && item.meta !== null) {
-        optionArray = Object.values(item.meta)
-        optionArray.forEach((opt, key) => {
-          optionArray[key] = {
-            id: opt,
-            name: opt,
+      let selectableOptions = []
+        
+      if (item.meta && item.type === 'select' ){
+        if ( typeof item.meta === 'object' ){
+          selectableOptions = Object.values(item.meta);
+          selectableOptions.forEach((opt, key) => {
+            selectableOptions[key] = {
+              id: opt,
+              name: opt,
+            }
+          })
+        } else {
+          selectableOptions[0] = {
+            id:  item.meta,
+            name:  item.meta,
           }
-        })
+        }
       }
 
-      return optionArray
+      return selectableOptions
     },
 
     updateItem(params, id) {

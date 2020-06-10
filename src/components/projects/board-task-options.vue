@@ -31,11 +31,10 @@ export default {
   data() {
     return {
       columnName: '',
-      columnNotifications: '',
       columnStatus: '',
       hexColor: '',
       columnNameShow: false,
-      columnNotificationsShow: false,
+      
       columnStatusShow: false,
       hexColorShow: false,
       hideOptions: false,
@@ -60,11 +59,6 @@ export default {
         }
       })
     },
-    editNotifications() {
-      this.columnNotificationsShow = true
-      this.columnNotifications = this.workflow.emails.length > 0 ? this.workflow.emails : ''
-      this.hideOptions = true
-    },
     editColumn() {
       this.columnNameShow = true
       this.columnName = this.workflow.title
@@ -78,13 +72,6 @@ export default {
     editStatus() {
       this.columnStatusShow = true
       this.columnStatus = this.workflow.status.code
-      this.hideOptions = true
-    },
-    updateColumnNotifications() {
-      if (this.columnNotifications === '') return
-
-      this.updateColumn({ emails: this.columnNotifications.split(',') })
-      this.workflow.emails = this.columnNotifications
       this.hideOptions = true
     },
     updateColumnName() {
@@ -131,7 +118,6 @@ export default {
           params
         )
         .then((response) => {
-          this.columnNotifications = ''
           this.columnStatus = ''
           this.columnName = ''
           this.hexColor = ''
@@ -143,7 +129,6 @@ export default {
         })
     },
     closeEditModeColumn() {
-      this.columnNotificationsShow = false
       this.columnStatusShow = false
       this.columnNameShow = false
       this.hexColorShow = false
@@ -163,18 +148,11 @@ export default {
         {{ workflow.title | truncate(20) }}
         <span class="task-total d-flex" v-text="total"></span>
       </div>
-
-
-
       <div v-if="!showAddCard" class="d-flex">
         <b-dropdown v-if="!hideOptions && !showAddCard && !hideOptionsMenu" size="md" variant="link" right class="board-task-options styled-dropdown">
           <template v-slot:button-content>
             <font-awesome-icon :icon="['fas', 'ellipsis-h']"/>
           </template>
-          <b-dropdown-item @click="editNotifications">
-            <font-awesome-icon :icon="['far', 'bell']"/>
-            {{ $t('Notifications') }}
-          </b-dropdown-item>
           <b-dropdown-item @click="editColor">
             <font-awesome-icon :icon="['far', 'palette']"/>
             {{ $t('Change Color') }}
@@ -197,28 +175,6 @@ export default {
     </div>
 
     <div v-if="!showAddCard" class="mt-10-px">
-      <div v-if="hideOptions && columnNotificationsShow" class="editColumn">
-        <div class="d-flex align-items-center justify-content-between">
-          <span class="board-task-title">{{ $t('Emails to receive notifications') }}</span>
-          <span class="icon-size text-right" :alt="$t('Close edit mode')" :title="$t('Close edit mode')">
-            <font-awesome-icon
-              :icon="['fa', 'times']"
-              style="color: #68748F"
-              class="cursor-pointer"
-              @click="closeEditModeColumn"
-            />
-          </span>
-        </div>
-        <div class="mt-10-px mb-20-px">
-          <b-form-textarea v-model="columnNotifications" rows="1" max-rows="6" trim></b-form-textarea>
-          <small class="d-block">
-            {{ $t('The separator should be a comma ( , ) to separate multiple email recipients') }}
-          </small>
-          <b-button class="btn btn-primary btn-xs mt-5-px" @click="updateColumnNotifications">
-            {{ $t('Save') }}
-          </b-button>
-        </div>
-      </div>
 
       <div v-if="hideOptions && columnStatusShow" class="editColumn">
         <div class=" d-flex justify-content-between">

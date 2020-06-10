@@ -10,7 +10,7 @@ export default {
       required: true,
     },
     templateSelected: {
-      type: Object,
+      type: Object | Array,
       required: true,
     },
     projectSlug: {

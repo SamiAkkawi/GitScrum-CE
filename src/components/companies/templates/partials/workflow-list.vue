@@ -12,7 +12,7 @@ export default {
       required: true,
     },
     templateSelected: {
-      type: Object || Array,
+      type: Object | Array,
       required: true,
     },
     projectSlug: {

@@ -6,7 +6,7 @@ export default {
   components: { ButtonLoading },
   props: {
     templateSelected: {
-      type: Object,
+      type: Object | Array,
       required: true,
     },
     currentCompany: {

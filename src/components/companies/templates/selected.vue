@@ -4,7 +4,7 @@ import Axios from '@utils/axios'
 export default {
   props: {
     templateSelected: {
-      type: Object,
+      type: Object | Array,
       required: true,
     },
     component: {
