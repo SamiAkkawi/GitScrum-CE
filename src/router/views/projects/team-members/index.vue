@@ -3,15 +3,14 @@ import Layout from '@layouts/tpl-main-project'
 import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
 import ListUsers from '@components/utils/list-users'
-import Alert from '@components/utils/alert'
-import Invite from '@components/projects/team-members/invite'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'Project Team Members',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, ListUsers, Alert, Invite },
+  components: { Layout, TitleLoading, ListUsers, Pagination },
   data() {
     return {
       teammates: [],
@@ -281,23 +280,14 @@ export default {
 
         </div>
       </div>
-      <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-        <b-pagination
-          v-model="currentPage"
-          hide-goto-end-buttons
-          class="paginator"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="getTeamMembers"
-        >
-          <template slot="prev-text">
-            <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-          </template>
-          <template slot="next-text">
-            <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-          </template>
-        </b-pagination>
-      </div>
+
+      <Pagination 
+        :total-pages="totalPages" 
+        :page="currentPage" 
+        :total-rows="totalRows" 
+        :per-page="perPage" 
+        @change="getTeamMembers"></Pagination>
+      
     </div>
   </Layout>
 </template>

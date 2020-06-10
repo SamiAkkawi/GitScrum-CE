@@ -93,11 +93,6 @@ export default {
   <div class="list-tasks">
     <div v-for="(item, index) in items" :key="index">
       <div class="d-flex align-items-start">
-        <!--
-        <div class="mr-2">
-          <ListUsers v-not-visible="'tablet'" :user="item.user" :link="true" size="28"></ListUsers>
-        </div>
-        -->
         <div style="width:100%">
           <b-link v-if="item.code" href="#" class="txt-primary-title" @click="modal('task', item)">{{ item.code }} - {{ item.title }}</b-link >
           <b-link v-if="!item.code" href="#" class="txt-primary-title" @click="modal('task', item)">{{ item.title }}</b-link>
@@ -109,7 +104,6 @@ export default {
               ' !important;width:' + item.stats.checklist_percentage + '%;'" >
             </div>
           </div>
-          
           <div class="list-task-content mt-1">
             <div>
               <router-link
@@ -118,10 +112,8 @@ export default {
                   params: {
                     companySlug: item.company.slug,
                     projectSlug: item.project.slug,
-                  },
-                }" class="mr-1">{{ item.project.name }}
+                  } }" class="mr-1">{{ item.project.name }}
               </router-link>
-
               <span> - {{ $t('Task created at') }} {{ item.created_at.date_for_humans }}</span>
               <div>
                 <span v-if="item.start_date.timezone" >
@@ -132,7 +124,6 @@ export default {
                     {{ $t('Due Date') }}: {{ item.due_date.date_for_humans }}
                 </span>
               </div>
-                
             </div>
           </div>
           <div class="mt-1">
@@ -146,15 +137,13 @@ export default {
             <span
               v-if="item.type"
               class="badge badge-primary"
-              :style="'color: ' + invertColor(item.type.color, true) + ';background:' + item.type.color"
-            >
+              :style="'color: ' + invertColor(item.type.color, true) + ';background:' + item.type.color">
               {{ item.type.title }}
             </span>
-            <span v-if="item.effort" class="badge  badge-primary badge-light"> {{ item.effort.title }} </span>
+            <span v-if="item.effort" class="badge badge-primary badge-light"> {{ item.effort.title }} </span>
             <Timer v-if="item.timer && authorize('tasks', 'read')" :task="item"></Timer>
           </div>
         </div>
-        
         <div v-if="displayAssignees" class="ml-2">
           <ListUsers v-not-visible="'tablet'" :users="item.users" :link="true" :limit="2" size="28" :wrap="false"></ListUsers>
         </div>

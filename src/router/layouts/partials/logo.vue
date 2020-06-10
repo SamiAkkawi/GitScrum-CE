@@ -50,7 +50,7 @@ export default {
     },
     gaClickLogo(){
       this.$ga.event('header_bar', 'click_logo')
-      this.$router.push({ name: 'dashboard.show' })
+      this.$router.push({ name: 'workspaces.projects' })
     }
   },
 }

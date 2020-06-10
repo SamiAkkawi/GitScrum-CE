@@ -9,6 +9,7 @@ import 'vue-swatches/dist/vue-swatches.min.css'
 import TitleLoading from '@components/utils/title-loading'
 import ShareableBoard from '@layouts/partials/shareable-board'
 import Invite from '@components/projects/team-members/invite'
+import ButtonLoading from '@components/utils/button-loading'
 
 export default {
   page: {
@@ -22,7 +23,8 @@ export default {
     Draggable,
     Swatches,
     ShareableBoard,
-    Invite
+    Invite,
+    ButtonLoading
   },
   data() {
     return {
@@ -34,7 +36,7 @@ export default {
       newColumn: '',
       colorColumn: '#000000',
       workflows: [],
-      boxNewColumn: false,
+      boxNewColumn: 'plus',
       nameColumn: '',
 
       btnOptionSelected: '0',
@@ -135,10 +137,10 @@ export default {
       }
     },
     toggleNewColumn() {
-      if (this.boxNewColumn) {
-        this.boxNewColumn = false
-      } else {
-        this.boxNewColumn = true
+      if (this.boxNewColumn === 'minus') {
+        this.boxNewColumn = 'plus'
+      } else{
+        this.boxNewColumn = 'minus'
       }
     },
   },
@@ -153,14 +155,12 @@ export default {
     </template>
 
     <template slot="header-right">
-
       <b-button-toolbar id="header-navbar-project" aria-label="Toolbar with button groups and dropdown menu">
         <b-form-radio-group
           v-model="btnOptionSelected"
           :options="btnOptions"
           buttons
-          name="radios-btn-default"
-        ></b-form-radio-group>
+          name="radios-btn-default"></b-form-radio-group>
         <b-button-group class="mx-1">
            <b-button v-b-toggle.sidebar-task-filter>
               <font-awesome-icon :icon="['far', 'filter']"/>
@@ -170,10 +170,9 @@ export default {
         <ShareableBoard v-if="authorize('header', 'share')" class="ml-2 mr-1"></ShareableBoard>
         <Invite></Invite>
       </b-button-toolbar>
-
     </template>
 
-    <div slot="content" class="">
+    <div slot="content">
       <div class="lists" :style="'width:' + width + 'px'">
         <Draggable
           :disabled="canDragColums"
@@ -183,53 +182,38 @@ export default {
           :list="workflows"
           v-bind="dragOptions"
           draggable=".draggableColumn"
-          @change="moveColumn"
-        >
+          @change="moveColumn">
           <li
             v-for="workflow in workflows"
             :key="workflow.id"
             class="draggableColumn"
-            style="min-height: calc(100vh - 120px);"
-          >
+            style="min-height: calc(100vh - 120px);">
             <BoardTask :workflow="workflow"></BoardTask>
           </li>
           <div v-show="!loading" class="mg-r-20 mg-l-0">
             <div class="addColumnBox" @click="toggleNewColumn">
-              <span v-if="!boxNewColumn">
-                <font-awesome-icon :icon="['fas', 'plus']" />
-              </span>
-              <span v-if="boxNewColumn">
-                <font-awesome-icon :icon="['fas', 'times']" />
-              </span>
+              <font-awesome-icon :icon="['fas', boxNewColumn]" />
             </div>
-            <div v-show="boxNewColumn" class="addColumnForm" :style="'border-top-color:' + colorColumn">
-              <div class="d-flex">
-                <b-form-input
+            <b-card v-show="boxNewColumn === 'minus'" :title="$t('Create a new Workflow Stage')" class="card-body-create mt-2">
+              <b-input-group>
+                <b-input-group-append>
+                  <Swatches 
+                  v-model="colorColumn" 
+                  colors="text-advanced" 
+                  class="swatches-input" 
+                  popover-to max-height="400"></Swatches>
+                  <b-form-input
                   v-model="nameColumn"
-                  class="input-sm"
-                  :placeholder="$t('Enter the name of your column')"
-                ></b-form-input>
-              </div>
-
-              <div class="mt-2 justify-content-between d-flex">
-                <Swatches
-                  v-model="colorColumn"
-                  colors="text-advanced"
-                  popover-to="left"
-                  max-height="400"
-                  class="justify-content-end"
-                ></Swatches>
-
-                <span v-if="!btnLoading" class="cursor-pointer add-column" @click="addNewColumn">
-                  {{ $t('+ Add Column') }}
-                </span>
-
-                <span v-if="btnLoading" class="cursor-pointer add-column">
-                  <b-spinner small type="grow"></b-spinner>
-                  {{ $t('Adding Column...') }}
-                </span>
-              </div>
-            </div>
+                  size="sm"
+                  :placeholder="$t('Column name')" />
+                  <ButtonLoading
+                  :loading="btnLoading"
+                  type="btn-sm"
+                  icon="plus"
+                  @action="addNewColumn"></ButtonLoading>
+                </b-input-group-append>
+              </b-input-group>
+            </b-card>
           </div>
         </Draggable>
       </div>

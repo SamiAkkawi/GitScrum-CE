@@ -113,7 +113,7 @@
     }
     .styled-dropdown {
         .dropdown-menu {
-            background-color: $grey-400 !important;
+            background-color: $grey-200 !important;
             .dropdown-item {
                 color: $grey-50 !important;
                 &:hover {
@@ -128,6 +128,19 @@
         .btn:active {
             background: $grey-900;
             border: 1px solid transparent;
+        }
+    }
+    .nav-tabs {
+        border-bottom: 1px solid $black-700 !important;
+        .nav-item {
+            a {
+                color: $black-700 !important;
+            }
+        }
+        .nav-link.active {
+            border-bottom: 1px solid $black-700 !important;
+            background: $black-700 !important;
+            color: $black-50 !important;
         }
     }
     .bunny-project-card button:focus,
@@ -157,6 +170,22 @@
         .card-header {
             background-color: $black-500 !important;
             color: $grey-400 !important;
+        }
+    }
+    #sidebar-task-filter {
+        background: $black-400 !important;
+        .b-sidebar-header {
+            strong {
+                color: $black-100 !important;
+            }
+            .close {
+                color: $black-100 !important;
+            }
+        }
+        .custom-select {
+            background-color: $grey-300 !important;
+            color: $grey-900 !important;
+            padding: 2px 13px;
         }
     }
     .task-close {
@@ -195,6 +224,10 @@
         background-color: $grey-300 !important;
         border: 2px solid $grey-900 !important;
         color: $black-900 !important;
+    }
+    .b-form-tags.form-control {
+        background-color: transparent !important;
+        border: 2px solid transparent !important;
     }
     .task-total {
         color: $black-50;
@@ -438,6 +471,14 @@
         h4,
         h5 {
             color: $grey-200 !important;
+        }
+    }
+    .addColumnBox {
+        background: $grey-700;
+        color: $grey-100 !important;
+        &:hover {
+            background: $grey-400;
+            box-shadow: none;
         }
     }
 }

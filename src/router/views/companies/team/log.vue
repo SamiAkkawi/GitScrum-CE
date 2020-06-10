@@ -3,16 +3,15 @@ import Layout from '@layouts/tpl-main'
 import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
 import SideBar from '@components/companies/side-bar'
-import ListUsers from '@components/utils/list-users'
 import Alert from '@components/utils/alert'
-import Ads from '@components/utils/ads'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'Company Team',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, Alert, SideBar, ListUsers, Ads },
+  components: { Layout, TitleLoading, Alert, SideBar, Pagination },
   data() {
     return {
       teammates: [],
@@ -180,23 +179,13 @@ export default {
             </template>
           </b-table>
 
-          <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-            <b-pagination
-              v-model="currentPage"
-              hide-goto-end-buttons
-              class="paginator"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              @change="getTeammates"
-            >
-              <template slot="prev-text">
-                <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-              </template>
-              <template slot="next-text">
-                <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-              </template>
-            </b-pagination>
-          </div>
+          <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getTeammates"></Pagination>
+          
         </div>
       </div>
     </div>

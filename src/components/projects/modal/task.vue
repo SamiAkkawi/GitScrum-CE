@@ -34,11 +34,7 @@ import SprintsIcon from '@components/projects/tasks/sprints-icon'
 import UserStoriesIcon from '@components/projects/tasks/user-stories-icon'
 import WorkflowsIcon from '@components/projects/tasks/workflows-icon'
 import DatePicker from 'vue2-datepicker'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 import moment from 'moment'
-
-import Mentions from '@components/utils/mentions'
 
 export default {
   components: {

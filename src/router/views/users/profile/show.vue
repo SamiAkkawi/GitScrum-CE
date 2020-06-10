@@ -3,9 +3,9 @@ import Layout from '@layouts/tpl-main'
 import Axios from '@utils/axios'
 import appConfig from '@src/app.config'
 import ListLabels from '@components/utils/list-labels'
-import ListUsers from '@components/utils/list-users'
 import GlanceYear from '@components/utils/glance-year'
 import DatePicker from 'vue2-datepicker'
+import Pagination from '@components/utils/pagination'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import UploadImage from '@components/utils/upload-image'
@@ -18,11 +18,11 @@ export default {
   components: {
     Layout,
     ListLabels,
-    ListUsers,
     DatePicker,
     GlanceYear,
     vSelect,
     UploadImage,
+    Pagination
   },
   props: {
     selectedTab: {
@@ -561,23 +561,13 @@ export default {
                     </tbody>
                   </table>
 
-                  <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-                    <b-pagination
-                      v-model="currentPage"
-                      hide-goto-end-buttons
-                      class="paginator"
-                      :total-rows="totalRows"
-                      :per-page="perPage"
-                      @change="getMyLogs"
-                    >
-                      <template slot="prev-text">
-                        <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-                      </template>
-                      <template slot="next-text">
-                        <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-                      </template>
-                    </b-pagination>
-                  </div>
+                  <Pagination 
+                    :total-pages="totalPages" 
+                    :page="currentPage" 
+                    :total-rows="totalRows" 
+                    :per-page="perPage" 
+                    @change="getMyLogs"></Pagination>
+
                 </div>
               </div>
             </div>

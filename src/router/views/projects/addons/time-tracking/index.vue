@@ -5,6 +5,7 @@ import DatePicker from 'vue2-datepicker'
 import ListUsers from '@components/utils/list-users'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
+import Pagination from '@components/utils/pagination'
 import moment from 'moment'
 import { modalManager } from '@state/helpers'
 
@@ -18,7 +19,8 @@ export default {
     DatePicker,
     ListUsers,
     TitleLoading,
-    ButtonLoading
+    ButtonLoading,
+    Pagination
   },
   data() {
     return {
@@ -344,124 +346,12 @@ export default {
           </template>
         </b-table>
 
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getTimeTracking($event, '', '')"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
-
-      </div>
-
-      
-
-
-
-
-      
-
-
-
-
-      <div class="container">
-        <div class="row mb-30-px">
-          <div class="col-md-12">
-            
-            
-            
-
-            
-
-
-
-            
-
-            
-
-            
-
-  <!--
-            <div class="divTable">
-              <div class="divTableHead">
-                <div class="divTableRow">
-                  <div class="divTableCell" :style="gridConfig.style[0]"> </div>
-                  <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                    {{ $tc('Task', 1) }}
-                  </div>
-                  <div class="divTableCell text-right" :style="gridConfig.style[4]">
-                    {{ $t('Worked') }}
-                  </div>
-                </div>
-              </div>
-              <div class="divTableBody card">
-                <div v-for="(item, index) in items" :key="index" class="divTableRowBg">
-                  <div class="divTableRow">
-                    <div class="divTableCell text-center" :style="gridConfig.style[0]">
-                      <ListUsers :link="true" :user="item.user"> </ListUsers>
-                    </div>
-
-                    <div class="divTableCell text-left rockstar-king" :style="gridConfig.style[1]">
-                      
-                      <span class="d-block info">
-                        <span v-text="item.time.start.timezone"></span>
-                        /
-                        <span v-text="item.time.end.timezone"></span>
-                      </span>
-                    </div>
-                    <div class="divTableCell text-right rockstar-king" :style="gridConfig.style[2]">
-                      <span style="    padding: 0 0 10px 18px;" class="ranking-number text-right d-block tx-20px fw-700 text-primary">
-                        {{ item.time.total }}
-                      </span>
-                      <div
-                      v-if="authorize('tasks', 'delete')"
-                      class="card-delete"
-                      @click="removeTime(item.time.id)"
-                    >
-                      {{ $t('Delete') }}
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="mg-b-20 mg-t-20">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th width="10"></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="align-middle"> </td>
-                      <td class="align-middle">
-                        <div class="mt-1"> </div>
-                      </td>
-                      <td class="align-middle text-right"> </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div> 
-            -->
-
-
-          </div>
-        </div>
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getTimeTracking($event, '', '')"></Pagination>
       </div>
     </div>
   </Layout>

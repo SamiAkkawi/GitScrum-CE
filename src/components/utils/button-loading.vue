@@ -64,8 +64,7 @@ export default {
       class="btn btn-medium btn-primary font-weight-bold"
       :type="mode"
       @click="$emit('action', true)"
-      @keyup.enter="submit"
-    >
+      @keyup.enter="submit">
       <span v-show="!loading" v-text="title"></span>
       <span v-show="loading" v-text="titleLoading"></span>
       <b-spinner v-show="loading" :label="$t('Loading')" small class="btn-medium-loading"></b-spinner>

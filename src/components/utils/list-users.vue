@@ -12,7 +12,7 @@ export default {
       default: null,
     },
     size: {
-      type: String,
+      type: String | Number,
       required: false,
       default: "28",
     },

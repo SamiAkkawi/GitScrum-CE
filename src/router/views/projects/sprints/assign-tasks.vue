@@ -2,10 +2,9 @@
 import Layout from '@layouts/tpl-main-project'
 import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
-import { modalManager } from '@state/helpers'
 import AssignCards from '@components/utils/assign-cards'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
+import Pagination from '@components/utils/pagination'
+import { modalManager } from '@state/helpers'
 
 export default {
   page: {
@@ -14,9 +13,9 @@ export default {
   },
   components: {
     Layout,
-    vSelect,
     AssignCards,
     TitleLoading,
+    Pagination
   },
   data() {
     return {
@@ -188,23 +187,14 @@ export default {
           guest="sprint"
           @assign="assignTask"
         />
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getTasks"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
+
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getTasks"></Pagination>
+        
       </div>
     </div>
   </Layout>

@@ -14,7 +14,7 @@ export default [{
             },
         },
         component: () => lazyLoadView(
-            import ('@views/dashboard/show')),
+            import ('@views/workspaces/projects')),
     },
     {
         path: '/login/:provider/callback',
@@ -81,15 +81,6 @@ export default [{
         },
         component: () => lazyLoadView(
             import ('@views/welcome/show')),
-    },
-    {
-        path: '/dashboard',
-        name: 'dashboard.show',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/dashboard/show')),
     },
     {
         path: '/projects',

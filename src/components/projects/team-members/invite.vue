@@ -3,9 +3,10 @@ import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
 import ListUsers from '@components/utils/list-users'
 import ButtonLoading from '@components/utils/button-loading'
+import Alert from '@components/utils/alert'
 
 export default {
-   components: { TitleLoading, ListUsers, ButtonLoading },
+   components: { TitleLoading, ListUsers, ButtonLoading, Alert },
   data() {
     return {
       loading: false,
@@ -19,6 +20,7 @@ export default {
       inviteEmails: [],
       listCompanyTeamMembers: [],
       totalInvites: [0,1,2],
+      alertStatus: '',
       fields: [
         { key: 'user.name', label: '' },
         { key: 'user.username', label: '' }
@@ -139,8 +141,6 @@ export default {
           this.loading = false
         })
     },
-    
-
     sendInvites(e) {
       this.alertStatus = false
       this.alertMessage = ''
@@ -159,7 +159,7 @@ export default {
         }
       )
       .then((response) => {
-        this.alertMessage = this.$t('Invitations successfully sent')
+        this.alertMessage = this.$t('Invitations have been successfully sent')
         this.alertStatus = true
         this.sendInvitesLoading = false
        
@@ -208,8 +208,7 @@ export default {
         <b-form-checkbox
           v-model="enableShareableLink"
           :disabled="invitationLinkLoading"
-          @change="handleShareableLink"
-        >
+          @change="handleShareableLink">
           <TitleLoading
             :title="$t('Shareable Link')"
             :subtitle="$t('Anyone with this link can join the project')"
@@ -222,8 +221,7 @@ export default {
               v-show="enableShareableLink"
               href="javascript:;"
               class="txt-68748F fw-500 lh-15-px tx-10-px tx-uppercase"
-              @click="updateInvitationLink"
-            >
+              @click="updateInvitationLink">
               {{ $t('Update Link') }}
             </a>
         </div>
@@ -248,7 +246,7 @@ export default {
 
       <b-tabs content-class="mt-3" justified>
         <b-tab :title="$t('Invite External Users')" active>
-          
+          <Alert class="mt-3" :message="alertMessage" :status="alertStatus"></Alert>
           <div v-for="invite in totalInvites" :key="invite" class="form-row">
             <div class="col-md-6 form-group">
               <div role="group">

@@ -4,6 +4,7 @@ import Layout from '@layouts/tpl-main'
 import TitleLoading from '@components/utils/title-loading'
 import BoxItem from '@components/marketplace/box-item'
 import Banner from '@components/marketplace/banner'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
@@ -14,7 +15,8 @@ export default {
     Layout,
     TitleLoading,
     BoxItem,
-    Banner
+    Banner,
+    Pagination
   },
   data() {
     return {
@@ -138,23 +140,14 @@ export default {
         </b-row>
         <b-row>
           <BoxItem :items="items" :template="$route.params.template" :name="getFeature()"></BoxItem>
-          <div v-if="totalPages > 1" class="d-flex justify-content-center mb-15-px">
-            <b-pagination
-              v-model="currentPage"
-              hide-goto-end-buttons
-              class="paginator"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              @change="getTemplate"
-            >
-              <template slot="prev-text">
-                <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-              </template>
-              <template slot="next-text">
-                <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-              </template>
-            </b-pagination>
-          </div>
+
+          <Pagination 
+            :total-pages="totalPages" 
+            :page="currentPage" 
+            :total-rows="totalRows" 
+            :per-page="perPage" 
+            @change="getTemplate"></Pagination>
+          
         </b-row>
       </b-container>
       

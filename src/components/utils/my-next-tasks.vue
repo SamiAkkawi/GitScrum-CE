@@ -4,6 +4,7 @@ import Alert from '@components/utils/alert'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
 import ListTasks from '@components/projects/tasks/list-tasks'
+import Pagination from '@components/utils/pagination'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
@@ -17,7 +18,8 @@ export default {
     vSelect,
     TitleLoading,
     ListTasks,
-    ButtonLoading
+    ButtonLoading,
+    Pagination
   },
   data() {
     return {
@@ -147,8 +149,6 @@ export default {
           </b-input-group-append>
         </b-input-group>
 
-        
-
       </div>
 
       <div class="box-list-task">
@@ -163,27 +163,16 @@ export default {
         ></ListTasks>
 
         <div v-if="!tasks.length && !loadingTask">
-          <Alert :message="$t('You have no tasks to do on this project')" :status="true"></Alert>
+          <Alert :message="$t('You have no tasks to do in the company')" :status="true"></Alert>
         </div>
 
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getTasks"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getTasks"></Pagination>
+
       </div>
-
     </div>
 </template>

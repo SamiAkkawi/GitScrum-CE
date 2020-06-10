@@ -8,6 +8,7 @@ import TitleLoading from '@components/utils/title-loading'
 import ListUsers from '@components/utils/list-users'
 import DropboxPicker from '@components/utils/dropbox-picker'
 import GDrivePicker from '@components/utils/gdrive-picker'
+import Pagination from '@components/utils/pagination'
 import { modalManager } from '@state/helpers'
 
 export default {
@@ -22,6 +23,7 @@ export default {
     ListUsers,
     DropboxPicker,
     GDrivePicker,
+    Pagination
   },
   data: function() {
     return {
@@ -340,23 +342,13 @@ export default {
           </silentbox-group>
         </div>
 
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getAttachments"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getAttachments"></Pagination>
+
       </div>
     </div>
   </Layout>

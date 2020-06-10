@@ -1,11 +1,12 @@
 <script>
 import Axios from '@utils/axios'
+import ButtonLoading from '@components/utils/button-loading'
 import { modalManager } from '@state/helpers'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
 export default {
-  components: { vSelect },
+  components: { vSelect, ButtonLoading },
   data() {
     return {
       loading: false,
@@ -152,29 +153,7 @@ export default {
     <div class="welcome d-flex justify-content-center align-items-center">
       <div class="welcome-box">
 
-        <!--
-        <div class="col-md-5 bg-464DEE d-flex justify-content-center align-items-center">
-          <div class="">
-            <div class="text-left" style="width:400px; margin: 0 auto;">
-              <img src="https://gitscrum-static.s3.amazonaws.com/img/modal.png" style="width:220px" />
-              <div class="mt-15-px ml-5-px">
-                <span class="tx-18-px txt-26DC8E fw-600">{{ $t('ProjectModal_Text1') }}</span>
-                <p class="tx-12-px mt-15-px">
-                  <strong>
-                    {{ $t('ProjectModal_Text2') }}
-                  </strong>
-                  {{ $t('ProjectModal_Text3') }}
-                </p>
-                <p class="tx-12-px mt-15-px">
-                  <strong>{{ $t('Private projects') }}</strong> {{ $t('ProjectModal_Text4') }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        -->
         <div class="col-md-12 d-flex justify-content-center align-items-center">
-          
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
             <div class="welcome-content">
               <h3 class="d-block tx-24-px fw-700 mb-0">{{ $t('Create a Project') }}</h3>
@@ -238,21 +217,14 @@ export default {
               </div>
 
               <div class="d-flex justify-content-end">
-                <div>
-                  <button v-show="!loading" class="btn btn-secondary" type="button" @click="hideModal">
-                    <span>{{ $t('Cancel') }}</span>
-                  </button>
-                </div>
+                <button v-show="!loading" class="btn btn-secondary" type="button" @click="hideModal">{{ $t('Cancel') }}</button>
                 <div class="ml-20-px">
-                  <b-button v-show="loading" class="btn btn-primary" type="button">
-                    <span class="mr-10-px">
-                      <b-spinner :label="$t('Loading')" small class="title-loading"></b-spinner>
-                    </span>
-                    <span>{{ $t('Creating Project') }}...</span>
-                  </b-button>
-                  <button v-show="!loading" class="btn btn-primary" type="button" @click="create">
-                    <span>{{ $t('Create Project') }}</span>
-                  </button>
+                  <ButtonLoading
+                  mode="button"
+                  :title="$t('Create Project')"
+                  :title-loading="$t('Creating Project')"
+                  :loading="loading"
+                  @action="create"></ButtonLoading>
                 </div>
               </div>
             </div>

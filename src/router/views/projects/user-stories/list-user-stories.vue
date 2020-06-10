@@ -4,6 +4,7 @@ import Axios from '@utils/axios'
 import ListUsers from '@components/utils/list-users'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
+import Pagination from '@components/utils/pagination'
 import { modalManager } from '@state/helpers'
 
 export default {
@@ -11,7 +12,7 @@ export default {
     title: 'User Story',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, ListUsers, TitleLoading, ButtonLoading },
+  components: { Layout, ListUsers, TitleLoading, ButtonLoading, Pagination },
   data() {
     return {
       loading: true,
@@ -181,23 +182,13 @@ export default {
           </template>
         </b-table>
 
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getUserStories"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getUserStories"></Pagination>
+          
       </div>
     </div>
   </Layout>

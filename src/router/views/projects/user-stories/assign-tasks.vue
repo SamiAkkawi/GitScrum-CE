@@ -4,13 +4,14 @@ import Axios from '@utils/axios'
 import { modalManager } from '@state/helpers'
 import TitleLoading from '@components/utils/title-loading'
 import AssignCards from '@components/utils/assign-cards'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'User Story Assign Tasks',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, TitleLoading, AssignCards },
+  components: { Layout, TitleLoading, AssignCards, Pagination },
   data() {
     return {
       loading: true,
@@ -224,23 +225,14 @@ export default {
           guest="user_story"
           @assign="assignTask"
         />
-        <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-          <b-pagination
-            v-model="currentPage"
-            hide-goto-end-buttons
-            class="paginator"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            @change="getTasks"
-          >
-            <template slot="prev-text">
-              <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-            </template>
-            <template slot="next-text">
-              <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-            </template>
-          </b-pagination>
-        </div>
+
+        <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getTasks"></Pagination>
+          
       </div>
     </div>
   </Layout>

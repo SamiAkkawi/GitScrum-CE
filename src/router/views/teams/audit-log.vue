@@ -3,13 +3,14 @@ import Layout from '@layouts/tpl-main'
 import Axios from '@utils/axios'
 import TitleLoading from '@components/utils/title-loading'
 import Alert from '@components/utils/alert'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'Teammates - Audit log',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, Alert },
+  components: { Layout, TitleLoading, Alert, Pagination },
   data() {
     return {
       teammates: [],
@@ -168,23 +169,13 @@ export default {
         </div>
       </div>
 
-      <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-        <b-pagination 
-          v-model="currentPage"
-          hide-goto-end-buttons
-          class="paginator"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="getAuditLogs"
-        >
-          <template slot="prev-text">
-            <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-          </template>
-          <template slot="next-text">
-            <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-          </template>
-        </b-pagination>
-      </div>
+      <Pagination 
+        :total-pages="totalPages" 
+        :page="currentPage" 
+        :total-rows="totalRows" 
+        :per-page="perPage" 
+        @change="getAuditLogs"></Pagination>
+
     </div>
   </Layout>
 </template>

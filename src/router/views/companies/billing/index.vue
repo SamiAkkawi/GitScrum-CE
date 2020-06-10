@@ -5,13 +5,14 @@ import TitleLoading from '@components/utils/title-loading'
 import SideBar from '@components/companies/side-bar'
 import Alert from '@components/utils/alert'
 import Ads from '@components/utils/ads'
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'Company Billing',
     meta: [{ name: 'description', content: '' }],
   },
-  components: { Layout, TitleLoading, SideBar, Alert, Ads },
+  components: { Layout, TitleLoading, SideBar, Alert, Ads, Pagination },
   data() {
     return {
       invoices: [],
@@ -182,23 +183,14 @@ export default {
               </div>
             </div>
           </div>
-          <div v-if="totalPages > 1" class="d-flex justify-content-center mt-4">
-            <b-pagination
-              v-model="currentPage"
-              hide-goto-end-buttons
-              class="paginator"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              @change="getSubscriptions"
-            >
-              <template slot="prev-text">
-                <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-              </template>
-              <template slot="next-text">
-                <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-              </template>
-            </b-pagination>
-          </div>
+
+          <Pagination 
+          :total-pages="totalPages" 
+          :page="currentPage" 
+          :total-rows="totalRows" 
+          :per-page="perPage" 
+          @change="getSubscriptions"></Pagination>
+          
         </div>
       </div>
     </div>

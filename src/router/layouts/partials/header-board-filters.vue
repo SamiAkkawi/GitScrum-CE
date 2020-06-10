@@ -176,189 +176,171 @@ export default {
 </script>
 
 <template>
-  
-  <div>
-    <div class="form-group mb-0">
-        <div class="mt-5-px">
-          <b-form-input v-model="filterTitle" type="search" autocomplete="off" class="mb-10-px" :placeholder="$t('Search by title')"></b-form-input>
-
-
-          <DatePicker
-            v-model="startDate"
-            style="width:100%"
-            class="mb-10-px"
-            range
-            lang="en"
-            format="YYYY-MM-DD"
-            confirm
-            :placeholder="$t('Start date')"
-          ></DatePicker>
-
-          <DatePicker
-            v-model="dueDate"
-            style="width:100%"
-            range
-            lang="en"
-            format="YYYY-MM-DD"
-            confirm
-            class="mg-t-5"
-            :placeholder="$t('Due date')"
-          ></DatePicker>
-
-          <b-form-group :label="$t('Filter by Users')">
-            <b-form-tags v-model="filterUsers" size="lg" add-on-change no-outer-focus class="mb-1">
-              <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
-                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      :title="tag"
-                      :disabled="disabled"
-                      variant="info"
-                      @remove="removeTag(tag)">
-                    {{ tag }}</b-form-tag>
-                  </li>
-                </ul>
-                <b-form-select
-                  :options="optionUsers"
-                  v-bind="inputAttrs"
-                  v-on="inputHandlers"
-                >
-                  <template v-slot:first>
-                    <option disabled value="">Choose a user ...</option>
-                  </template>
-                </b-form-select>
+  <div class="form-group mb-0">
+    <div class="mt-5-px">
+      <b-form-input 
+        v-model="filterTitle" 
+        type="search" 
+        autocomplete="off" 
+        class="mb-2" size="sm"
+        :placeholder="$t('Search by title')"></b-form-input>
+      <DatePicker
+        v-model="startDate"
+        style="width:100%"
+        class="mb-2"
+        range
+        lang="en"
+        format="YYYY-MM-DD"
+        confirm
+        :placeholder="$t('Start date')"></DatePicker>
+      <DatePicker
+        v-model="dueDate"
+        style="width:100%"
+        range
+        lang="en"
+        format="YYYY-MM-DD"
+        confirm
+        class="mb-2"
+        :placeholder="$t('Due date')"></DatePicker>
+      <b-form-group :label="$t('Filter by Users')">
+        <b-form-tags v-model="filterUsers" size="lg" add-on-change no-outer-focus class="mb-1">
+          <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+            <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
+              <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                <b-form-tag
+                  :title="tag"
+                  :disabled="disabled"
+                  variant="info"
+                  @remove="removeTag(tag)">
+                {{ tag }}</b-form-tag>
+              </li>
+            </ul>
+            <b-form-select
+              :options="optionUsers"
+              v-bind="inputAttrs"
+              v-on="inputHandlers">
+              <template v-slot:first>
+                <option disabled value="">Choose a user ...</option>
               </template>
-            </b-form-tags>
-          </b-form-group>
-
-          <b-form-group :label="$t('Filter by Labels')">
-            <b-form-tags v-model="filterLabels" size="lg" add-on-change no-outer-focus class="mb-1">
-              <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
-                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      :title="tag"
-                      :disabled="disabled"
-                      variant="info"
-                      @remove="removeTag(tag)">
-                    {{ tag }}</b-form-tag>
-                  </li>
-                </ul>
-                <b-form-select
-                  :options="optionLabels"
-                  v-bind="inputAttrs"
-                  v-on="inputHandlers"
-                >
-                  <template v-slot:first>
-                    <option disabled value="">Choose a label ...</option>
-                  </template>
-                </b-form-select>
+            </b-form-select>
+          </template>
+        </b-form-tags>
+      </b-form-group>
+      <b-form-group :label="$t('Filter by Labels')">
+        <b-form-tags v-model="filterLabels" size="lg" add-on-change no-outer-focus class="mb-1">
+          <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+            <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
+              <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                <b-form-tag
+                  :title="tag"
+                  :disabled="disabled"
+                  variant="info"
+                  @remove="removeTag(tag)">
+                {{ tag }}</b-form-tag>
+              </li>
+            </ul>
+            <b-form-select
+              :options="optionLabels"
+              v-bind="inputAttrs"
+              v-on="inputHandlers">
+              <template v-slot:first>
+                <option disabled value="">Choose a label ...</option>
               </template>
-            </b-form-tags>
-          </b-form-group>
-
-          <b-form-group :label="$t('Filter by Types')">
-            <b-form-tags v-model="filterTypes" size="lg" add-on-change no-outer-focus class="mb-1">
-              <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
-                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      :title="tag"
-                      :disabled="disabled"
-                      variant="info"
-                      @remove="removeTag(tag)"
-                    >{{ tag }}</b-form-tag>
-                  </li>
-                </ul>
-                <b-form-select
-                  :options="optionTypes"
-                  v-bind="inputAttrs"
-                  v-on="inputHandlers"
-                >
-                  <template v-slot:first>
-                    <option disabled value="">Choose a type ...</option>
-                  </template>
-                </b-form-select>
+            </b-form-select>
+          </template>
+        </b-form-tags>
+      </b-form-group>
+      <b-form-group :label="$t('Filter by Types')">
+        <b-form-tags v-model="filterTypes" size="lg" add-on-change no-outer-focus class="mb-1">
+          <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+            <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
+              <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                <b-form-tag
+                  :title="tag"
+                  :disabled="disabled"
+                  variant="info"
+                  @remove="removeTag(tag)"
+                >{{ tag }}</b-form-tag>
+              </li>
+            </ul>
+            <b-form-select
+              :options="optionTypes"
+              v-bind="inputAttrs"
+              v-on="inputHandlers">
+              <template v-slot:first>
+                <option disabled value="">Choose a type ...</option>
               </template>
-            </b-form-tags>
-          </b-form-group>
-
-          <b-form-group :label="$t('Filter by Efforts')">
-            <b-form-tags v-model="filterEfforts" size="lg" add-on-change no-outer-focus class="mb-1">
-              <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
-                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      :title="tag"
-                      :disabled="disabled"
-                      variant="info"
-                      @remove="removeTag(tag)"
-                    >{{ tag }}</b-form-tag>
-                  </li>
-                </ul>
-                <b-form-select
-                   :options="optionEfforts"
-                  v-bind="inputAttrs"
-                  v-on="inputHandlers">
-                  <template v-slot:first>
-                    <option disabled value="">Choose a effort ...</option>
-                  </template>
-                </b-form-select>
+            </b-form-select>
+          </template>
+        </b-form-tags>
+      </b-form-group>
+      <b-form-group :label="$t('Filter by Efforts')">
+        <b-form-tags v-model="filterEfforts" size="lg" add-on-change no-outer-focus class="mb-1">
+          <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+            <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-1">
+              <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                <b-form-tag
+                  :title="tag"
+                  :disabled="disabled"
+                  variant="info"
+                  @remove="removeTag(tag)"
+                >{{ tag }}</b-form-tag>
+              </li>
+            </ul>
+            <b-form-select
+                :options="optionEfforts"
+              v-bind="inputAttrs"
+              v-on="inputHandlers">
+              <template v-slot:first>
+                <option disabled value="">Choose a effort ...</option>
               </template>
-            </b-form-tags>
-          </b-form-group>
-
-          <b-container class="mt-8-px mb-15px">
-            <b-row>
-              <b-col cols="12">
-                <b-form-checkbox
-                  v-model="timer"
-                  value="1"
-                  unchecked-value="0">
-                  Timer active
-                </b-form-checkbox>
-              </b-col>
-              <b-col cols="12">
-                <b-form-checkbox
-                  v-model="isBlocker"
-                  value="1"
-                  unchecked-value="0">
-                  Blocked
-                </b-form-checkbox>
-              </b-col>
-              <b-col cols="12">
-                <b-form-checkbox
-                  v-model="isDraft"
-                  value="1"
-                  unchecked-value="0">
-                  Draft
-                </b-form-checkbox>
-              </b-col>
-              <b-col cols="12">
-                <b-form-checkbox
-                  v-model="isBug"
-                  value="1"
-                  unchecked-value="0">
-                  Bug
-                </b-form-checkbox>
-              </b-col>
-            </b-row>
-          </b-container>
-
-          <div class="d-flex align-items-center justify-content-between">
-
-              <span v-if="authorize('settings', 'update')" class="txt-68748F txt-link tx-11-px" @click="exportTask">
-                <font-awesome-icon :icon="['far', 'file-export']" />&nbsp;
-                {{ $t('Export All Tasks') }}
-              </span>
-
-            <b-button variant="primary" size="xs" @click="addFilter">{{ $t('Apply Filters') }}</b-button>
-
-          </div>
-
-        </div>
-
+            </b-form-select>
+          </template>
+        </b-form-tags>
+      </b-form-group>
+      <b-container class="mt-8-px mb-15px">
+        <b-row>
+          <b-col cols="12">
+            <b-form-checkbox
+              v-model="timer"
+              value="1"
+              unchecked-value="0" class="text-muted">
+              {{ $t('Timer active') }}
+            </b-form-checkbox>
+          </b-col>
+          <b-col cols="12">
+            <b-form-checkbox
+              v-model="isBlocker"
+              value="1"
+              unchecked-value="0" class="text-muted">
+              {{ $t('Blocked') }}
+            </b-form-checkbox>
+          </b-col>
+          <b-col cols="12">
+            <b-form-checkbox
+              v-model="isDraft"
+              value="1"
+              unchecked-value="0" class="text-muted">
+              {{ $t('Draft') }}
+            </b-form-checkbox>
+          </b-col>
+          <b-col cols="12">
+            <b-form-checkbox
+              v-model="isBug"
+              value="1"
+              unchecked-value="0" class="text-muted">
+              {{ $t('Bug') }}
+            </b-form-checkbox>
+          </b-col>
+        </b-row>
+      </b-container>
+      <div class="d-flex align-items-center justify-content-between">
+        <span v-if="authorize('settings', 'update')" class="small text-muted" @click="exportTask">
+          <font-awesome-icon :icon="['far', 'file-export']" />&nbsp;
+          {{ $t('Export All Tasks') }}
+        </span>
+        <b-button variant="primary" size="xs" @click="addFilter">{{ $t('Apply Filters') }}</b-button>
+      </div>
     </div>
-  </div>
-      
+  </div>      
 </template>

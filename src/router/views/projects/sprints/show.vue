@@ -8,6 +8,7 @@ import Burndown from '@components/projects/sprints/burndown'
 import DatePicker from 'vue2-datepicker'
 import InputEditable from '@components/utils/input-editable' 
 import TextareaEditable from '@components/utils/textarea-editable' 
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
@@ -22,7 +23,8 @@ export default {
     DatePicker,
     InputEditable,
     TextareaEditable,
-    TitleLoading
+    TitleLoading,
+    Pagination
   },
   data() {
     return {
@@ -416,23 +418,14 @@ export default {
               </b-tabs>
             </b-card>
             <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
-            <div v-if="totalRows" class="d-flex justify-content-center mt-4">
-              <b-pagination
-                v-model="currentPage"
-                hide-goto-end-buttons
-                class="paginator"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                @change="getTasks"
-              >
-                <template slot="prev-text">
-                  <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-                </template>
-                <template slot="next-text">
-                  <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-                </template>
-              </b-pagination>
-            </div>
+
+            <Pagination 
+              :total-pages="totalPages" 
+              :page="currentPage" 
+              :total-rows="totalRows" 
+              :per-page="perPage" 
+              @change="getTasks"></Pagination>
+
           </b-col>
         </b-row>
       </b-container>

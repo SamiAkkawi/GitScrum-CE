@@ -6,13 +6,14 @@ import ListTasks from '@components/projects/tasks/list-tasks'
 import TitleLoading from '@components/utils/title-loading'
 import InputEditable from '@components/utils/input-editable' 
 import TextareaEditable from '@components/utils/textarea-editable' 
+import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
     title: 'User Story',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, ListUsers, ListTasks, TitleLoading, InputEditable, TextareaEditable },
+  components: { Layout, ListUsers, ListTasks, TitleLoading, InputEditable, TextareaEditable, Pagination },
   data() {
     return {
       loading: true,
@@ -377,22 +378,14 @@ export default {
           </b-col>
           <b-col cols="9">
             <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
-            <div v-if="totalRows" class="d-flex justify-content-center mt-4">
-              <b-pagination
-                v-model="currentPage"
-                hide-goto-end-buttons
-                class="paginator"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                @change="getTasks">
-                <template slot="prev-text">
-                  <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-                </template>
-                <template slot="next-text">
-                  <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-                </template>
-              </b-pagination>
-            </div>
+            
+            <Pagination 
+              :total-pages="totalPages" 
+              :page="currentPage" 
+              :total-rows="totalRows" 
+              :per-page="perPage" 
+              @change="getTasks"></Pagination>
+
           </b-col>
         </b-row>
       </b-container>

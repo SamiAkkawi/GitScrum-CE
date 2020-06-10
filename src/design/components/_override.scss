@@ -364,6 +364,12 @@ a.badge-secondary.focus {
     padding: 0.5rem 0 !important;
 }
 
+#sidebar-task-filter {
+    .custom-select {
+        padding: 1px 13px;
+    }
+}
+
 .apexcharts-menu-icon {
     display: none;
 }

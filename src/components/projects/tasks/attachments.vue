@@ -1,10 +1,11 @@
 <script>
 import Axios from '@utils/axios'
 import ListUsers from '@components/utils/list-users'
+import Pagination from '@components/utils/pagination'
 import { taskManager } from '@state/helpers'
 
 export default {
-  components: { ListUsers },
+  components: { ListUsers, Pagination },
   props: {
     task: {
       type: Object,
@@ -229,23 +230,12 @@ export default {
           </div>
         </div>
       </silentbox-group>
-      <div v-if="totalPages > 1" class="d-flex justify-content-center mg-b-30">
-        <b-pagination
-          v-model="currentPage"
-          hide-goto-end-buttons
-          class="paginator"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="getAttachments"
-        >
-          <template slot="prev-text">
-            <font-awesome-icon :icon="['far', 'angle-left']" style="font-size:18px; color: #909CB8;" />
-          </template>
-          <template slot="next-text">
-            <font-awesome-icon :icon="['far', 'angle-right']" style="font-size:18px; color: #909CB8;" />
-          </template>
-        </b-pagination>
-      </div>
+      <Pagination 
+        :total-pages="totalPages" 
+        :page="currentPage" 
+        :total-rows="totalRows" 
+        :per-page="perPage" 
+        @change="getAttachments"></Pagination>
     </b-col>
   </b-row>
 </template>
