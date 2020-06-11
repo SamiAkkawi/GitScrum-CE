@@ -307,15 +307,6 @@ export default [{
         component: () => lazyLoadView(
             import ('@views/projects/user-stories/assign-tasks')),
     },
-    {
-        path: '/:companySlug/:projectSlug/user-stories/:userStorySlug/edit',
-        name: 'projects.user-stories.edit',
-        meta: {
-            authRequired: true,
-        },
-        component: () => lazyLoadView(
-            import ('@views/projects/user-stories/edit')),
-    },
     // Sprints
     {
         path: '/:companySlug/:projectSlug/sprints',

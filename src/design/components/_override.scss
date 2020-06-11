@@ -308,6 +308,16 @@ a.badge-secondary.focus {
     }
 }
 
+.table-assign-task {
+    background: #fff;
+    td:nth-child(1) {
+        width: 30px;
+    }
+    td:nth-child(2) {
+        padding-right: 20px
+    }
+}
+
 .table-team-members-log {
     background: #fff;
     td:nth-child(1) {
@@ -402,7 +412,7 @@ a.badge-secondary.focus {
 .card-header {
     padding: 0.35rem 1.0rem !important;
     margin-bottom: 0;
-    background-color: $grey-50 !important;
+    background-color: $yellow-50 !important;
     color: $black-300 !important;
     font-weight: 600;
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);

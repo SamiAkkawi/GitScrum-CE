@@ -2,7 +2,6 @@
 import Axios from '@utils/axios'
 import Layout from '@layouts/tpl-main'
 import TitleLoading from '@components/utils/title-loading'
-import SideList from '@components/marketplace/side-list'
 import FooterList from '@components/marketplace/footer-list'
 import Banner from '@components/marketplace/banner'
 
@@ -14,7 +13,6 @@ export default {
   components: {
     Layout,
     TitleLoading,
-    SideList,
     FooterList,
     Banner
   },
@@ -48,9 +46,6 @@ export default {
           this.loading = false
           this.copyTemplateLoading = false
         })
-        .catch((e) => {
-          console.error(e)
-        })
     },
     copyTemplate() {
       this.copyTemplateLoading = true
@@ -66,9 +61,6 @@ export default {
         .then((response) => {
           this.getTemplate()
           this.hasTemplate = true
-        })
-        .catch((e) => {
-          console.error(e)
         })
     },
     getFeature() {
@@ -113,13 +105,10 @@ export default {
   <Layout>
     <div slot="content" class="marketplace">
 
-      <b-container>
-        <b-row>
-          <b-col>
-            <Banner :template-name="getFeature()"></Banner>
-          </b-col>
-        </b-row>
-        <b-row align-v="center" class="mb-20-px">
+      <Banner :template-name="getFeature()"></Banner>
+
+      <b-container class="mt-4">
+       <b-row align-v="center" class="mb-3">
           <b-col>
             <TitleLoading :title="getFeature() + ' Template'" 
               :loading="loading"></TitleLoading>
@@ -127,28 +116,25 @@ export default {
         </b-row>
         <b-row>
           <b-col>
-            
             <b-card>
-
-              <b-row class="mt-10px">
+              <b-row class="mt-1">
                 <b-col cols="2">
-                  <b-img :src="template.company.logo" rounded :alt="template.company.name"></b-img>
+                  <b-img :src="template.company.logo" rounded :alt="template.company.name" style="width:128px;"></b-img>
                 </b-col>
-                <b-col class="ml-10px">
+                <b-col class="ml-4 mr-3">
                   <b-row>
                     <b-col cols="8">
-                      <div>
-                        <b-badge v-if="meta.is_mine" class="mb-15px" variant="secondary">
-                          {{ $t('You own this template') }}</b-badge>
-                        <b-badge v-if="meta.copied" class="mb-15px" variant="warning">
-                          {{ $t('You copied this template for your company') }}
-                        </b-badge>
-                        <b-link v-if="meta.is_mine | meta.copied" :to="{ name: 'companies.template.' + $route.params.template }" 
-                            class="ml-5-px tx-11-px">{{ $t('See template in your company') }}</b-link>
-                      </div>
-                      <h6 class="mt-5px tx-11px fw-600 txt-26DC8E">{{ $t('Template Free') }}</h6>
-                      <h3 class="tx-18px fw-600 mb-0">{{ template.name }}</h3>
-                      <span class="txt-9EA9C1 tx-12-px" v-text="template.company.name"></span>
+                      <b-link 
+                        v-if="meta.is_mine | meta.copied" 
+                        :to="{ name: 'companies.templates', params: { template: $route.params.template } }" 
+                        class="d-block mb-2 font-weight-bold">{{ $t('See template in your company') }}</b-link>
+
+                      <b-badge v-if="meta.is_mine" class="mb-3" variant="secondary" v-text="$t('You own this template')" />
+                      <b-badge v-if="meta.copied" class="mb-3" variant="warning" v-text="$t('You copied this template for your company')" />
+                      
+                      <h6 class="text-success">{{ $t('Template Free') }}</h6>
+                      <h3 class="font-weight-bold">{{ template.name }}</h3>
+                      <h6 v-text="template.company.name"></h6>
                     </b-col>
                     <b-col  cols="4" class="text-right pr-4">
                       <div v-show="!meta.is_mine">
@@ -166,10 +152,10 @@ export default {
                       <tr>
                         <th colspan="2" class="pl-0 pr-0 wd-100"> 
                           <div class="d-flex justify-content-between align-items-center">
-                            <div>{{ getFeature() }}</div>
+                            <h6 class="ml-3 m-0">{{ getFeature() }}</h6>
                             <div class="text-right">
-                              <span v-if="template.copiers >= 30" class="badge badge-light"> {{ $t('+XXX copiers', { total: template.copiers }) }} </span>
-                              <span v-if="template.copiers <= 10" class="badge badge-light"> {{ $t('+XXX copiers', { total: 30 }) }} </span>
+                              <h6 class="m-0"><span v-if="template.copiers >= 30" class="badge badge-light">{{ $t('+XXX copiers', { total: template.copiers }) }}</span></h6>
+                              <h6 class="m-0"><span v-if="template.copiers <= 10" class="badge badge-light">{{ $t('+XXX copiers', { total: 30 }) }}</span></h6>
                             </div>
                           </div>
                         </th>
@@ -243,7 +229,7 @@ export default {
           </b-col>
           <b-col cols="3" class="pl-20-px">
             <h5 class="tx-14-px lh-18-px fw-600">{{ $t('Templates are an excellent way to optimize your company\'s processes and projects.') }}</h5>
-            <p>{{ $t('Click on "Copy Template" button to use this template in your company and projects.') }}</p>
+            <p>{{ $t('Click on "Copy Template" to use this template one in your company and projects.') }}</p>
             <p>{{ $t('After copying this template for your company, you can set the template as the default for all your projects.') }} 
               {{ $t('Whenever you create a new project, that template will be applied automatically.') }}</p>
           </b-col>

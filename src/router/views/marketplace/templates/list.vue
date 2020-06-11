@@ -182,45 +182,30 @@ export default {
   <Layout>
     <div slot="content" class="marketplace">
 
-      <Banner :template-name="''"></Banner>
+      <Banner :template-name="''" class="mb-4"></Banner>
 
-      <div class="row mb-30-px">
-        <div class="col-md-12">
-          <div v-for="(boxe, index) in boxes" :key="index" class="row mb-10-px">
-            <div class="col-md-12">
-              <div class="d-flex justify-content-between align-items-center mb-10-px">
-                <div>
-                  <TitleLoading :title="boxe.title" :loading="boxe.loading" class="header-title" />
-                </div>
-                <div>
-                  <router-link
-                    :to="{
-                      name: 'marketplace.templates.index',
-                      params: {
-                        template: boxe.template.type,
-                      },
-                    }"
-                    class="txt-link txt-primary  mr-10-px"
-                  >
-                    {{ $t('See All') }}
-                  </router-link>
-                </div>
+      <b-container class="mb-4" style="margin-top:40px;">
+        <b-row v-for="(boxe, index) in boxes" :key="index" align-h="center" class="mb-4">
+          <b-col>
+            <div class="d-flex justify-content-between align-items-center mb-10-px">
+              <TitleLoading :title="boxe.title" :loading="boxe.loading" class="header-title" />
+              <div>
+                <router-link
+                  :to="{
+                    name: 'marketplace.templates.index',
+                    params: {
+                      template: boxe.template.type,
+                    },
+                  }"
+                  class="txt-link txt-primary  mr-10-px">
+                  {{ $t('See All') }}
+                </router-link>
               </div>
             </div>
-            <div class="col-md-12">
-              <BoxItem :items="boxe.items" :template="boxe.template.type" :name="boxe.template.name"></BoxItem>
-            </div>
-          </div>
-        </div>
-        <!--
-        <div class="col-md-2 offset-md-1">
-         
-          <SideList :title="$t('Installed')" :informations="list"> </SideList>
-          <SideList :title="$t('Popular')" :informations="list"> </SideList>
-          
-        </div>
-        -->
-      </div>
+            <BoxItem :items="boxe.items" :template="boxe.template.type" :name="boxe.template.name"></BoxItem>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </Layout>
 </template>

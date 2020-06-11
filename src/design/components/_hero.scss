@@ -4,6 +4,8 @@
     background: linear-gradient(263.88deg, #26dc8e 0.37%, #26dc8e 0.38%, #3a81cb 72.5%, #464dee 100%);
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.08);
     border-radius: 6px;
+    position: relative;
+    z-index: 11;
     h3 {
         padding-right: 30px;
         font-weight: 700;

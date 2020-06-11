@@ -112,6 +112,7 @@ export default {
 
     getTasks(page) {
       this.scrollToElem()
+      this.loading = true
       Axios()
         .get(
           'tasks/?company_slug=' +
@@ -248,7 +249,36 @@ export default {
       <b-container v-if="userStory">
         <b-row>
           <b-col>
-            <b-card :header="$t('User Story')">
+            <b-card>
+
+              <template v-slot:header>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span v-text="$t('User Story')"></span>
+                  <div class="d-flex align-items-center">
+                    <router-link
+                      :to="{
+                      name: 'projects.board',
+                      params: {
+                        companySlug: $route.params.companySlug,
+                        projectSlug: $route.params.projectSlug,
+                      }, query: { userStorySlug: $route.params.userStorySlug } }" 
+                      class="small"
+                      v-text="$t('User Story in Board')">
+                    </router-link>
+                    <router-link
+                      :to="{
+                      name: 'projects.user-stories.assign-tasks',
+                      params: {
+                        companySlug: $route.params.companySlug,
+                        projectSlug: $route.params.projectSlug,
+                        userStorySlug: $route.params.userStorySlug } }"
+                      class="ml-3 badge badge-success"
+                      v-text="$t('Assign Tasks')">
+                    </router-link>
+                  </div>
+                </div>
+              </template>
+
               <InputEditable v-if="authorize('userStories', 'update')" 
                 :placeholder="$t('Sprint Name')"
                 :text="userStory.title"
@@ -257,63 +287,29 @@ export default {
                 @text-updated-enter="updateTitle"></InputEditable>
                 <span v-else class="vlabeledit-label" v-text="userStory.title" />
                 
-                <div class="d-flex justify-content-between">
-                  <div class="wd-100">
-                    <div class="textarea-description">
-                      <span class="small ml-1 font-weight-bold" v-text="$t('Additional information')" />
-                      <TextareaEditable
-                      v-if="authorize('userStories', 'update')" 
-                      :placeholder="$t('User Story')"
-                      :text="userStory.additional_information"
-                      :current-object="sprint"
-                      @text-updated-blur="updateAdditionalInformation"  
-                      @text-updated-enter="updateAdditionalInformation"></TextareaEditable>
-                      <span v-else class="vlabeledit-label" v-text="userStory.additional_information"></span>
-                    </div>
-                    <div class="textarea-description">
-                      <span class="small ml-1 font-weight-bold" v-text="$t('Acceptance criteria')" />
-                      <TextareaEditable
-                      v-if="authorize('userStories', 'update')" 
-                      :placeholder="$t('User Story')"
-                      :text="userStory.acceptance_criteria"
-                      :current-object="sprint"
-                      @text-updated-blur="updateAcceptanceCriteria"  
-                      @text-updated-enter="updateAcceptanceCriteria"></TextareaEditable>
-                      <span v-else class="vlabeledit-label" v-text="userStory.acceptance_criteria"></span>
-                    </div>
-                  </div>
-                  <div class="pt-2 ml-2" style="min-width:260px">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="small text-secondary ml-1">
+                    {{ $t('Created on') }}
+                    <span v-if="userStory.created_at" v-text="userStory.created_at.date_for_humans"></span> {{ $t('by') }} 
                     <router-link
-                      :to="{
-                        name: 'projects.board',
-                        params: {
-                          companySlug: this.$route.params.companySlug,
-                          projectSlug: this.$route.params.projectSlug,
-                        }, query: { userStorySlug: this.$route.params.userStorySlug } }" 
-                        class="btn btn-primary btn-sm btn-block" v-text="$t('User Story in Board')">
-                    </router-link>
-                    <router-link
-                      :to="{
-                        name: 'projects.user-stories.assign-tasks',
-                        params: {
-                          companySlug: $route.params.companySlug,
-                          projectSlug: $route.params.projectSlug,
-                          userStorySlug: $route.params.userStorySlug } }"
-                      class="btn btn-success btn-sm btn-block" v-text="$t('Assign Tasks')">
-                    </router-link>
+                    v-if="userStory.user"
+                    :to="{
+                      name: 'profile.user',
+                      params: { username: userStory.user.username } }"
+                    v-text="userStory.user.name"></router-link>
                   </div>
+
+                  <b-link
+                    v-if="authorize('userStories', 'update')" 
+                    class="small tx-uppercase"
+                    :title="$t('Delete Sprint')"
+                    @click="deleteUserStory">
+                    <small class="small font-weight-bold">
+                    <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
+                    {{ $t('Delete User Story') }}
+                    </small>
+                  </b-link>
                 </div>
-              
-                <span class="small text-secondary ml-1">
-                  {{ $t('Created on') }}
-                  <span v-if="userStory.created_at" v-text="userStory.created_at.date_for_humans"></span> - 
-                  <router-link
-                  v-if="userStory.user"
-                  :to="{
-                    name: 'profile.user',
-                    params: { username: userStory.user.username } }"
-                  v-text="userStory.user.name"></router-link>
-                </span>
             </b-card>
           </b-col>
         </b-row>
@@ -336,6 +332,7 @@ export default {
         </b-row>
         <b-row>
           <b-col cols="3">
+            
             <div style="position:sticky; top:115px">
               <b-jumbotron 
               v-if="userStory.stats" 
@@ -358,7 +355,7 @@ export default {
               class="sprint-jumbotron-blue">
                 <p v-text="$t('Tasks')"></p>
               </b-jumbotron>
-              <b-card :header="$t('Sprint Team')">
+              <b-card :header="$t('User Story Team')">
                 <ListUsers
                   :link="true"
                   :users="userStory.users"
@@ -366,26 +363,45 @@ export default {
                   :wrap="true"
                   class="list-users-left"></ListUsers>
               </b-card>
-              <b-link
-                href="javascript:;"
-                class="txt-68748F fw-500 lh-15-px tx-10-px mr-10-px tx-uppercase"
-                :title="$t('Delete Sprint')"
-                @click="deleteUserStory">
-                <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
-                {{ $t('Delete User Story') }}
-              </b-link>
+
+              <b-card class="mt-2">
+                <div class="textarea-description mb-2">
+                  <span class="small ml-1 font-weight-bold" v-text="$t('Additional information')" />
+                  <TextareaEditable
+                  v-if="authorize('userStories', 'update')" 
+                  :placeholder="$t('User Story')"
+                  :text="userStory.additional_information"
+                  :current-object="sprint"
+                  @text-updated-blur="updateAdditionalInformation"  
+                  @text-updated-enter="updateAdditionalInformation"></TextareaEditable>
+                  <span v-else class="vlabeledit-label" v-text="userStory.additional_information"></span>
+                </div>
+                <div class="textarea-description mb-2">
+                  <span class="small ml-1 font-weight-bold" v-text="$t('Acceptance criteria')" />
+                  <TextareaEditable
+                  v-if="authorize('userStories', 'update')" 
+                  :placeholder="$t('User Story')"
+                  :text="userStory.acceptance_criteria"
+                  :current-object="sprint"
+                  @text-updated-blur="updateAcceptanceCriteria"  
+                  @text-updated-enter="updateAcceptanceCriteria"></TextareaEditable>
+                  <span v-else class="vlabeledit-label" v-text="userStory.acceptance_criteria"></span>
+                </div>
+              </b-card>
             </div>
+
+            
           </b-col>
           <b-col cols="9">
-            <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
-            
+            <b-card>
+              <ListTasks class="pl-2 pr-3" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+            </b-card>
             <Pagination 
               :total-pages="totalPages" 
               :page="currentPage" 
               :total-rows="totalRows" 
               :per-page="perPage" 
               @change="getTasks"></Pagination>
-
           </b-col>
         </b-row>
       </b-container>

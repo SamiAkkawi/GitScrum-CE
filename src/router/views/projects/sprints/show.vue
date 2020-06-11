@@ -417,7 +417,10 @@ export default {
                 </b-tab>
               </b-tabs>
             </b-card>
-            <ListTasks class="mt-4" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+
+            <b-card class="mt-2">
+              <ListTasks class="pl-2 pr-3" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+            </b-card>
 
             <Pagination 
               :total-pages="totalPages" 

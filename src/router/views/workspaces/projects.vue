@@ -174,9 +174,7 @@ export default {
 <template>
   <Layout>
     <div slot="content">
-      <b-overlay :show="loading" no-wrap></b-overlay>
-      
-      <div v-if="projects.length" align-v="center" class="subheader shadow-sm d-flex justify-content-between">
+      <div align-v="center" class="subheader shadow-sm d-flex justify-content-between">
         <TitleLoading
           v-if="projects.length || loading"
           :title="$tc('Explore Projects', projects.length)"

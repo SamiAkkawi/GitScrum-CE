@@ -54,7 +54,7 @@ export default {
               '<span> ' +
               series[seriesIndex][dataPointIndex] +
               ' ' +
-              this.$tc('Task', 2) +
+              this.$t('Task') +
               '</span>' +
               '</div>'
             )

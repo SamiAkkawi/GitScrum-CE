@@ -132,25 +132,18 @@ export default {
 
       <Banner :template-name="getFeature()"></Banner>
       
-      <b-container>
-        <b-row align-v="center" class="mb-10-px">
-          <b-col>
-            <TitleLoading :title="getFeature()" :loading="loading"></TitleLoading>
-          </b-col>
-        </b-row>
-        <b-row>
+      <b-container class="mb-4" style="margin-top:40px;">
+        <b-row align-v="center">
+          <TitleLoading :title="getFeature()" :loading="loading" class="mb-4"></TitleLoading>
           <BoxItem :items="items" :template="$route.params.template" :name="getFeature()"></BoxItem>
-
           <Pagination 
             :total-pages="totalPages" 
             :page="currentPage" 
             :total-rows="totalRows" 
             :per-page="perPage" 
             @change="getTemplate"></Pagination>
-          
         </b-row>
       </b-container>
-      
     </div>
   </Layout>
 </template>

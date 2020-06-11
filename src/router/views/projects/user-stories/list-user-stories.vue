@@ -163,7 +163,7 @@ export default {
                 {{ data.item.code }} - {{ data.item.title }}
               </router-link>
               <p class="mb-0">
-                <span>{{ $tc('Task', 2) }}: {{ data.item.stats.tasks }}</span>
+                <span>{{ $t('Tasks') }}: {{ data.item.stats.tasks }}</span>
                 -
                 <span>
                   {{ $tc('Story Point', 2) }}:

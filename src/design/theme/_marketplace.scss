@@ -1,17 +1,16 @@
 .card-marketplace {
     background: #fff;
-    border: 1px solid #e9e9e9;
     border-radius: 6px;
-    padding: 20px 15px 10px;
-    margin: 10px;
+    margin: 7px;
     transition: box-shadow ease-in 0.2s;
     .card {
         height: 100%;
+        padding: 20px 15px 10px;
         border: 1px solid transparent;
     }
     .rounded-circle {
-        width: 40px !important;
-        height: 40px !important;
+        width: 70px !important;
+        height: 70px !important;
         margin-bottom: 22px;
         background: #e0e0e0;
     }
@@ -80,7 +79,7 @@
 
 @include media-breakpoint-up(xl) {
     .card-marketplace {
-        width: 268px;
+        width: 262px;
         margin-left: 0;
     }
 }

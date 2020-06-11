@@ -73,8 +73,7 @@ export default {
         :data-fullname="u.name"
         :data-avatar="u.avatar"
         class="d-flex align-items-start justify-content-end"
-        :class="{ ' flex-wrap ' : wrap === true }"
-      >
+        :class="{ ' flex-wrap ' : wrap === true }">
         <span v-if="index < limit" :alt="u.name">
           <b-avatar v-if="link" 
             :to="{ name: 'profile.user', params: { username: u.username } }" 
@@ -89,7 +88,7 @@ export default {
       </span>
     </div>
 
-    <div v-if="user" v-b-tooltip.hover="user.name" :alt="user.name">
+    <div v-if="user" :alt="user.name">
       <b-avatar v-if="link" 
         :to="{ name: 'profile.user', params: { username: user.username } }" 
         :src="user.avatar" :size="size"></b-avatar>

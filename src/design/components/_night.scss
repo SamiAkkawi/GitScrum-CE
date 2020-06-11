@@ -153,7 +153,7 @@
         color: $grey-100 !important;
     }
     .card {
-        background: $black-300 !important;
+        background: $black-500 !important;
         .card-title {
             color: $grey-100 !important;
         }
@@ -168,8 +168,8 @@
             }
         }
         .card-header {
-            background-color: $black-500 !important;
-            color: $grey-400 !important;
+            background-color: $grey-900 !important;
+            color: $grey-200 !important;
         }
     }
     #sidebar-task-filter {
@@ -473,12 +473,58 @@
             color: $grey-200 !important;
         }
     }
+    .textarea-description span.font-weight-bold {
+        color: $grey-100 !important;
+    }
     .addColumnBox {
         background: $grey-700;
         color: $grey-100 !important;
         &:hover {
             background: $grey-400;
             box-shadow: none;
+        }
+    }
+    .btn.btn-success,
+    a.btn-success {
+        color: #fff !important;
+        background-color: $lime-900 !important;
+        border-color: $lime-500 !important;
+    }
+    .card-marketplace {
+        .badge-light {
+            color: $grey-50 !important;
+            background-color: $black-500 !important;
+        }
+    }
+    #header-content {
+        .dropdown-style .dropdown-menu,
+        #header-navbar .dropdown-menu {
+            background: $grey-900 !important;
+        }
+        .dropdown-style .dropdown-menu p,
+        #header-navbar .dropdown-menu p {
+            color: $grey-200 !important;
+        }
+        .dropdown-style .dropdown-item:hover,
+        .dropdown-style .dropdown-item:focus,
+        #header-navbar .dropdown-item:hover,
+        #header-navbar .dropdown-item:focus {
+            background: $black-900 !important;
+        }
+    }
+    .list-tasks {
+        cursor: default;
+        .list-task-content {
+            color: $grey-200;
+            a {
+                color: $grey-300;
+            }
+        }
+        .txt-primary-title {
+            color: $black-50 !important;
+        }
+        a {
+            color: $grey-50 !important;
         }
     }
 }

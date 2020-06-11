@@ -21,6 +21,7 @@ export default {
       listCompanyTeamMembers: [],
       totalInvites: [0,1,2],
       alertStatus: '',
+      alertMessage: '',
       fields: [
         { key: 'user.name', label: '' },
         { key: 'user.username', label: '' }

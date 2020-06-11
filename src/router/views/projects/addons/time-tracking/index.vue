@@ -97,6 +97,8 @@ export default {
             dateEnd +
             '&users=' + 
             this.filterMembers +
+            '&title=' + 
+            this.filterTitle +
             '&page=' +
             page
         )
@@ -167,7 +169,9 @@ export default {
             '&start_date=' +
             this.resume.period_start +
             '&end_date=' +
-            this.resume.period_end,
+            this.resume.period_end +
+            '&title=' + 
+            this.filterTitle,
           { responseType: 'blob' }
         )
         .then((response) => {
@@ -305,8 +309,7 @@ export default {
               :loading="btnLoading"
               type="btn-sm"
               icon="search"
-              @action="addFilter"
-            ></ButtonLoading>
+              @action="addFilter"></ButtonLoading>
           </div>
 
         </div>

@@ -58,14 +58,6 @@ export default {
           style: '',
           route: 'companies.billing',
         },
-        /*
-        {
-          title: this.$t('Subscription'),
-          subtitle: this.$t(''),
-          style: '',
-          route: 'companies.subscriptions',
-        },
-        */
         
       ],
     }

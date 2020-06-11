@@ -92,7 +92,7 @@ export default {
             <div class="row flex-nowrap">
               <div class="col-1 gantt-line-fixed" style="width:52px !important;max-width:52px !important"> </div>
               <div class="col-6 tx-11-px gantt-title-fixed">
-                <span class="tx-11-px">{{ $tc('Task', 2) }}</span>
+                <span class="tx-11-px">{{ $t('Tasks') }}</span>
               </div>
               <div class="col-2 tx-11-px pl-10-px" style="width:140px !important;max-width:140px !important">
                 <span class="tx-11-px">{{ $t('Start Date') }}</span>
