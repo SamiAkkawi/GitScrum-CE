@@ -14,6 +14,16 @@
     }
     .subheader {
         background: $grey-900;
+        .btn.btn-light,
+        .badge-light {
+            border: 1px solid transparent !important;
+            color: $grey-200 !important;
+            background: $grey-700 !important;
+            border-color: transparent;
+            .btn {
+                color: $grey-200;
+            }
+        }
     }
     .b-sidebar-body {
         h5 {
@@ -89,6 +99,9 @@
         }
         &:hover {
             border: 2px solid $grey-600 !important;
+        }
+        .txt-primary-title {
+            color: $black-50 !important;
         }
         .btn-secondary {
             color: $grey-200;
@@ -248,6 +261,7 @@
             color: $grey-400;
         }
         .add-card {
+            color: $grey-200;
             background: $black-400;
             border: 1px solid $grey-900;
         }
@@ -371,10 +385,13 @@
         }
         .task-icons small,
         .task-stats small {
-            color: $black-700 !important;
+            color: $grey-50 !important;
         }
-        .badge.badge-light {
-            background-color: rgba(255, 255, 255, 0.7) !important;
+        .badge-light {
+            background: $grey-800 !important;
+            border: 1px solid $grey-700;
+            padding-bottom: 2px;
+            color: $grey-200 !important;
         }
     }
     textarea {
@@ -526,5 +543,12 @@
         a {
             color: $grey-50 !important;
         }
+    }
+    .modal-content .modal-header,
+    .modal-content .modal-body {
+        background: $grey-600 !important;
+    }
+    .modal-footer {
+        border-top: 1px solid $grey-600 !important;
     }
 }

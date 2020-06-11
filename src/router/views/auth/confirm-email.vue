@@ -48,7 +48,7 @@ export default {
 <template>
   <Layout>
     <div class="authentication mt-60px">
-      <ul><Logo></Logo></ul>
+      <ul style="padding:0"><Logo></Logo></ul>
 
       <div class="mt-30-px">
         <div v-show="showFail">

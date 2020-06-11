@@ -173,7 +173,7 @@ export default {
 <template>
   <Layout>
     <div class="authentication mt-60px">
-      <ul><Logo></Logo></ul>
+      <ul style="padding:0"><Logo></Logo></ul>
 
       <div v-show="showSignupComplete" class="mt-33px">
         <h3 class="txt-1E1E2F tx-24px fw-700">{{ $t('Congratulations') }}</h3>

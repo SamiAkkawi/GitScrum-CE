@@ -64,10 +64,8 @@ export default {
       this.timeTrackerPreloaded = true
       this.clockIsReady = true
     } else {
-      if (this.scope !== 'modal') {
-        this.timeTrackerPreloaded = true
-        this.clockIsReady = true
-      }
+      this.timeTrackerPreloaded = true
+      this.clockIsReady = true
     }
   },
   methods: {

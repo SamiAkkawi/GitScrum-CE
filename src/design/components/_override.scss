@@ -412,10 +412,15 @@ a.badge-secondary.focus {
 .card-header {
     padding: 0.35rem 1.0rem !important;
     margin-bottom: 0;
-    background-color: $yellow-50 !important;
-    color: $black-300 !important;
+    background-color: $grey-200 !important;
+    color: $black-700 !important;
     font-weight: 600;
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    small,
+    .small {
+        color: $black-700 !important;
+        font-weight: 500 !important;
+    }
 }
 
 .card,

@@ -250,12 +250,12 @@ export default {
         <b-row>
           <b-col>
             <b-card>
-
               <template v-slot:header>
                 <div class="d-flex justify-content-between align-items-center">
                   <span v-text="$t('User Story')"></span>
                   <div class="d-flex align-items-center">
                     <router-link
+                      v-if="authorize('userStories', 'update')"
                       :to="{
                       name: 'projects.board',
                       params: {
@@ -266,6 +266,7 @@ export default {
                       v-text="$t('User Story in Board')">
                     </router-link>
                     <router-link
+                      v-if="authorize('userStories', 'update')"
                       :to="{
                       name: 'projects.user-stories.assign-tasks',
                       params: {

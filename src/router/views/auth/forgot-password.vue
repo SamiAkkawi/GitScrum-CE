@@ -73,7 +73,7 @@ export default {
 <template>
   <Layout>
     <div class="authentication mt-60px">
-      <ul><Logo></Logo></ul>
+      <ul style="padding:0"><Logo></Logo></ul>
 
       <div class="mt-33px">
         <h3 class="txt-1E1E2F tx-24px">{{ $t('Forgot Password') }}</h3>

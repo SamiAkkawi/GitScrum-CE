@@ -122,21 +122,22 @@ export default {
 
     deleteSprint() {
         
-      if( this.title ){
-        Axios()
-        .delete(this.getSprintEndpoint())
-        .then((response) => {
-          this.$router.push({
-            name: 'projects.sprints',
-            params: {
-              companySlug: this.$route.params.companySlug,
-              projectSlug: this.$route.params.projectSlug,
-            },
+      this.$bvModal.msgBoxConfirm(this.$t('Do you really want to delete?'), this.msgBoxConfirmConfig() )
+      .then(value => {
+        if(value){
+          Axios()
+          .delete(this.getSprintEndpoint())
+          .then((response) => {
+            this.$router.push({
+              name: 'projects.sprints',
+              params: {
+                companySlug: this.$route.params.companySlug,
+                projectSlug: this.$route.params.projectSlug,
+              },
+            })
           })
-        })
-      } else{
-        alert(this.$t('You must fill in at least the first field'))
-      }
+        }
+      })
 
     },
 
@@ -245,7 +246,34 @@ export default {
       <b-container v-if="sprint">
         <b-row>
           <b-col>
-            <b-card :header="$t('Sprint')">
+            <b-card>
+              <template v-slot:header>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span v-text="$t('Sprint')"></span>
+                  <div class="d-flex align-items-center">
+                    <router-link
+                      v-if="authorize('sprints', 'update')"
+                      :to="{
+                      name: 'projects.board',
+                      params: {
+                        companySlug: $route.params.companySlug,
+                        projectSlug: $route.params.projectSlug,
+                      }, query: { sprintSlug: $route.params.sprintSlug } }"
+                    class="small">
+                    {{ $t('Sprint in Board') }}</router-link>
+                    <router-link
+                      v-if="authorize('sprints', 'update')"
+                      :to="{
+                      name: 'projects.sprints.assign-tasks',
+                      params: {
+                        companySlug: $route.params.companySlug,
+                        projectSlug: $route.params.projectSlug,
+                        sprintSlug: $route.params.sprintSlug } }"
+                      class="ml-3 badge badge-success">
+                      {{ $t('Assign Tasks') }}</router-link>
+                  </div>
+                </div>
+              </template>
               <div class="title-component">
                 <InputEditable v-if="authorize('sprints', 'update')" 
                 :placeholder="$t('Sprint Name')"
@@ -264,17 +292,29 @@ export default {
                   @text-updated-enter="updateDescription"></TextareaEditable>
                   <span v-else class="vlabeledit-label" v-text="sprint.description"></span>
                 </div>
-                <span class="small text-secondary ml-1">
-                  {{ $t('Created on') }}
-                  <span v-if="sprint.created_at" v-text="sprint.created_at.date_for_humans"></span> 
-                  {{ $t('by') }} 
-                  <router-link
-                  v-if="sprint.user"
-                  :to="{
-                    name: 'profile.user',
-                    params: { username: sprint.user.username } }"
-                  v-text="sprint.user.name"></router-link>
-                </span>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="small text-secondary ml-1">
+                    {{ $t('Created on') }}
+                    <span v-if="sprint.created_at" v-text="sprint.created_at.date_for_humans"></span> 
+                    {{ $t('by') }} 
+                    <router-link
+                    v-if="sprint.user"
+                    :to="{
+                      name: 'profile.user',
+                      params: { username: sprint.user.username } }"
+                    v-text="sprint.user.name"></router-link>
+                  </span>
+                  <b-link
+                    v-if="authorize('userStories', 'update')" 
+                    class="small tx-uppercase"
+                    :title="$t('Delete Sprint')"
+                    @click="deleteSprint">
+                    <small class="small font-weight-bold">
+                    <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
+                    {{ $t('Delete Sprint') }}
+                    </small>
+                  </b-link>
+                </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-start" style="height: 25px;">
@@ -316,25 +356,6 @@ export default {
                   </div>
                 </div>
                 <div class="d-flex">
-                  <router-link
-                  v-if="authorize('sprints', 'update')"
-                  :to="{
-                    name: 'projects.sprints.assign-tasks',
-                    params: {
-                      companySlug: $route.params.companySlug,
-                      projectSlug: $route.params.projectSlug,
-                      sprintSlug: $route.params.sprintSlug } }"
-                  class="btn btn-success btn-sm text-nowrap mr-2">
-                  {{ $t('Assign Tasks') }}</router-link>
-                  <router-link
-                  :to="{
-                    name: 'projects.board',
-                    params: {
-                      companySlug: this.$route.params.companySlug,
-                      projectSlug: this.$route.params.projectSlug,
-                    }, query: { sprintSlug: this.$route.params.sprintSlug } }"
-                  class="btn btn-primary btn-sm text-nowrap mr-2">
-                  {{ $t('Sprint in Board') }}</router-link>
                   <b-form-select 
                   v-model="sprintStatus" 
                   :options="sprintStatuses" 
@@ -396,14 +417,6 @@ export default {
                   :wrap="true"
                   class="list-users-left"></ListUsers>
               </b-card>
-              <b-link
-                href="javascript:;"
-                class="txt-68748F fw-500 lh-15-px tx-10-px mr-10-px tx-uppercase"
-                :title="$t('Delete Sprint')"
-                @click="deleteSprint">
-                <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
-                {{ $t('Delete Sprint') }}
-              </b-link>
             </div>
           </b-col>
           <b-col cols="9">

@@ -30,7 +30,6 @@ export default {
       filterTitle: '',
       assignedTasks: [],
       userStoryPriorities: [],
-      userStoryEndpoint: this.getUserStoryEndpoint(),
       fields: [
         {
           key: 'checked',
@@ -42,11 +41,6 @@ export default {
         }
       ],
     }
-  },
-  watch: {
-    searchByName() {
-      this.searchTitle()
-    },
   },
   mounted() {
     this.getUserStory()
@@ -148,7 +142,7 @@ export default {
             '&project_slug=' +
             this.$route.params.projectSlug,
           {
-            user_story_id: id // this.data.id,
+            user_story_id: id,
           }
         )
         .then((response) => {
@@ -157,16 +151,6 @@ export default {
           this.assignLoading = false
           this.loading = false
         })
-    },
-    getUserStoryEndpoint() {
-      return (
-        'user-stories/' +
-        this.$route.params.userStorySlug +
-        '/?company_slug=' +
-        this.$route.params.companySlug +
-        '&project_slug=' +
-        this.$route.params.projectSlug
-      )
     },
 
     sendAssign(item, index) {
@@ -213,7 +197,7 @@ export default {
                   <router-link
                   :to="{
                     name: 'projects.user-stories.show',
-                    params: { projectSlug: data.project.slug, sprintSlug: data.slug } }" class="small" >
+                    params: { projectSlug: data.project.slug, userStorySlug: data.slug } }" class="small" >
                   {{ $t('Go back to User Story') }}
                 </router-link>
                 </div>
@@ -238,8 +222,7 @@ export default {
                 :loading="btnLoading"
                 type="btn-sm"
                 icon="search"
-                @action="search"
-                ></ButtonLoading>
+                @action="search"></ButtonLoading>
               </b-input-group-append>
             </b-input-group>
             </div>
