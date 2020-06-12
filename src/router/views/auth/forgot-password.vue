@@ -58,7 +58,6 @@ export default {
           this.alertMessage = response.data.message
         })
         .catch((error) => {
-          console.log(error)
           this.loading = false
           this.alertStatus = true
           this.alertMessage = this.$t('Invalid email')

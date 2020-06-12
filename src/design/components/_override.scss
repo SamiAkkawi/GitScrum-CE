@@ -4,6 +4,12 @@
     box-shadow: none !important;
 }
 
+textarea {
+    padding: 4px 6px !important;
+    font-size: 14px !important;
+    line-height: 18px !important;
+}
+
 small,
 .small {
     display: flow-root;
@@ -253,6 +259,14 @@ a.badge-secondary.focus {
         font-size: 14px !important;
         line-height: 20px;
         font-weight: 600;
+    }
+}
+
+.table-user-stories {
+    background: #fff;
+    td:nth-child(1) {
+        width: 120px;
+        max-width: 240px;
     }
 }
 
@@ -651,6 +665,22 @@ a.badge-secondary.focus {
             margin-left: -1px;
             margin-top: -1px;
         }
+    }
+}
+
+.modal-content {
+    background: $black-500 !important;
+    color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.5);
+}
+
+.project-details {
+    .badge.badge-light,
+    .btn-secondary {
+        color: $grey-500 !important;
+        background-color: $grey-50 !important;
+        border-color: $grey-50 !important;
     }
 }
 

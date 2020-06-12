@@ -134,7 +134,6 @@ export default {
             this.$route.params.projectSlug
         )
         .then((response) => {
-          console.log(response.data.data)
           this.listCompanyTeamMembers = response.data.data
           this.loading = false
         })

@@ -56,7 +56,9 @@ export default {
         .then((response) => {
           this.loading = false
           this.companyTemplates = response.data.data
-          this.companyTemplate = this.companyTemplates[0].id
+          if ( this.companyTemplates[0] ){
+            this.companyTemplate = this.companyTemplates[0].id
+          }
         })
     },
 

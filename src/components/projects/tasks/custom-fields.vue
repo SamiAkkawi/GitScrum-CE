@@ -82,7 +82,6 @@ export default {
       })
     },
     updateFieldSelected(field) {
-      console.log(field)
       this.update({
         field_id: field.id,
         value: field.value ? field.value : '',

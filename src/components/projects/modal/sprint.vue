@@ -1,16 +1,15 @@
 <script>
 import Axios from '@utils/axios'
 import DatePicker from 'vue2-datepicker'
+import ButtonLoading from '@components/utils/button-loading'
 import { modalManager } from '@state/helpers'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
-import Mentions from '@components/utils/mentions'
 
 export default {
-  components: { DatePicker, vSelect, Mentions },
+  components: { DatePicker, ButtonLoading },
   data() {
     return {
       loading: false,
+      projectLoading: false,
       sprintName: '',
       sprintGoal: '',
       sprintDates: new Date(),
@@ -30,9 +29,6 @@ export default {
       if (object.item.name === 'sprintCreate') {
         object.item.name = ''
         this.errors = []
-        if (this.$route.params.projectSlug) {
-          this.getProject(this.$route.params.projectSlug)
-        }
         this.getProjects()
         this.getSprintStatuses()
 
@@ -44,37 +40,17 @@ export default {
     hideModal() {
       this.closeModal(this.$refs['modal'])
     },
-    getProject(projectSlug) {
-      Axios()
-        .get('projects/' + projectSlug + '/?company_slug=' + this.currentCompany.slug)
-        .then((response) => {
-          this.project = {
-            label: response.data.data.name,
-            code: response.data.data.slug,
-          }
-        })
-        .catch((e) => {
-          console.error(e)
-        })
-    },
-
     getProjects() {
       Axios()
         .get('projects/?company_slug=' + this.currentCompany.slug)
         .then((response) => {
-          let data = response.data.data
-          var arr = []
-
-          for (let i = 0; i < data.length; i++) {
-            arr.push({
-              label: data[i].name,
-              code: data[i].slug,
-            })
+          this.projects = response.data.data
+          if ( this.$route.params.projectSlug ){
+            this.project = this.$route.params.projectSlug
+          } else {
+            this.project = this.projects[0].slug
           }
-          this.projects = arr
-        })
-        .catch((e) => {
-          console.error(e)
+          this.projectLoading = false
         })
     },
 
@@ -82,54 +58,13 @@ export default {
       Axios()
         .get('sprints/statuses?company_slug=' + this.currentCompany.slug)
         .then((response) => {
-          let data = response.data.data
-          var arr = []
-
-          for (let i = 0; i < data.length; i++) {
-            arr.push({
-              label: data[i].title,
-              code: data[i].slug,
-            })
-          }
-          this.sprintStatuses = arr
+          this.sprintStatuses = response.data.data
+          this.sprintStatus = response.data.data[0].slug
         })
-        .catch((e) => {
-          console.error(e)
-        })
-    },
-
-    validateForm(event) {
-      this.errors = []
-
-      if (!this.project) {
-        this.errors.push(this.$t('Project is required'))
-      }
-
-      if (!this.sprintStatus) {
-        this.errors.push(this.$t('Status is required'))
-      }
-
-      if (!this.sprintName) {
-        this.errors.push(this.$t('Sprint Name is required'))
-      }
-
-      if (!this.sprintDates[0] || !this.sprintDates[1]) {
-        this.errors.push(this.$t('Dates is required'))
-      }
-
-      if (this.errors.length) {
-        return false
-      }
-
-      return true
     },
 
     create(event) {
-      if (!this.validateForm(event)) {
-        event.preventDefault()
-        return
-      }
-
+      
       this.loading = true
 
       let dateStart = new Date(this.sprintDates[0])
@@ -139,7 +74,10 @@ export default {
       let dateFinishFormated = dateFinish.getFullYear() + '-' + (dateFinish.getMonth() + 1) + '-' + dateFinish.getDate()
 
       Axios()
-        .post('sprints/?company_slug=' + this.currentCompany.slug + '&project_slug=' + this.project.code, {
+        .post('sprints/?company_slug=' + 
+          this.currentCompany.slug + 
+          '&project_slug=' + this.project, 
+        {
           title: this.sprintName,
           date_start: dateStartFormated,
           date_finish: dateFinishFormated,
@@ -152,127 +90,108 @@ export default {
           this.$router.push({
             name: 'projects.sprints.show',
             params: {
-              companySlug: data.company.slug,
+              companySlug: this.currentCompany.slug,
               projectSlug: data.project.slug,
               sprintSlug: data.slug,
             },
           })
         })
-        .catch((e) => {
-          console.error(e)
-        })
-    },
-
-    updateSprintGoalText(text) {
-      this.sprintGoal = text
     },
   },
 }
 </script>
 
 <template>
-  <b-modal id="modal" ref="modal" lazy size="lg" :title="$t('Create a Sprint')" hide-header hide-footer>
-    <div class="welcome d-flex justify-content-center align-items-center">
-      <div class="welcome-box">
-        
-        <div class="row">
-          <!--
-          <div class="col-md-5 bg-464DEE d-flex justify-content-center align-items-center">
-            <div class="">
-              <div class="text-left" style="width:400px; margin: 0 auto;">
-                <img src="https://gitscrum-static.s3.amazonaws.com/img/modal.png" style="width:220px" />
-                <div class="mt-15-px ml-5-px">
-                  <span class="tx-18-px txt-26DC8E fw-600">{{ $t('What is Sprint?') }}</span>
-                  <p class="tx-12-px mt-15-px">
-                    <strong>
-                      {{ $t('Sprint_Text1') }}
-                    </strong>
-                    {{ $t('Sprint_Text2') }}
-                  </p>
-                  <p class="tx-12-px mt-15-px">
-                    <strong>{{ $t('Sprint Goal') }}</strong> {{ $t('Sprint_Text3') }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          -->
-          <div class="col-md-12 d-flex justify-content-center align-items-center">
-            <div>
-              <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
-              <div style="max-width: 520px">
-                <h3 class="d-block tx-24-px fw-700 mb-0">{{ $t('Create a Sprint') }}</h3>
-                <span class="d-block tx-14-px txt-9EA9C1 mb-30-px">{{ currentCompany.name }}</span>
-
-                <div v-if="errors.length" class="alert alert-info">
-                  <b>{{ $t('Please correct the following error(s):') }}</b>
-                  <ul>
-                    <li v-for="error in errors" :key="error">{{ error }}</li>
-                  </ul>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group col-md-12">
-                    <label>{{ $t('Project Name') }} *</label>
-                    <v-select v-model="project" :options="projects" :clearable="false"> </v-select>
-                  </div>
-                  <div class="form-group col-md-12">
-                    <label>{{ $t('Sprint Name') }} *</label>
-                    <input v-model="sprintName" type="text" required="true" class="form-control" maxlength="60" />
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label>{{ $t('Project Status') }} *</label>
-                    <v-select v-model="sprintStatus" :options="sprintStatuses" :clearable="false"> </v-select>
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label>{{ $t('Dates') }} *</label>
-                    <DatePicker
-                      v-model="sprintDates"
-                      range
-                      lang="en"
-                      format="YYYY-MM-DD"
-                      confirm
-                      style="width:100%"
-                    ></DatePicker>
-                  </div>
-                  <div class="form-group col-md-12">
-                    <label>{{ $t('Sprint Goals') }}</label>
-                    <Mentions
-                      ref="mentions"
-                      element-type="textarea"
-                      :mention-users="true"
-                      :content-text="sprintGoal"
-                      :company-slug="currentCompany.slug"
-                      :project-slug="project.code"
-                      :element-rows="5"
-                      @update-text="updateSprintGoalText"
-                    ></Mentions>
-                  </div>
-                </div>
-                <div class="mt-10-px d-flex justify-content-end">
-                  <div>
-                    <button v-show="!loading" class="btn btn-secondary" type="button" @click="hideModal">
-                      <span>{{ $t('Cancel') }}</span>
-                    </button>
-                  </div>
-                  <div class="ml-20-px">
-                    <b-button v-show="loading" class="btn btn-primary" type="button">
-                      <span class="mr-10-px">
-                        <b-spinner :label="$t('Loading')" small class="title-loading"></b-spinner>
-                      </span>
-                      <span>{{ $t('Creating Sprint') }}...</span>
-                    </b-button>
-                    <button v-show="!loading" class="btn btn-primary" type="button" @click="create">
-                      <span class="mr-10-px"><font-awesome-icon :icon="['fa', 'plus']"/></span>
-                      <span>{{ $t('Create Sprint') }}</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <b-modal id="modal" ref="modal" hide-header hide-footer>
+    <b-container>
+      <b-row class="mb-3">
+        <b-col>
+          <h3 class="mb-0">{{ $t('Create a Sprint') }}</h3>
+          <span>{{ currentCompany.name }}</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Project Name')">
+            <b-form-select 
+            v-model="project" 
+            :options="projects" 
+            value-field="slug"
+            text-field="name"></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Project Status')">
+            <b-form-select 
+            v-model="sprintStatus" 
+            :disabled="projectLoading"
+            :options="sprintStatuses" 
+            value-field="slug"
+            text-field="title"></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Sprint Name')">
+            <b-form-input 
+            v-model="sprintName" 
+            :disabled="projectLoading"
+            type="text" 
+            maxlength="60" 
+            trim></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Project Name')">
+            <DatePicker
+            v-model="sprintDates"
+            :disabled="projectLoading"
+            range
+            lang="en"
+            format="YYYY-MM-DD"
+            confirm
+            style="width:100%"></DatePicker>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Sprint Goals')">
+            <b-form-textarea 
+            v-model="sprintGoal" 
+            :disabled="projectLoading"
+            rows="1" 
+            max-rows="4"></b-form-textarea>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col align-self="center">
+          <b-link 
+            v-show="!loading" 
+            @click="hideModal" 
+            v-text="$t('Cancel')" />
+        </b-col>
+        <b-col class="text-right">
+          <ButtonLoading
+            :loading="loading"
+            :title="$t('Create Sprint')"
+            :title-loading="$t('Creating')"
+            type="btn-md"
+            mode="button"
+            @action="create"></ButtonLoading>
+        </b-col>
+      </b-row>
+    </b-container>
   </b-modal>
 </template>

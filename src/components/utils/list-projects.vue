@@ -246,9 +246,8 @@ export default {
               </div>
 
               <b-collapse :id="'collapse' + project.slug">
-                <b-card>
-                  <div class="title-7-d mt-1">
-                    {{ $t('Project Progress in Last 7 Days') }}
+                  <div class="small text-uppercase mt-2 pb-1">
+                    <small class="small font-weight-bold">{{ $t('Project Progress in Last 7 Days') }}</small>
                   </div>
                   
                   <apexchart
@@ -257,7 +256,6 @@ export default {
                     :options="chartOptionsTopSpark1"
                     :series="seriesTopSpark(project)"
                     class="mt-1" />
-                </b-card>
               </b-collapse>
 
               <ListLabels

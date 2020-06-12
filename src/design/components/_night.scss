@@ -103,21 +103,17 @@
         .txt-primary-title {
             color: $black-50 !important;
         }
-        .btn-secondary {
-            color: $grey-200;
-            background-color: $grey-900;
-            border-color: $grey-900;
-        }
-        .badge-light {
-            color: $grey-200 !important;
-            background-color: $grey-900 !important;
-            border-color: $grey-900 !important;
-            .btn {
-                color: $grey-200 !important;
-            }
-        }
         .project-list-progress.progress .progress-bar {
             background: $pink-500 !important;
+        }
+        .project-details {
+            .badge.badge-light,
+            .btn,
+            .btn-secondary {
+                color: $grey-100 !important;
+                background-color: $grey-500 !important;
+                border-color: $grey-500 !important;
+            }
         }
     }
     .project-progress.progress .progress-bar {
@@ -128,7 +124,7 @@
         .dropdown-menu {
             background-color: $grey-200 !important;
             .dropdown-item {
-                color: $grey-50 !important;
+                color: $grey-500 !important;
                 &:hover {
                     background-color: $grey-700 !important;
                     border-radius: 4px;
@@ -145,11 +141,13 @@
     }
     .nav-tabs {
         border-bottom: 1px solid $black-700 !important;
+        /*
         .nav-item {
             a {
                 color: $black-700 !important;
             }
         }
+        */
         .nav-link.active {
             border-bottom: 1px solid $black-700 !important;
             background: $black-700 !important;
@@ -394,11 +392,6 @@
             color: $grey-200 !important;
         }
     }
-    textarea {
-        padding: 4px 6px !important;
-        font-size: 14px !important;
-        line-height: 18px !important;
-    }
     .input-title div {
         color: $grey-50 !important;
     }
@@ -546,9 +539,21 @@
     }
     .modal-content .modal-header,
     .modal-content .modal-body {
-        background: $grey-600 !important;
+        /* background: $grey-600 !important; */
     }
     .modal-footer {
         border-top: 1px solid $grey-600 !important;
+    }
+    .card-header small,
+    .card-header .small {
+        color: $grey-100 !important;
+    }
+    .alert,
+    .alert-dark {
+        color: $grey-700 !important;
+        a {
+            color: $grey-700 !important;
+            font-weight: 700;
+        }
     }
 }

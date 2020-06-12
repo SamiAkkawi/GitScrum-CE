@@ -231,13 +231,7 @@
     "Company Owner": "Company Owner",
     "Board Background": "Board Background",
     "Update Background": "Update Background",
-    "Project_Details_Text": "When a project is Public, anyone can access the project and view their tasks. Public projects are in read - only mode for everyone. ",
-    "Project_Details_Text_2": "You can upload a logo image to appear in sidebar of your project. This is a great way to promote your brand on your project. We recommend using image files of less than 500 KB and between 128 x 128 pixels for best results.",
     "Blocker": "Blocker",
-    "What is Sprint?": "What is Sprint?",
-    "Sprint_Text1": "Sprint is one timeboxed iteration of a continuous development cycle. Within a Sprint, planned amount of work has to be completed by the team and made ready for review.",
-    "Sprint_Text2": "Sprint literal meaning is a short race at full speed. Accordingly, teams usually define a short duration of a Sprint up to 2-4 weeks.",
-    "Sprint_Text3": "The Sprint Goal is an objective set for the Sprint that can be met through the implementation of Product Backlog.It provides guidance to the Development Team on why it is building the Increment.As the Development Team works, it does so with the Sprint Goal always in mind. ",
     "Sprint Goal": "Sprint Goal",
     "Dates": "Dates",
     "Drag and drop to upload": "Drag and drop to upload",
@@ -768,5 +762,6 @@
     "Project Private": "Project Private",
     "Invite External Users": "Invite External Users",
     "Invite Internal Users": "Invite Internal Users",
-    "Accepted at XXX": "Accepted at {datetime}"
+    "Accepted at XXX": "Accepted at {datetime}",
+    "Project_Details_Text_2": "You can upload a logo image to appear in sidebar of your project. This is a great way to promote your brand on your project.We recommend using image files of less than 500 KB and between 128 x 128 pixels for best results."
 }

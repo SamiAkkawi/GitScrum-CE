@@ -65,10 +65,9 @@ export default {
           this.$router.push('auth.login')
         })
         .catch((error) => {
-          console.log(error)
           this.loading = false
           this.alertStatus = true
-          this.alertMessage = response.data.message.password
+          this.alertMessage = error.data.message.password
         })
     },
   },

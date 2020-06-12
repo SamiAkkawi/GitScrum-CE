@@ -1,6 +1,7 @@
 <script>
 import MasterHeader from '@layouts/partials/header'
 import MasterHeaderMenuProject from '@layouts/partials/header-menu-project'
+import { isMobile } from 'mobile-device-detect';
 
 export default {
   components: {
@@ -24,7 +25,7 @@ export default {
   </MasterHeader>
 
   <div id="page-padding-left">
-    <div id="header-project-area" class="d-flex justify-content-between align-items-center tpl-main-project-area subheader">
+    <div v-if="!isMobile" id="header-project-area" class="d-flex justify-content-between align-items-center tpl-main-project-area subheader">
       <div>
         <slot name="header-left"></slot>
       </div>

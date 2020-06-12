@@ -138,7 +138,7 @@ export default {
           </div>
         </div>
 
-        <b-table class="table-discussions"  hover :items="userStories" :fields="fields" >
+        <b-table class="table-user-stories"  hover :items="userStories" :fields="fields" >
           <template v-slot:cell(priority)="data" >
             <span
               v-if="data.item.priority"

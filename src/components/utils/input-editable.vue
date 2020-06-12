@@ -3,7 +3,7 @@
 export default {
   props: {
     currentObject: {
-      type: Object,
+      type: Object | Array,
       required: false,
       default: function() {
         return []

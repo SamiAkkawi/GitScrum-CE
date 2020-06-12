@@ -71,7 +71,8 @@
     }
     .btn-outline-primary,
     .btn-secondary {
-        height: 28px;
+        height: 26px;
+        padding: 0.15rem 0.5rem;
     }
     .btn-secondary.not-collapsed {
         background: $grey-A700;

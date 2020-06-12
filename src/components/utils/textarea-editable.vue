@@ -5,7 +5,7 @@ export default {
   components: { VueMarkdownIt },
   props: {
     currentObject: {
-      type: Object,
+      type: Object | Array,
       required: false,
       default: function() {
         return []

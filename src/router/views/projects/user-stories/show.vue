@@ -13,7 +13,15 @@ export default {
     title: 'User Story',
     meta: [{ name: '', content: '' }],
   },
-  components: { Layout, ListUsers, ListTasks, TitleLoading, InputEditable, TextareaEditable, Pagination },
+  components: { 
+    Layout, 
+    ListUsers, 
+    ListTasks, 
+    TitleLoading, 
+    InputEditable, 
+    TextareaEditable, 
+    Pagination, 
+  },
   data() {
     return {
       loading: true,
@@ -132,9 +140,6 @@ export default {
           this.currentPage = response.data.current_page
           this.loading = false
         })
-        .catch((e) => {
-          console.error(e)
-        })
     },
 
     deleteUserStory() {
@@ -222,13 +227,13 @@ export default {
     updateAdditionalInformation(content){
       let params = { additional_information: content.text }
       this.update(params)
-      this.sprint.additional_information = content.text
+      this.userStory.additional_information = content.text
     },
 
     updateAcceptanceCriteria(content){
       let params = { acceptance_criteria: content.text }
       this.update(params)
-      this.sprint.acceptance_criteria = content.text
+      this.userStory.acceptance_criteria = content.text
     },
   },
 }
@@ -281,11 +286,11 @@ export default {
               </template>
 
               <InputEditable v-if="authorize('userStories', 'update')" 
-                :placeholder="$t('Sprint Name')"
+                :placeholder="$t('User Story Name')"
                 :text="userStory.title"
                 :current-object="userStory"
-                @text-updated-blur="updateTitle"  
-                @text-updated-enter="updateTitle"></InputEditable>
+                @text-updated-blur="titleUpdate"  
+                @text-updated-enter="titleUpdate"></InputEditable>
                 <span v-else class="vlabeledit-label" v-text="userStory.title" />
                 
                 <div class="d-flex justify-content-between align-items-center">
@@ -303,7 +308,7 @@ export default {
                   <b-link
                     v-if="authorize('userStories', 'update')" 
                     class="small tx-uppercase"
-                    :title="$t('Delete Sprint')"
+                    :title="$t('Delete User Story')"
                     @click="deleteUserStory">
                     <small class="small font-weight-bold">
                     <font-awesome-icon :icon="['far', 'trash']" class="mr-5-px" style="font-size:12px; color: #909CB8;" />
@@ -340,23 +345,24 @@ export default {
               :lead="userStory.stats.worked_hours" 
               class="sprint-jumbotron-yellow">
                 <p><span class="d-block">{{ $t('Hours Worked') }}</span>
-                  <b-link class="small" @click="downloadExcel">
+                  <b-link
+                  class="small" @click="downloadExcel">
                     {{ $t('Download TimeSheet') }}
                   </b-link></p>
               </b-jumbotron>
               <b-jumbotron 
-              v-if="userStory.stats.story_points" 
+              v-if="userStory.stats && userStory.stats.story_points" 
               :lead="userStory.stats.story_points" 
               class="sprint-jumbotron-lime">
                 <p v-text="$t('Effort')"></p>
               </b-jumbotron>
               <b-jumbotron 
-              v-if="userStory.stats" 
+              v-if="userStory.stats.total_tasks"
               :lead="userStory.stats.closed_tasks + ' / ' + userStory.stats.total_tasks" 
               class="sprint-jumbotron-blue">
                 <p v-text="$t('Tasks')"></p>
               </b-jumbotron>
-              <b-card :header="$t('User Story Team')">
+              <b-card v-if="userStory.users.length" :header="$t('User Story Team')">
                 <ListUsers
                   :link="true"
                   :users="userStory.users"
@@ -372,7 +378,7 @@ export default {
                   v-if="authorize('userStories', 'update')" 
                   :placeholder="$t('User Story')"
                   :text="userStory.additional_information"
-                  :current-object="sprint"
+                  :current-object="userStory"
                   @text-updated-blur="updateAdditionalInformation"  
                   @text-updated-enter="updateAdditionalInformation"></TextareaEditable>
                   <span v-else class="vlabeledit-label" v-text="userStory.additional_information"></span>
@@ -383,7 +389,7 @@ export default {
                   v-if="authorize('userStories', 'update')" 
                   :placeholder="$t('User Story')"
                   :text="userStory.acceptance_criteria"
-                  :current-object="sprint"
+                  :current-object="userStory"
                   @text-updated-blur="updateAcceptanceCriteria"  
                   @text-updated-enter="updateAcceptanceCriteria"></TextareaEditable>
                   <span v-else class="vlabeledit-label" v-text="userStory.acceptance_criteria"></span>
@@ -395,7 +401,22 @@ export default {
           </b-col>
           <b-col cols="9">
             <b-card>
-              <ListTasks class="pl-2 pr-3" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+              <ListTasks v-if="tasks.length" class="pl-2 pr-3" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
+              <b-alert v-if="!tasks.length" show variant="dark">
+                <h6 class="mb-0">
+                  <b-link
+                    v-if="authorize('userStories', 'update')"
+                    :to="{
+                    name: 'projects.user-stories.assign-tasks',
+                    params: {
+                      companySlug: $route.params.companySlug,
+                      projectSlug: $route.params.projectSlug,
+                      userStorySlug: $route.params.userStorySlug } }"
+                    class="text-primary"
+                    v-text="$t('Assign task to this User Story')">
+                  </b-link>
+                </h6>
+              </b-alert>
             </b-card>
             <Pagination 
               :total-pages="totalPages" 

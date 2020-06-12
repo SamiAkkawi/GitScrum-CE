@@ -4,6 +4,7 @@ import ButtonLoading from '@components/utils/button-loading'
 import { modalManager } from '@state/helpers'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
+import { faTrumpet } from '@fortawesome/pro-regular-svg-icons'
 
 export default {
   components: { vSelect, ButtonLoading },
@@ -29,7 +30,7 @@ export default {
   },
   watch: {
     projectIsPrivate(){
-      console.log(this.projectIsPrivate)
+      
     },
     statusModal(object) {
       if (object.item.name === 'projectCreate') {
@@ -51,7 +52,6 @@ export default {
   },
   methods: {
     hideModal() {
-      
       this.closeModal(this.$refs['modal'])
     },
 
@@ -59,10 +59,20 @@ export default {
       Axios()
         .get('projects/parents/?company_slug=' + this.currentCompany.slug)
         .then((response) => {
-          this.projectsParents = response.data.data
-        })
-        .catch((e) => {
-          console.error(e)
+          let projects = response.data.data
+
+          if ( this.$route.params.projectSlug ){
+            let arr = []
+            for (var i = 0; i < projects.length; i++) {
+              if ( this.$route.params.projectSlug !== projects[i].slug ){
+                arr[i] = projects[i]
+              }
+            }
+            this.projectsParents = arr
+          } else {
+            this.projectsParents = projects
+          }
+          
         })
     },
 
@@ -71,43 +81,16 @@ export default {
         .get('projects/statuses/?company_slug=' + this.currentCompany.slug)
         .then((response) => {
           this.projectsStatus = response.data.data
-          this.projectsStatusSelect = this.projectsStatus[this.projectsStatusSelect]
+          this.projectsStatusSelect = this.projectsStatus[0].id
         })
-        .catch((e) => {
-          console.error(e)
-        })
-    },
-
-    validateForm(event) {
-      this.errors = []
-
-      if (!this.projectName) {
-        this.errors.push('Project name required.')
-      }
-
-      if (!this.projectsStatusSelect) {
-        this.projectsStatusSelect.id = 0
-      }
-
-      if (this.errors.length) {
-        return false
-      }
-
-      return true
     },
 
     create(event) {
-      if (!this.validateForm(event)) {
-        event.preventDefault()
-        return
-      }
 
-      this.loading = true
-
-      console.log(this.projectIsPrivate)
+      this.loading = faTrumpet
 
       let parentId = this.projectsParentSelect ? this.projectsParentSelect.id : null
-      console.log(this.projectsStatusSelect)
+      
       Axios()
         .post('projects/?company_slug=' + this.currentCompany.slug, {
           company_slug: this.currentCompany.slug,
@@ -129,7 +112,6 @@ export default {
             },
           })
         })
-        .catch((error) => {})
     },
 
     advanced(){
@@ -140,96 +122,99 @@ export default {
 </script>
 
 <template>
-  <b-modal
-    id="modal"
-    ref="modal"
-    lazy
-    size="lg"
-    :title="$t('Create a new Project')"
-    hide-header
-    hide-footer
-    @ok="create"
-  >
-    <div class="welcome d-flex justify-content-center align-items-center">
-      <div class="welcome-box">
+  <b-modal id="modal" ref="modal" hide-header hide-footer>
 
-        <div class="col-md-12 d-flex justify-content-center align-items-center">
-            <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
-            <div class="welcome-content">
-              <h3 class="d-block tx-24-px fw-700 mb-0">{{ $t('Create a Project') }}</h3>
-              <span class="d-block tx-14-px txt-9EA9C1 mb-30-px">{{ currentCompany.name }}</span>
-
-              <div v-if="errors.length" class="alert alert-info">
-                <b>{{ $t('Please correct the following error(s):') }}</b>
-                <ul>
-                  <li v-for="error in errors" :key="error">{{ error }}</li>
-                </ul>
-              </div>
-
-              <div class="form-row">
-                
-                <div class="form-group col-md-12">
-                  <label>{{ $t('Project Name') }} *</label>
-                  <input
-                    v-model="projectName"
-                    :clearable="false"
-                    type="text"
-                    autocomplete="off"
-                    maxlength="45"
-                    class="form-control project-title"
-                  />
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <b-form-checkbox
-                    v-model="projectIsPrivate"
-                    value="1"
-                    unchecked-value="0"
-                  >
-                    {{ $t('Project Private') }}
-                  </b-form-checkbox>
-
-                  <a href="javascript:;" class="link-advanced" @click="advanced">Advanced</a>
-              </div>
-              
-
-              <hr />
-
-              <div v-show="advancedShow" class="form-row">
-                <div class="form-group col-md-6">
-                  <label>{{ $t('Optional Code (e.g. PROJ01)') }}</label>
-                  <input v-model="projectCode" type="text" maxlength="6" class="form-control" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label>{{ $t('Project Status') }} *</label>
-                  <v-select v-model="projectsStatusSelect" :options="projectsStatus" label="label" :clearable="false">
-                  </v-select>
-                </div>
-                <div class="form-group col-md-12">
-                  <label>{{ $t('Project Parent') }}</label>
-                  <v-select v-model="projectsParentSelect" :options="projectsParents" label="name"></v-select>
-                </div>
-                <div class="form-group col-md-12">
-                  <label>{{ $t('Project Goals') }}</label>
-                  <b-form-textarea v-model="projectDescription" rows="5" max-rows="8" no-auto-shrink></b-form-textarea>
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-end">
-                <button v-show="!loading" class="btn btn-secondary" type="button" @click="hideModal">{{ $t('Cancel') }}</button>
-                <div class="ml-20-px">
-                  <ButtonLoading
-                  mode="button"
-                  :title="$t('Create Project')"
-                  :title-loading="$t('Creating Project')"
-                  :loading="loading"
-                  @action="create"></ButtonLoading>
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
+    <b-container>
+      <b-row class="mb-3">
+        <b-col>
+          <h3 class="mb-0">{{ $t('Create a Project') }}</h3>
+          <span>{{ currentCompany.name }}</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('Project Name')">
+            <b-form-input 
+            v-model="projectName" 
+            type="text" 
+            maxlength="45" trim></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="d-flex justify-content-between mb-2">
+          <b-form-checkbox
+            v-model="projectIsPrivate"
+            value="1"
+            unchecked-value="0">
+            {{ $t('Project Private') }}
+          </b-form-checkbox>
+          <b-link class="link-advanced" @click="advanced">{{ $t('Advanced') }}</b-link>
+        </b-col>
+      </b-row>
+      <b-row v-show="advancedShow" class="mt-3">
+        <b-col>
+          <b-form-group
+            :label="$t('Optional Code (e.g. PROJ01)')">
+            <b-form-input 
+            v-model="projectCode"
+            type="text" 
+            maxlength="6" 
+            trim></b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col>
+          <b-form-group
+            :label="$t('Project Status')">
+            <b-form-select 
+            v-model="projectsStatusSelect" 
+            :options="projectsStatus"
+            value-field="id"
+            text-field="label"></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row v-show="advancedShow">
+        <b-col>
+          <b-form-group
+            :label="$t('Project Parent')">
+            <b-form-select 
+            v-model="projectsParentSelect" 
+            :options="projectsParents"
+            value-field="slug"
+            text-field="name"></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row v-show="advancedShow">
+        <b-col>
+          <b-form-group
+            :label="$t('Project Goals')">
+            <b-form-textarea 
+            v-model="projectDescription" 
+            rows="2" 
+            max-rows="4"></b-form-textarea>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row class="mt-2">
+        <b-col align-self="center">
+          <b-link 
+            v-show="!loading" 
+            @click="hideModal" 
+            v-text="$t('Cancel')" />
+        </b-col>
+        <b-col class="text-right">
+          <ButtonLoading
+            :loading="loading"
+            :title="$t('Create Project')"
+            :title-loading="$t('Creating')"
+            type="btn-md"
+            mode="button"
+            @action="create"></ButtonLoading>
+        </b-col>
+      </b-row>
+    </b-container>
   </b-modal>
 </template>

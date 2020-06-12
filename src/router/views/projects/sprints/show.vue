@@ -409,7 +409,7 @@ export default {
               class="sprint-jumbotron-blue">
                 <p v-text="$t('Tasks')"></p>
               </b-jumbotron>
-              <b-card :header="$t('Sprint Team')">
+              <b-card v-if="sprint.users.length" :header="$t('Sprint Team')">
                 <ListUsers
                   :link="true"
                   :users="sprint.users"
@@ -431,7 +431,7 @@ export default {
               </b-tabs>
             </b-card>
 
-            <b-card class="mt-2">
+            <b-card v-if="tasks.length" class="mt-2">
               <ListTasks class="pl-2 pr-3" :items="tasks" :search="true" title="" :flag="true"></ListTasks>
             </b-card>
 
