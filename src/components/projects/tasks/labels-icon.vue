@@ -28,32 +28,14 @@ export default {
       labels: [],
       label: this.getLabelDefault(),
       newLabel:  this.getLabelDefault(),
-      labelSelected: '',
       labelProps: { blank: true, width: 15, height: 15, class: 'm1' },
       alertMessage: '',
       alertStatus: false,
     }
   },
-  watch: {
-    labelSelected: function(val, oldval) {
-      if (val === null) {
-        let color = this.label.color
-        this.label = this.getLabelDefault()
-        this.label.color = color
-      } else if (val.id) {
-        this.label = val
-      } else {
-        let color = this.label.color
-        this.label = this.getLabelDefault()
-        this.label.title = val.title ? val.title : val
-        this.label.color = color
-      }
-    },
-  },
   methods: {
     getLabelDefault() {
       return {
-        id: null,
         title: '',
         color: '#000000',
       }
@@ -100,7 +82,6 @@ export default {
           this.task.labels.push(response.data.data)
           this.getAllLabels()
           this.newLabel = this.getLabelDefault()
-          this.labelSelected = ''
           this.boxSelected = 'list'
           this.btnAddLoading = false
         })
@@ -108,7 +89,7 @@ export default {
 
     editLabel(label) {
       this.btnLoading = true
-
+      
       Axios()
         .put(
           'task-labels/' +

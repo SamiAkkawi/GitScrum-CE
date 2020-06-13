@@ -2,9 +2,9 @@
 import Layout from '@layouts/tpl-main-project'
 import Axios from '@utils/axios'
 import DatePicker from 'vue2-datepicker'
-import ListUsers from '@components/utils/list-users'
 import TitleLoading from '@components/utils/title-loading'
 import ButtonLoading from '@components/utils/button-loading'
+import ListTasks from '@components/projects/tasks/list-tasks'
 import Pagination from '@components/utils/pagination'
 import moment from 'moment'
 import { modalManager } from '@state/helpers'
@@ -17,10 +17,10 @@ export default {
   components: {
     Layout,
     DatePicker,
-    ListUsers,
     TitleLoading,
     ButtonLoading,
-    Pagination
+    Pagination,
+    ListTasks
   },
   data() {
     return {
@@ -42,9 +42,10 @@ export default {
       resume: [],
       
       fields: [
+        
         {
-          key: 'user.name',
-          label: this.$t('Time Tracking'),
+          key: 'title',
+          label: this.$t('Task'),
         },
         {
           key: 'time.total',
@@ -315,28 +316,8 @@ export default {
         </div>
 
         <b-table class="table-time-tracking" hover :items="items" :fields="fields" >
-          <template v-slot:cell(user.name)="data" >
-            
-            <b-link v-if="data.item.task.code" href="#" class="txt-primary-title" @click="modal('task', data.item.task)">{{ data.item.task.code }} - {{ data.item.task.title }}</b-link >
-            <b-link v-if="!data.item.task.code" href="#" class="txt-primary-title" @click="modal('task', data.item.task)">{{ data.item.task.title }}</b-link>
-
-            <div class="date-time">
-              <span v-text="data.item.time.start.timezone"></span>
-                - 
-              <span v-text="data.item.time.end.timezone"></span>
-               <div class="time-comment" v-text="data.item.comment"></div>
-            </div>
-
-            <div class="box-useravatar">
-              <router-link
-              :to="{
-                name: 'profile.user',
-                params: { username: data.item.user.username },
-              }"
-              >
-                {{data.item.user.name}}
-              </router-link>
-            </div>
+          <template v-slot:cell(title)="data" >
+            <ListTasks :items="[data.item.task]" :modal-flag="false"></ListTasks>
           </template>
           <template v-slot:cell(time.total)="data" >
             <div class="worked">
@@ -348,7 +329,6 @@ export default {
             > {{ $t('Delete') }} </a>
           </template>
         </b-table>
-
         <Pagination 
           :total-pages="totalPages" 
           :page="currentPage" 

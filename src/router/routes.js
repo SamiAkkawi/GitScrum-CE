@@ -488,6 +488,16 @@ export default [{
         component: () => lazyLoadView(
             import ('@views/projects/settings/api')),
     },
+    // Project Integrations
+    {
+        path: '/:companySlug/:projectSlug/integrations',
+        name: 'project.settings.integrations',
+        meta: {
+            authRequired: true,
+        },
+        component: () => lazyLoadView(
+            import ('@views/projects/settings/integrations')),
+    },
     {
         path: '/ooops',
         name: 'ooops',

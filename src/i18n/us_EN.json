@@ -763,5 +763,6 @@
     "Invite External Users": "Invite External Users",
     "Invite Internal Users": "Invite Internal Users",
     "Accepted at XXX": "Accepted at {datetime}",
-    "Project_Details_Text_2": "You can upload a logo image to appear in sidebar of your project. This is a great way to promote your brand on your project.We recommend using image files of less than 500 KB and between 128 x 128 pixels for best results."
+    "Project_Details_Text_2": "You can upload a logo image to appear in sidebar of your project. This is a great way to promote your brand on your project.We recommend using image files of less than 500 KB and between 128 x 128 pixels for best results.",
+    "Project_Details_Text": "When a project is Public, anyone can access the project and view their tasks. Public projects are in read - only mode for everyone. "
 }

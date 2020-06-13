@@ -441,7 +441,7 @@ export default {
               :use-custom-slot="true"
               @vdropzone-complete="afterCompleteBackground">
                   <h3 class="h6 font-weight-bold">{{ $t('Drag and drop to upload') }}</h3>
-                  <h6v class="small">...{{ $t('or click to select a file from your computer') }}</h6v>
+                  <h6 class="small">...{{ $t('or click to select a file from your computer') }}</h6>
               </vue-dropzone>
               <b-img v-if="project.background" :src="project.background" class="mt-2" style="width:100%"></b-img>
               <b-link v-if="project.background" @click="removeBackground">{{ $t('Remove Background') }}</b-link>

@@ -102,7 +102,7 @@ export default {
 </script>
 
 <template>
-  <b-modal id="modal" ref="modal" hide-header hide-footer>
+  <b-modal id="modal-black" ref="modal" hide-header hide-footer size="xx">
     <b-container>
       <b-row class="mb-3">
         <b-col>

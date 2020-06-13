@@ -32,7 +32,7 @@ export default {
     toggleModal() {
       this.$refs['modal'].toggle('#toggle-btn')
     },
-    addCompany(){
+    create(){
       if(this.companyName.length === 0){
         return alert(this.$t('Company name is mandatory'))
       }
@@ -61,48 +61,41 @@ export default {
 </script>
 
 <template>
-  <b-modal id="modal" ref="modal" hide-footer lazy size="md">
-    <div slot="modal-title">
-      <div class="d-flex" style="align-items: center;">
-        <span class="title">{{ $t('Create another company') }}</span>
-        <div class="d-flex">
-          <b-spinner
-            v-show="loading"
-            :label="$t('Loading')"
-            variant="secondary"
-            small
-            class="title-loading"
-          ></b-spinner>
-        </div>
-      </div>
-      <span class="subTitle">{{ $t('Enter company name') }}</span>
-    </div>
-    <div class="modalContent">
-      <div class="project-user-story-priorities">
-        <b-card>
-          <div class="col-sm-12">
-            <div class="col-sm-12">
-              <div class="input-group">
-                <input
-                  v-model="companyName"
-                  maxlength="45"
-                  class="form-control"
-                  type="text"
-                  :placeholder="$t('Company name')"
-                />
-                <div class="d-flex ml-1 align-items-center checklist-save-btn">
-                  <ButtonLoading
-                    :loading="btnLoading"
-                    :title="$t('Create')"
-                    :title-loading="$t('Loading')"
-                    @action="addCompany"
-                  ></ButtonLoading>
-                </div>
-              </div>
-            </div>
-          </div>
-        </b-card>
-      </div>
-    </div>
+  <b-modal id="modal-black" ref="modal" hide-header hide-footer size="xx">
+    <b-container>
+      <b-row class="mb-3">
+        <b-col>
+          <h3 class="mb-0">{{ $t('Create another company') }}</h3>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            :label="$t('New company name')">
+            <b-form-input 
+            v-model="companyName" 
+            type="text" 
+            maxlength="45" trim></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row class="mt-2">
+        <b-col cols="4" align-self="center">
+          <b-link 
+            v-show="!loading" 
+            @click="hideModal" 
+            v-text="$t('Cancel')" />
+        </b-col>
+        <b-col class="text-right">
+          <ButtonLoading
+            :loading="loading"
+            :title="$t('Create New Company')"
+            :title-loading="$t('Creating')"
+            type="btn-md"
+            mode="button"
+            @action="create"></ButtonLoading>
+        </b-col>
+      </b-row>
+    </b-container>
   </b-modal>
 </template>

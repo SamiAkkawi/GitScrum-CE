@@ -16,7 +16,7 @@ export default {
         },
         {
           label: this.$t('Integrations'),
-          route: 'projects.integrations',
+          route: 'project.settings.integrations',
         },
         {
           space: true,

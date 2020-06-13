@@ -668,11 +668,13 @@ a.badge-secondary.focus {
     }
 }
 
-.modal-content {
-    background: $black-500 !important;
-    color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.5);
+#modal-black {
+    .modal-content {
+        background: $black-500 !important;
+        color: #fff;
+        border-radius: 6px;
+        box-shadow: 0 5px 14px rgba(0, 0, 0, 0.5);
+    }
 }
 
 .project-details {

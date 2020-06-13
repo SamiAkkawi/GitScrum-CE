@@ -1,9 +1,13 @@
 <script>
 import Axios from '@utils/axios'
 import moment from 'moment'
+import ButtonLoading from '@components/utils/button-loading'
 import { BroadcastChannel } from 'broadcast-channel'
 
 export default {
+  components: { 
+    ButtonLoading
+  },
   props: {
     displayTitle: {
       type: Boolean,
@@ -25,6 +29,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       time: '00:00:00',
       btnStart: true,
       btnStop: false,
@@ -36,7 +41,6 @@ export default {
       clock: false,
       startedUTC: false,
       channel: null,
-      modalTitle: 'Stop work log time on task',
       modalClockTime: '00:00:00',
       timerLogComment: '',
       timeTrackerPreloaded: false,
@@ -182,12 +186,16 @@ export default {
       this.clockStop()
       this.sendTime('end')
       this.timerLogComment = ''
+      this.task.time_tracker = null
+      this.task.stats.time_trackers = this.task.stats.time_trackers + 1
+      this.closeModal(this.$refs['modal'])
     },
     cancelTimeSave() {
       this.clockStop()
       this.sendTime('cancel')
       this.timerLogComment = ''
       this.task.time_tracker = null
+      this.closeModal(this.$refs['modal'])
     },
     reset() {
       this.clockStop()
@@ -210,9 +218,7 @@ export default {
 <template>
   <div class="badge badge-light mb-1 task-timer timer-content" @click.stop.prevent="clickhandler">
     <h5 v-if="displayTitle" class="mg-b-10">{{ $t('Task Time Tracking') }}</h5>
-
     <b-spinner v-if="!clockIsReady" v-show="!clockIsReady" :label="$t('Loading')" variant="secondary" small></b-spinner>
-
     <div v-else class="d-flex justify-content-between ">
       <div id="time">{{ time }}</div>
       <div class="ml-1">
@@ -228,32 +234,52 @@ export default {
         @click.stop.prevent="stop" />
        </div>
     </div>
-
     <b-modal
-      id="modal"
+      id="modal-black"
       ref="modal"
       class="modalConfirmBody"
-      size="md"
-      :title="modalTitle"
-      ok-title="Confirm"
-      cancel-title="Discard"
-      @ok="confirmTimeSave"
-      @cancel="cancelTimeSave"
-    >
-      <div class=" modalTimer card pd-t-6 pd-r-10 pd-l-10  mg-t-20 mg-b-20 mg-l-20 mg-r-20">
-        <p class=" mg-l-20 mg-r-20"> {{ $t('Work Log') }}: {{ modalClockTime }}</p>
-        <hr />
-        <p class=" mg-l-20 mg-r-20 tx-bold ">{{ task.title }}</p>
-      </div>
-      <div class="pd-t-6 pd-r-0  mg-t-20 mg-b-20 mg-l-20 mg-r-20">
-        <b-form-textarea
-          v-model="timerLogComment"
-          :placeholder="$t('Write a comment')"
-          trim
-          rows="3"
-          max-rows="6"
-        ></b-form-textarea>
-      </div>
+      size="xxx" hide-header hide-footer>
+      <b-container>
+        <b-row class="mb-3">
+          <b-col>
+            <h3 class="mb-0">{{ $t('Stop work log time on task') }}</h3>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <h5>{{ task.title }}</h5>
+            <hr>
+            <h6><strong>{{ $t('Work Log') }}</strong>: {{ modalClockTime }}</h6>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-form-textarea
+            v-model="timerLogComment"
+            :placeholder="$t('Describe how time was used for this task')"
+            trim
+            rows="3"
+            max-rows="6"></b-form-textarea>
+          </b-col>
+        </b-row>
+        <b-row class="mt-2">
+          <b-col align-self="center">
+            <b-link 
+              v-show="!loading" 
+              @click="cancelTimeSave" 
+              v-text="$t('Discard this time spent')" />
+          </b-col>
+          <b-col class="text-right">
+            <ButtonLoading
+              :loading="loading"
+              :title="$t('Confirm')"
+              :title-loading="$t('Adding')"
+              type="btn-md"
+              mode="button"
+              @action="confirmTimeSave"></ButtonLoading>
+          </b-col>
+        </b-row>
+      </b-container>
     </b-modal>
   </div>
 </template>

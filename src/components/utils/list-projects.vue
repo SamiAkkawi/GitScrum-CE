@@ -153,8 +153,7 @@ export default {
       backdrop
       shadow
       right
-      class="sidebar-project-labels"
-    >
+      class="sidebar-project-labels">
       <template v-slot="{ hide }">
         <div>
           <div class="p-2">
