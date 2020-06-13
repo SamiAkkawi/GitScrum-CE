@@ -266,13 +266,10 @@ export default {
                   v-model="inviteEmails[invite]"
                   type="email"
                   :placeholder="$t('Email')"
-                  trim
-                ></b-form-input>
-
+                  trim ></b-form-input>
               </div>
             </div>
           </div>
-
           <ButtonLoading 
             :loading="sendInvitesLoading"
             :title="$t('Send Invite')"
@@ -281,11 +278,16 @@ export default {
             type="btn-md"
             class="d-flex justify-content-end"
             @action="sendInvites"></ButtonLoading>
-
         </b-tab>
         <b-tab :title="$t('Invite Internal Users')" @click="getListCompanyTeamMembers">
           
-            <div style="height:208px; overflow-y:auto;">
+          <b-spinner
+            v-show="loading"
+            :label="$t('Loading')"
+            variant="secondary"
+            small class="ml-2 title-loading"></b-spinner>
+
+            <div v-show="!loading" style="height:208px; overflow-y:auto;">
               <b-table class="table-small" hover :items="listCompanyTeamMembers" :fields="fields" >
                 <template v-slot:cell(user.name)="data">
                   <div class="d-flex align-items-center">
@@ -295,7 +297,7 @@ export default {
                 </template>
                 <template v-slot:cell(user.username)="data">
                   <div class="d-flex justify-content-end">
-                    <b-button size="sm" @click="addTeamMember(data.item.user.username)">Add to Project</b-button>
+                    <b-button size="sm" @click="addTeamMember(data.item.user.username)">{{ $t('Add User to Project') }}</b-button>
                   </div>
                 </template>
               </b-table>

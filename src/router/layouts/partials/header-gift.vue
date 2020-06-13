@@ -10,6 +10,11 @@ export default {
     return {
       gifts: [
         {
+          title: 'Huge UI/UX update and Dark mode',
+          content: 'Intense improvements to the GitScrum interface.',
+          when: '2020-06-13 12:00:00',
+        },
+        {
           title: 'Advanced Filters for Tasks',
           content: 'Use advanced filters to find your tasks within the project board.',
           when: '2020-05-09 09:00:00',

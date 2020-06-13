@@ -132,6 +132,9 @@
                     border-color: transparent;
                 }
             }
+            a {
+                color: $black-700 !important;
+            }
         }
         .btn:focus,
         .btn:active {
@@ -588,6 +591,14 @@
         }
         .page-link:focus {
             box-shadow: none !important;
+        }
+    }
+    .b-dropdown-text {
+        strong {
+            color: $grey-50 !important;
+        }
+        span {
+            color: $grey-200;
         }
     }
 }
