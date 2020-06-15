@@ -4,7 +4,7 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 10px -5px, rgba(0, 0, 0, 0.14) 0px 16px 24px 2px, rgba(0, 0, 0, 0.12) 0px 6px 30px 5px;
     .col-4 {
         min-height: calc(100vh - 15px);
-        padding: 3px 30px;
+        padding: 0 30px;
     }
     .badge-light {
         margin-bottom: 0;
@@ -521,9 +521,6 @@
         font-size: 12px !important;
         font-weight: 400 !important;
         height: calc(1.5em + 10px);
-    }
-    .custom-control.custom-checkbox {
-        font-size: 12px !important;
     }
     .list-inline-item:not(:last-child) {
         margin-right: 0;

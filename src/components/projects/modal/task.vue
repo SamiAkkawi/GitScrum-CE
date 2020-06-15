@@ -368,12 +368,12 @@ export default {
               <b-col cols="1"></b-col>
               <b-col>
                 <div class="d-flex justify-content-between line-1">
-                  <div class="d-flex">
+                  <div class="d-flex align-items-center">
                     <WorkflowsIcon 
                       :task="task" 
                       :activities="refreshActivities" 
                       class="mr-2"></WorkflowsIcon>
-                    <div class="badge mr-2">
+                    <div class="mr-2">
                       <b-form-checkbox
                         v-model="task.settings.is_archived"
                         :disabled="!authorize('tasks', 'update', checkMyTask(task))"
@@ -585,8 +585,8 @@ export default {
             <Comments :task="task"></Comments>
           </b-col>
           <b-col cols="4" :style="(task.type) ? 'background: ' + opacityColor(task.type.color, '0.2') : ''">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="d-flex align-items-center badge pl-0">
+            <div class="d-flex justify-content-between mb-1">
+                <div class="d-flex align-items-center pl-0 mt-4">
                   <b-form-checkbox
                     v-model="task.settings.is_blocker"
                     :disabled="!authorize('tasks', 'update', checkMyTask(task))"

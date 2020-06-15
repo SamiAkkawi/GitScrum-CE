@@ -51,8 +51,12 @@ export default {
         if (this.fields[i].meta) {
           let selectableOptions = []
           if ( this.fields[i].type === 'select' ){
-            selectableOptions = this.fields[i].meta.split(',');
-            this.$set(this.fields[i], 'selectableOptions', selectableOptions)
+            try{
+              selectableOptions = this.fields[i].meta.split(',');
+              this.$set(this.fields[i], 'selectableOptions', selectableOptions)
+            } catch (err) {
+
+            }
           }
         }
       }

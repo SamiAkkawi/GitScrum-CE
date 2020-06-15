@@ -559,6 +559,8 @@ a.badge-secondary.focus {
     font-size: 44px;
     line-height: 30px !important;
     color: $grey-800;
+    top: 14px;
+    position: relative;
     &:focus,
     &:hover {
         background: transparent !important;
@@ -740,4 +742,9 @@ BASE
             margin-left: 10px !important;
         }
     }
+}
+
+.custom-switch {
+    font-size: 13px;
+    line-height: 25px;
 }
