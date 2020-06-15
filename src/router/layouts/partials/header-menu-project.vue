@@ -206,7 +206,7 @@ export default {
         :sidebar-status="sidebarStatus"></ProjectBoardFilters>
     </b-sidebar>
     <b-progress class="project-progress" :value="project.percent" :max="100"></b-progress>
-    <SidebarMenu :menu="menu" :collapsed="getMenuProjectState()" @toggle-collapse="onToggleCollapse">
+    <SidebarMenu :menu="menu" :collapsed="false" @toggle-collapse="onToggleCollapse">
       <div slot="header">
         <div id="sidebar-left" class="sidebar-left">
           <div class="d-flex justify-content-start">
