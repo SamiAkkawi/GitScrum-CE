@@ -317,7 +317,7 @@ export default {
 
         <b-table class="table-time-tracking" hover :items="items" :fields="fields" >
           <template v-slot:cell(title)="data" >
-            <ListTasks :items="[data.item.task]" :modal-flag="false"></ListTasks>
+            <ListTasks :items="[data.item.task]" :modal-flag="false" :display-timer="false"></ListTasks>
           </template>
           <template v-slot:cell(time.total)="data" >
             <div class="worked">

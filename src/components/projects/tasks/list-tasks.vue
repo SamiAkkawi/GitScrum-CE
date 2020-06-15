@@ -33,6 +33,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    displayTimer: {
+      type: Boolean,
+      required: false,
+      default: true,
     }
   },
   data() {
@@ -141,7 +146,7 @@ export default {
               {{ item.type.title }}
             </span>
             <span v-if="item.effort" class="badge badge-primary badge-light"> {{ item.effort.title }} </span>
-            <Timer v-if="item.timer && authorize('tasks', 'read')" :task="item"></Timer>
+            <Timer v-if="displayTimer && item.timer && authorize('tasks', 'read')" :task="item"></Timer>
           </div>
         </div>
         <div v-if="displayAssignees" class="ml-2">
