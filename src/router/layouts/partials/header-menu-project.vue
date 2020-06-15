@@ -37,8 +37,6 @@ export default {
   
   mounted(){
     this.$store.dispatch('tasksArchived/setIsArchived', this.btnOptionSelected)
-    let state = this.getMenuProjectState()
-    this.onToggleCollapse(state)
     this.setBackground()
   },
   created() {
@@ -138,32 +136,6 @@ export default {
         }
       }
 
-    },
-
-    onToggleCollapse(collapsed) {
-
-      if(collapsed){
-        localStorage.setItem('MENU_PROJECT_COLLAPSED', 1)
-
-        if (document.getElementById('page-padding-left'))
-          document.getElementById('page-padding-left').style.paddingLeft = "50px";
-       
-      } else {
-
-        localStorage.removeItem('MENU_PROJECT_COLLAPSED')
-        
-        if (document.getElementById('page-padding-left'))
-          document.getElementById('page-padding-left').style.paddingLeft = '240px';
-        
-      }
-
-    },
-    getMenuProjectState(){
-      if (isMobile){
-        return true
-      }
-      let state = Boolean(localStorage.getItem('MENU_PROJECT_COLLAPSED'))
-      return state
     },
 
     openTaskFilters(){
