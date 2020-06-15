@@ -37,17 +37,6 @@ export default {
       }
       
     },
-    checkUpgrade() {
-      if (
-        this.currentCompany != null &&
-        this.currentCompany.subscription === 'free' &&
-        this.$cookies.get('chosen_plan')
-      ) {
-        return true
-      }
-
-      return false
-    },
     gaClickLogo(){
       this.$ga.event('header_bar', 'click_logo')
       this.$router.push({ name: 'workspaces.projects' })
@@ -61,10 +50,5 @@ export default {
     <span class="cursor-pointer" @click="gaClickLogo">
       <img id="companyLogo" style="max-width: 122px; max-height: 22px; margin-left: 8px;" :src="data.logo_header" :alt="data.name" :title="data.name" />
     </span>
-    <div v-if="checkUpgrade()">
-      <span class="badge badge-danger upgrade-account">
-        <a :href="'/subscription/checkout/' + this.$cookies.get('chosen_plan')">Upgrade Account</a>
-      </span>
-    </div>
   </b-navbar-brand>
 </template>
