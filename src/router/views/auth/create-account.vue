@@ -28,7 +28,6 @@ export default {
       invitationCode: null,
       invitationCodeSuccess: null,
       disabledEmail: false,
-      remember: true,
       showSocial: false,
     }
   },
@@ -123,26 +122,16 @@ export default {
         .then((response) => {
           if (response.status === 201) {
 
-            if ( !response.data.email_confirmed ){
-              this.showSignup = false
-              this.showSignupComplete = true
-              this.loading = false
-              return ;
-            }
+            let myip = require('quick-local-ip');
 
-            if (this.invitationCode) {
-              Axios()
-                .post('auth/login', { email: this.email, password: this.password })
-                .then((response) => {
-                  if (response.status === 200) {
-                    this.authentication(response, this.remember)
-                  }
-                })
-            } else {
-              this.showSignup = false
-              this.showSignupComplete = true
-              this.loading = false
-            }
+            Axios()
+            .post('auth/login', { email: params.email, password: params.password, ipv4: myip.getLocalIP4() } )
+            .then((response) => {
+              if (response.status === 200) {
+                this.authentication(response, true)
+              }
+            })
+
           }
         })
         .catch((error) => {
@@ -293,24 +282,13 @@ export default {
 
             <p class="tx-11 lh-16 text-left ml-3 mr-3 mb-4 txt-1E1E2F">
               {{ $t('By clicking Sign in or Sign up with') }}
-              <strong class="fw-700">{{ $t('GitScrum’s') }}</strong
-              >&nbsp;
+              &nbsp;
               <a href="https://site.gitscrum.com/terms-and-conditions/" target="_blank" class="text-primary">
-                {{ $t('Terms and Conditions') }}
-              </a>
+                {{ $t('Terms and Conditions') }}</a>
               {{ $t('and') }}
               <a href="https://site.gitscrum.com/privacy-policy/" target="_blank" class="text-primary">
-                {{ $t('Privacy Policy') }} </a
-              >.
+                {{ $t('Privacy Policy') }} </a>
             </p>
-
-            <!--
-            <div class="mb-4 text-left">
-              <b-form-checkbox id="checkbox-1" v-model="remember" name="checkbox-1">
-                {{ $t('Remember me') }}
-              </b-form-checkbox>
-            </div>
-            -->
 
             <div class="mg-b-20">
               <ButtonLoading

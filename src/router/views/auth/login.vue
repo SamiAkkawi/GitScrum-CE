@@ -25,7 +25,6 @@ export default {
       invitationCodeSuccess: null,
       errors: [],
       disabledEmail: false,
-      remember: true,
       purchase: false,
       showSocial: true
     }
@@ -122,7 +121,7 @@ export default {
       .then((response) => {
         this.email = ''
         this.password = ''
-        this.authentication(response, this.remember)
+        this.authentication(response, true)
       })
       .catch((error) => {
         this.alertMessage = error.response.data.message
@@ -211,12 +210,6 @@ export default {
           }}</a
           >.
         </p>
-
-        <div class="mb-4 text-left d-none">
-          <b-form-checkbox id="checkbox-1" v-model="remember" name="checkbox-1">
-            {{ $t('Remember me') }}
-          </b-form-checkbox>
-        </div>
 
         <div class="mg-b-20">
           <ButtonLoading
