@@ -678,6 +678,19 @@ a.badge-secondary.focus {
     }
 }
 
+.footer {
+    background: $yellow-400;
+    color: $red-900;
+    position: fixed;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    width: 100%;
+    z-index: 12;
+    padding: 12px 0;
+    bottom: 0;
+}
+
 
 /* Scrollbar */
 

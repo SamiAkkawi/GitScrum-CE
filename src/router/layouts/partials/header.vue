@@ -217,5 +217,8 @@ export default {
       class="my-next-tasks">
        <MyNextTasks></MyNextTasks>      
     </b-sidebar>
+    <div v-if="!currentUser.confirmed" class="footer">
+      {{ $t('Look for the verification email in your inbox and click the link in that email.') }}
+    </div>
   </div>
 </template>
