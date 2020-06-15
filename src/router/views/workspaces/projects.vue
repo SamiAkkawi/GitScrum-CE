@@ -175,7 +175,7 @@ export default {
 <template>
   <Layout>
     <div slot="content">
-      <div v-if="!isMobile" align-v="center" class="subheader shadow-sm d-flex justify-content-between">
+      <div v-if="!isMobile && projects.length" align-v="center" class="subheader shadow-sm d-flex justify-content-between">
         <TitleLoading
           v-if="projects.length || loading"
           :title="$tc('Explore Projects', projects.length)"

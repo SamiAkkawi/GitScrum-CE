@@ -26,15 +26,9 @@ export default {
       searchLoading: false,
     }
   },
-  /*
-  computed: {
-    ...taskManager
-  },
-  */
   watch: {
     statusTask(data){
       if ( data.item.name === 'type.change' && this.task.uuid === data.item.uuid ){
-        alert('')
         this.task.type = data.item.object
       }
     },
