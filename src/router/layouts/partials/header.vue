@@ -119,7 +119,7 @@ export default {
     },
     checkUpgrade() {
       if (
-        ( this.currentCompany.subscription !== null ||
+        ( this.currentCompany.subscription === null ||
         this.currentCompany.subscription === 'free' ) && 
         this.currentCompany.owner.username === this.currentUser.username ) {
         return true
