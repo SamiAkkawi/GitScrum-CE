@@ -47,6 +47,13 @@ export default {
 			}
 		}
 	},
+	watch: {
+		text: function(value){
+			if(value === '' || value === undefined){
+				this.label = this.vplaceholder
+			}
+		}
+  },
 	mounted: function(){
 		// initiate the label view
 		this.initText();
@@ -57,13 +64,6 @@ export default {
 			ed.focus();
 		}
 	},
-	watch: {
-		text: function(value){
-			if(value === '' || value === undefined){
-				this.label = this.vplaceholder
-			}
-		}
-  },
   methods: {
 		initText: function(){
 			if(this.text === ''||this.text === undefined){
@@ -93,7 +93,7 @@ export default {
 </script>
 <template>
 	<div class="vlabeledit">
-		<div class="vlabeledit-label" @click="onLabelClick" v-if="!edit">{{vlabel}}</div>
-		<input type="text" v-if="edit" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
+		<div v-if="!edit" class="vlabeledit-label" @click="onLabelClick">{{vlabel}}</div>
+		<input v-if="edit" ref="labeledit" v-model="label" type="text" :placeholder="vplaceholder" class="vlabeledit-input" @blur="updateTextBlur" @keyup.enter="updateTextEnter"/>
 	</div>
 </template>

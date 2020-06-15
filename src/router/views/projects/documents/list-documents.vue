@@ -235,8 +235,8 @@ export default {
 
         <div class="d-flex justify-content-between">
           <vue-dropzone
-          class="wd-100"
-            id="documentsDropzone"
+          id="documentsDropzone"
+            class="wd-100"
             :options="dropzoneOptions"
             :use-custom-slot="true"
             @vdropzone-file-added="sedding"

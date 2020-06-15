@@ -58,6 +58,13 @@ export default {
 			}
 		}
 	},
+	watch: {
+		text: function(value){
+			if(value==''||value==undefined){
+				this.label = this.vplaceholder
+			}
+		}
+  },
 	mounted: function(){
 		this.initText();
 	},
@@ -67,13 +74,6 @@ export default {
 			ed.focus();
 		}
 	},
-	watch: {
-		text: function(value){
-			if(value==''||value==undefined){
-				this.label = this.vplaceholder
-			}
-		}
-  },
   methods: {
 		initText: function(){
 			if(this.text==''||this.text==undefined){

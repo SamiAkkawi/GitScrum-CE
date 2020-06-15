@@ -109,7 +109,7 @@ export default {
             this.workflows.forEach(element => {
               if ( element.default ){
                 this.workflow = element.id
-                return
+                
               }
             });
 

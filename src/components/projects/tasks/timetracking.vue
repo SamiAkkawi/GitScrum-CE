@@ -39,15 +39,15 @@ export default {
     }
   },
   created() {
-    //this.setPeriod()
+    // this.setPeriod()
   },
   methods: {
     setPeriod() {
       this.period_start = null
       
-      //moment(new Date()).subtract(1, 'M').format('DD-MM-YYYY')
+      // moment(new Date()).subtract(1, 'M').format('DD-MM-YYYY')
       this.period_end = null
-      //moment(new Date()).format('DD-MM-YYYY')
+      // moment(new Date()).format('DD-MM-YYYY')
     },
 
     getTimeTrackingDefault() {

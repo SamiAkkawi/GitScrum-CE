@@ -106,6 +106,7 @@ a.badge-secondary.focus {
 }
 
 .table-small {
+    background: #fff;
     thead {
         display: none;
     }
@@ -113,13 +114,7 @@ a.badge-secondary.focus {
     td {
         padding: 0.5em 0.4em 0.3em !important;
         vertical-align: middle !important;
-        border-top: 1px solid #DADBFC !important;
-        font-size: 1em !important;
-        color: #001737 !important;
-    }
-    tbody tr:hover {
-        color: #001737 !important;
-        background-color: #E5EFFF !important;
+        font-size: 13px !important;
     }
     .btn-sm,
     .btn-group-sm>.btn {

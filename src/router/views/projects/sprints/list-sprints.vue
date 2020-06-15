@@ -117,8 +117,8 @@ export default {
                   class="form-control"
                   autocomplete="off"
                   :placeholder="$t('Search sprint')"
-                  @keydown.enter.prevent="search"
-                  style="height: 32px" />
+                  style="height: 32px"
+                  @keydown.enter.prevent="search" />
                 <div class="input-group-append">
                   <ButtonLoading
                     type="btn-sm"

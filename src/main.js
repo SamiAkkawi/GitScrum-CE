@@ -36,13 +36,28 @@ import {
     FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 
-Vue.use(VueCookies)
-Vue.use(vueNotVisible)
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import svgJs from "./svg.js"
+
+import VueSidebarMenu from 'vue-sidebar-menu'
+
+import VueLazyload from 'vue-lazyload'
+
+import VueClipboard from 'vue-clipboard2'
+
+
+
+import {
+    languages,
+    defaultLocale
+} from './i18n/index.js'
+
+import Vue2Filters from 'vue2-filters'
+
+Vue.use(VueCookies)
+Vue.use(vueNotVisible)
 Vue.use(svgJs);
 
 
@@ -55,27 +70,14 @@ Vue.use(VueAnalytics, {
     id: 'UA-162930772-1',
     router
 });
-
-import VueSidebarMenu from 'vue-sidebar-menu'
 Vue.use(VueSidebarMenu)
-
-import VueLazyload from 'vue-lazyload'
 
 Vue.use(VueLazyload, {
     preLoad: 1.1,
     attempt: 2
 })
-
-import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
-
-
-
-import {
-    languages,
-    defaultLocale
-} from './i18n/index.js'
 
 library.add(fal, far, fas)
 
@@ -83,8 +85,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(VueI18n)
 const messages = Object.assign(languages)
-
-import Vue2Filters from 'vue2-filters'
 Vue.use(Vue2Filters)
 
 var i18n = new VueI18n({

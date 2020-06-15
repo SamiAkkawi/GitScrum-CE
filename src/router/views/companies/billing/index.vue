@@ -9,7 +9,7 @@ import Pagination from '@components/utils/pagination'
 
 export default {
   page: {
-    title: 'Company Billing',
+    title: 'Billing',
     meta: [{ name: 'description', content: '' }],
   },
   components: { Layout, TitleLoading, SideBar, Alert, Ads, Pagination },
@@ -25,15 +25,13 @@ export default {
       isCanceled: null,
       currentCompany: JSON.parse(window.localStorage.getItem('CURRENT_COMPANY')),
       loading: false,
-      gridConfig: {
-        style: [
-          '',
-          'max-width:250px; width:250px;',
-          '',
-          'max-width:140px; width:140px;',
-          'max-width: 140px; width:140px',
-        ],
-      },
+      fields: [
+        { key: 'document_id', label: 'Document' },
+        { key: 'document_url', label: 'Download' },
+        { key: 'name', label: 'Subscription' },
+        { key: 'period.name', label: 'Period' },
+        { key: 'date', label: '' }
+      ],
     }
   },
   mounted() {
@@ -144,45 +142,17 @@ export default {
             </div>
           </div>
 
-          <Alert :message="$t('You do not have an invoice')" :status="!totalRows" class="mg-b-20"></Alert>
+          <Alert v-if="!invoices.length" :message="$t('You do not have an invoice')" :status="!totalRows" class="mg-b-20"></Alert>
 
-          <div class="divTable mt-20-px">
-            <div v-show="totalRows" class="divTableHead">
-              <div class="divTableRow">
-                <div class="divTableCell text-left" :style="gridConfig.style[1]">{{ $t('Invoice Document') }}</div>
-                <div class="divTableCell text-left" :style="gridConfig.style[2]">{{ $t('Subscription') }} </div>
-                <div class="divTableCell text-center" :style="gridConfig.style[3]">
-                  {{ $t('Date') }}
-                </div>
-                <div class="divTableCell text-center" :style="gridConfig.style[4]">
-                  {{ $t('Period') }}
-                </div>
+          <b-table class="table-small" hover :items="invoices" :fields="fields" >
+            <template v-slot:cell(document_url)="data">
+              <div class="d-flex align-items-center">
+                <b-link :href="data.item.document_url.data.url" target="_blank">
+                  {{ $t('Invoice Download') }}
+                </b-link>
               </div>
-            </div>
-
-            
-
-            <div class="divTableBody">
-              <div v-for="(item, index) in invoices" :key="index" class="divTableRowBg">
-                <div class="divTableRow">
-                  <div class="divTableCell text-left" :style="gridConfig.style[1]">
-                    <a :href="item.document_url.data.url" target="_blank">
-                      {{ item.document_id }} {{ $t('Invoice Download') }}
-                    </a>
-                  </div>
-                  <div class="divTableCell text-left" :style="gridConfig.style[2]">
-                    <span v-text="item.name"></span>
-                  </div>
-                  <div class="divTableCell text-left" :style="gridConfig.style[3]">
-                    <span v-text="item.date"></span>
-                  </div>
-                  <div class="divTableCell text-left" :style="gridConfig.style[4]">
-                    <span v-text="item.period.name"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            </template>
+          </b-table>
 
           <Pagination 
           :total-pages="totalPages" 

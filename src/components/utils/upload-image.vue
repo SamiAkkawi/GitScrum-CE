@@ -157,14 +157,14 @@ export default {
       <button
         class="mb-1"
         :class="btnClass === '' ? 'btn btn-primary btn-sm' : btnClass"
-        @click="$refs.file.click()">
+        @click="$refs.file.click">
         {{ btnTitle }}
       </button>
       <b-link v-if="image" class="d-block" @click="deleteImage">{{ btnRemoveTitle }}</b-link>
     </div>
     
     <div v-if="twoButtons">
-      <button class="btn btn-primary mr-4-px p-0" @click="$refs.file.click()">
+      <button class="btn btn-primary mr-4-px p-0" @click="$refs.file.click">
         <font-awesome-icon :icon="['fal', 'cloud-upload']" />
       </button>
       <b-button v-show="hasImage" class="btn btn-primary ml-4-px p-0" @click="deleteImage">

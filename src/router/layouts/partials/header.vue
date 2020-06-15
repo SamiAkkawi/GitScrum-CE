@@ -3,7 +3,7 @@ import Axios from '@utils/axios'
 import MasterHeaderCreate from '@layouts/partials/header-menu-create'
 import HeaderLanguage from '@layouts/partials/header-language'
 import Logo from '@layouts/partials/logo'
-//import HeaderNotifications from '@layouts/partials/header-notifications'
+// import HeaderNotifications from '@layouts/partials/header-notifications'
 import HeaderUser from '@layouts/partials/header-user'
 import HeaderGift from '@layouts/partials/header-gift'
 import HeaderChangeCompany from '@layouts/partials/header-change-company'
@@ -17,7 +17,7 @@ export default {
     MasterHeaderCreate,
     HeaderLanguage,
     Logo,
-    //HeaderNotifications,
+    // HeaderNotifications,
     HeaderUser,
     HeaderGift,
     HeaderChangeCompany,

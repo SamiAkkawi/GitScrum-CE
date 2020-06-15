@@ -172,7 +172,7 @@ export default {
               </b-link>
               <b-button
                 v-if="data.item.creator.email !== currentUserEmail && data.item.accepted_at === null"
-                @click="resendInvitation(data.item)" class="btn btn-sm btn-secondary">
+                class="btn btn-sm btn-secondary" @click="resendInvitation(data.item)">
                 <font-awesome-icon :icon="['fal', 'paper-plane']" class="ml-5-px" />
                   {{ $t('Resend Invite') }}
               </b-button>

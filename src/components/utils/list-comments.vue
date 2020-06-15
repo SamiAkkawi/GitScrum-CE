@@ -96,7 +96,7 @@ export default {
 
       this.editOpenId = 0
 
-      //this.currentComment.comment_mention = evt
+      // this.currentComment.comment_mention = evt
     },
 
     cancel(comment){

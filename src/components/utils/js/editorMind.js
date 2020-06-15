@@ -442,7 +442,7 @@ export default class {
             }
         }
         addSprites(jsonData, this.title);
-        return
+        
     }
 
     toJsonData() {

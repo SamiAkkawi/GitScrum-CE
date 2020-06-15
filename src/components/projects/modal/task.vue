@@ -246,7 +246,7 @@ export default {
         )
         .then((response) => {
           if ( params.title ) {
-            //this.task.slug = response.data.data.slug
+            // this.task.slug = response.data.data.slug
             this.pushStateOpen()
           }
           return response

@@ -168,7 +168,7 @@ export default {
     @change="updateItemPosition($event)">
     <b-card v-for="item in templateSelected.items" :key="item.id">
       <template v-slot:header>
-        <b-row :class="{ ' cursor-grab ' : !$route.params.projectSlug }">
+        <b-row :class="{ ' cursor-grab ': !$route.params.projectSlug }">
           <b-col cols="9">
             <b-form-radio 
               v-model="item.default"

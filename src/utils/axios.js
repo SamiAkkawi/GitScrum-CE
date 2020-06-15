@@ -1,6 +1,6 @@
 import axios from 'axios'
 import appConfig from '@src/app.config'
-//import store from '@state/store'
+// import store from '@state/store'
 
 export default () => {
 

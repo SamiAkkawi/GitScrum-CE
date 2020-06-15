@@ -42,7 +42,7 @@ export default {
       projectAccessMessage: this.$t(
         'Unfortunately, you do not have access to project. Please, contact the company owner or the project leader'
       ),
-      projectAccessStatus: this.$route.query.project_access && this.$route.query.project_access.length ? true : false,
+      projectAccessStatus: !!(this.$route.query.project_access && this.$route.query.project_access.length),
       labelsLoading: false,
     }
   },
@@ -86,7 +86,7 @@ export default {
       let arr = [];
       this.projectsLabels = []
       
-      //if ( !this.projectsLabels[0] ){
+      // if ( !this.projectsLabels[0] ){
         for (let i = 0; i < elements.length; i++) {
           element = elements[i].getElementsByClassName('badge')
           if ( element.length ){
@@ -103,7 +103,7 @@ export default {
             
           }
         }  
-      //}
+      // }
       this.labelsLoading = false
     },
     searchLabelsInProjects(project, searchLabels) {

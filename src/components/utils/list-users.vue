@@ -64,7 +64,7 @@ export default {
 <template>
   <div>
     <div v-if="Array.isArray(users) && users.length > 0" class="task-users list-users d-flex align-items-start justify-content-end " 
-      :class="{ ' flex-wrap ' : wrap === true }">
+      :class="{ ' flex-wrap ': wrap === true }">
       <div
         v-for="(u, index) in removeDuplicates(users)"
         :key="u.username"
@@ -73,7 +73,7 @@ export default {
         :data-fullname="u.name"
         :data-avatar="u.avatar"
         class="d-flex align-items-start justify-content-end"
-        :class="{ ' flex-wrap ' : wrap === true }">
+        :class="{ ' flex-wrap ': wrap === true }">
         <span v-if="index < limit" :alt="u.name">
           <b-avatar v-if="link" 
             :to="{ name: 'profile.user', params: { username: u.username } }" 

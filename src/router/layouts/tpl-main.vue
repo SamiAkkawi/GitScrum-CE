@@ -22,8 +22,8 @@ export default {
       <MasterHeader>
         <MasterHeaderMenuProject
           v-if="$route.params.projectSlug"
-          :background="false"
           slot="submenu"
+          :background="false"
         ></MasterHeaderMenuProject>
       </MasterHeader>
     

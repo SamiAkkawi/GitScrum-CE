@@ -110,7 +110,7 @@ export default {
 
 <template>
   <div v-if="scriptReady">
-    <FilePickerButton :config="gConfig" @picked="showDetails" class="btn-none">
+    <FilePickerButton :config="gConfig" class="btn-none" @picked="showDetails">
       <a
         href="javascript:;"
         class="dropbox-dropin-default"

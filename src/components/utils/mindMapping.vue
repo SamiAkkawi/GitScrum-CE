@@ -1,23 +1,23 @@
 <template>
   <div 
-    class="mindMapping" 
     ref="wTextarea" 
+    class="mindMapping" 
     :style = "{
-      width  : this.editor.width  + 'px',
-      height : this.editor.height + 'px',
+      width: this.editor.width  + 'px',
+      height: this.editor.height + 'px',
     }"
   >
     <div :id='editorId' :ref ='editorId'></div>
     
     <div 
-      class="input_text"
       v-if="this.selectId"
+      class="input_text"
       :style="selectBoxStyle"
       @click="stopDocument($event)"
     >
       <input 
-        class="input_message" 
-        v-model="titleData.message"
+        v-model="titleData.message" 
+        class="input_message"
         :style="selectInputStyle"
         @blur="setTitle"
       >
@@ -30,21 +30,9 @@ import EditorMind from  './js/editorMind.js'
 import UUID from './js/uuid.js';
 export default {
   name: 'MindMapping',
-  data() {
-    return {
-      editor   : '',
-      editorId : 'editor_',
-      selectId : '',
-      selectBoxStyle   : '', 
-      selectInputStyle : '',
-      titleData : {
-        message : ''
-      },
-    };
-  },
   model: {
-    prop  : 'value',//绑定的值，通过父组件传递
-    event : 'update_value'//自定义时间名
+    prop  : 'value',// 绑定的值，通过父组件传递
+    event : 'update_value'// 自定义时间名
   },
   props: {
     value     : {
@@ -80,9 +68,21 @@ export default {
       default : false,
     },
   },
-  watch: {
+  data() {
+    return {
+      editor   : '',
+      editorId : 'editor_',
+      selectId : '',
+      selectBoxStyle   : '', 
+      selectInputStyle : '',
+      titleData : {
+        message : ''
+      },
+    };
   },
   computed: {
+  },
+  watch: {
   },
   mounted() {
     let uuid = new UUID();

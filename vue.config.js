@@ -23,7 +23,7 @@ module.exports = {
         performance: {
             // Only enable performance hints for production builds,
             // outside of tests.
-            hints: false //process.env.NODE_ENV === 'production' && !process.env.VUE_APP_TEST && 'warning',
+            hints: false // process.env.NODE_ENV === 'production' && !process.env.VUE_APP_TEST && 'warning',
         },
         optimization: {
             splitChunks: {

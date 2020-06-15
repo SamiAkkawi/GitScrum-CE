@@ -129,8 +129,8 @@ export default {
                         class="form-control"
                         autocomplete="off"
                         :placeholder="$t('Search discussion')"
-                        @keydown.enter.prevent="search"
                         style="height: 32px"
+                        @keydown.enter.prevent="search"
                       />
                       <div class="input-group-append">
                         <ButtonLoading

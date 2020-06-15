@@ -24,7 +24,7 @@ export const actions = {
         state,
         rootState
     }, item) {
-        //$('html').addClass('modal-open')
+        // $('html').addClass('modal-open')
         commit('SET_OPEN', item)
     },
 }
