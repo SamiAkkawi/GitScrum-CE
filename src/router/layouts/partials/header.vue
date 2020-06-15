@@ -149,9 +149,10 @@ export default {
               @change="changeTheme">{{ $t('Dark') }}</b-form-checkbox>
             </div>
           </li>
-          <li v-if="currentCompany.subscription === 'free' && currentCompany.owner.username === currentUser.username">
+          <li v-if="(currentCompany.subscription === 'free' || currentCompany.subscription === null ) 
+            && currentCompany.owner.username === currentUser.username">
             <a href="https://site.gitscrum.com/pricing-growing-companies" target="_blank">
-              <b-badge class="badge-upgrade">{{ $t('Upgrade to Business Unlimited') }}</b-badge>
+              <b-badge class="badge-upgrade">{{ $t('Upgrade to Business Unlimited - Only $49') }}</b-badge>
             </a>
           </li>
           <li v-if="!isMobile">
