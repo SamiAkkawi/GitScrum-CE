@@ -1,5 +1,6 @@
 
 # GitScrum CE - Everything you need to manage your Projects Remotely
+<a href="https://gitscrum.com"><img src="https://site.gitscrum.com/badges/project.svg?project=gitscrum/gitscrum-ce" alt="GitScrum"></a>
 
 **Join our work (r)evolution!**
 [GitScrum](https://site.gitscrum.com) is a young and vibrant start-up. We are focused in applying Agile & Scrum principles, gamification and performance management to absolutely any collection of organized individuals.
